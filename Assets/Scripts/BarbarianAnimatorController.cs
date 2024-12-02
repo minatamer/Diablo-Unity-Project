@@ -1,99 +1,3 @@
-//using System.Collections; // Required for IEnumerator and Coroutines
-//using UnityEngine;
-//using UnityEngine.AI;
-
-
-//public class BarbarianAnimatorController : MonoBehaviour
-//{
-//    private Animator animator;
-//    private NavMeshAgent navMeshAgent;
-//    public GameObject shieldAura; // Reference to the Shield Aura GameObject
-
-
-//    void Start()
-//    {
-//        animator = GetComponent<Animator>();
-//        navMeshAgent = GetComponent<NavMeshAgent>();
-//        shieldAura = transform.Find("ShieldAura").gameObject; // Locate the Shield Aura child object
-//        shieldAura.SetActive(false); // Ensure it's disabled initially
-//    }
-
-
-
-//    void Update()
-//    {
-
-//        if (Input.GetKeyDown(KeyCode.W))
-//        {
-//            ActivateShield();
-//        }
-//        // Mouse-based movement
-//        if (Input.GetMouseButtonDown(0))
-//        {
-//            RaycastHit hit;
-//            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-//            if (Physics.Raycast(ray, out hit))
-//            {
-//                navMeshAgent.SetDestination(hit.point);
-//                animator.SetBool("isRunning", true);
-//                navMeshAgent.isStopped = false;
-//            }
-//        }
-
-//        // Stop running when reaching destination
-//        if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-//        {
-//            if (animator.GetBool("isRunning"))
-//            {
-//                animator.SetBool("isRunning", false);
-//            }
-//            navMeshAgent.isStopped = true;
-//        }
-
-//        // Trigger sheild
-
-
-//        // Trigger Bash
-//        if (Input.GetKeyDown(KeyCode.B))
-//        {
-//            animator.SetTrigger("Bash");
-//        }
-
-//        // Trigger Charge
-//        if (Input.GetKeyDown(KeyCode.E))
-//        {
-//            animator.SetTrigger("Charge");
-//            StartCoroutine(ResetToIdleAfterCharge());
-//        }
-
-//        // Trigger Iron Maelstrom
-//        if (Input.GetKeyDown(KeyCode.Q))
-//        {
-//            animator.SetTrigger("IronMaelstrom");
-//        }
-//    }
-//    private void ActivateShield()
-//    {
-//        Debug.Log("Shield activated!");
-
-//        // Enable the Shield Aura and disable it after 3 seconds
-//        shieldAura.SetActive(true);
-//        StartCoroutine(DisableShieldAfterTime(3f));
-//    }
-
-//    private IEnumerator DisableShieldAfterTime(float duration)
-//    {
-//        yield return new WaitForSeconds(duration);
-//        shieldAura.SetActive(false);
-//    }
-//    // Coroutine to reset to Idle after Charge
-//    private IEnumerator ResetToIdleAfterCharge()
-//    {
-//        yield return new WaitForSeconds(1.0f); // Adjust duration to match Charge animation length
-//        animator.ResetTrigger("Charge");
-//    }
-//}
 using System.Collections; // Required for IEnumerator and Coroutines
 using UnityEngine;
 using UnityEngine.AI;
@@ -115,6 +19,11 @@ public class BarbarianAnimatorController : MonoBehaviour
     private bool isIronMaelstromOnCooldown = false;
     private bool isShieldOnCooldown = false;
     private bool isChargeOnCooldown = false;
+
+    //collision
+    private bool enemyCollision = false;
+
+    private GameObject enemy;
 
     void Start()
     {
@@ -161,6 +70,18 @@ public class BarbarianAnimatorController : MonoBehaviour
         {
             animator.SetTrigger("Bash");
             StartCoroutine(BashCooldown());
+        }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Bash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.01f)
+        {
+            Debug.Log("EDRAB TANY 3AYEZ ATOOB");
+            if (enemyCollision == true)
+            {
+                Debug.Log("EDRAB TANY 3AYEZ ATOOB");
+                MinionController minionController = enemy.gameObject.GetComponent<MinionController>();
+                minionController.hp -= 20;
+                enemyCollision = false;
+            }
+
         }
 
         // Handle Charge ability with cooldown
@@ -230,5 +151,15 @@ public class BarbarianAnimatorController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f); // Adjust duration to match Charge animation length
         animator.ResetTrigger("Charge");
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.CompareTag("Minion"))
+        {
+            Debug.Log("7asal collision");
+            enemy = collision.gameObject;
+            enemyCollision = true;
+        }
     }
 }

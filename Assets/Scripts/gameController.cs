@@ -7,6 +7,7 @@ using TMPro;
 using System.Xml.Serialization;
 using Unity.VisualScripting;
 using System.Runtime.InteropServices;
+using UnityEditor.Rendering;
 
 public class gameController : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class gameController : MonoBehaviour
     public TMP_Text[] cooldownVal = new TMP_Text[4];
 
     private int[] locked = new int[4];
+
+    public Camera mainCamera;
 
 
     void Awake(){
@@ -82,7 +85,15 @@ public class gameController : MonoBehaviour
         if (characterToInstantiate != null)
         {
             // Instantiate the selected character at position (-3, 0, -7)
-            Instantiate(characterToInstantiate, new Vector3(-3, 0, -7), Quaternion.identity);
+            //GameObject newObject = Instantiate(characterToInstantiate, new Vector3(297.46f, 3.67f, 8.6f), Quaternion.identity);
+            GameObject newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
+            CameraFollow cameraFollow = mainCamera.GetComponent<CameraFollow>();
+            if (cameraFollow != null)
+            {
+                cameraFollow.target = newObject.transform;
+                cameraFollow.offset = new Vector3(0, 10, -10); // Adjust offset as needed
+                cameraFollow.rotationAngle = new Vector3(45, 0, 0);
+            }
         }
         else
         {
