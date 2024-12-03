@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CampController : MonoBehaviour
+public class CampControllerTwo : MonoBehaviour
 {
     private List<GameObject> minions = new List<GameObject>();
     private List<Vector3> originalPositions = new List<Vector3>();
@@ -15,7 +15,7 @@ public class CampController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            GameObject[] allMinions = GameObject.FindGameObjectsWithTag("Minion");
+            GameObject[] allMinions = GameObject.FindGameObjectsWithTag("Minion2");
 
             foreach (GameObject minion in allMinions)
             {

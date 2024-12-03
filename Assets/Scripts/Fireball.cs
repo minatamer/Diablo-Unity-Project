@@ -20,11 +20,14 @@ public class Fireball : MonoBehaviour
 
    void OnTriggerEnter(Collider other)
 {
-    if (other.gameObject.CompareTag("test")) // Check for "enemy" tag
+    if (other.gameObject.CompareTag("Minion")) 
     {
         Debug.Log("Fireball hit enemy");
         sorScript.SetFireBallDestroyed(true);
         sorScript.SetCurrentFireball(null);
+        MinionController enemyScript = other.gameObject.GetComponent<MinionController>();//update with ennemy script name
+        enemyScript.hp -= 10; //10
+       
         Destroy(gameObject); // Destroy the fireball
      }
 }

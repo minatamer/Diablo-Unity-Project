@@ -1,149 +1,9 @@
 fileFormatVersion: 2
-guid: 33a11e7dc24e1ee49887787ed914e3c1
+guid: d5a0bb5815821451583703f7a0217440
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Body_MAT4
-    second: {fileID: 2100000, guid: ef1036bf2ccf7ba49b51e1ac5fe2bee6, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: EyeSpec_MAT2
-    second: {fileID: 2100000, guid: ae47cf19a3acc8e428f2151cd4a0b041, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: EyeSpec_MAT4
-    second: {fileID: 2100000, guid: 5c2cbb73bb79ffc459b2e951bbc18f0c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Lashes_MAT4
-    second: {fileID: 2100000, guid: 62d534e1ce47fd842920d0594f9bfefb, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Bottom5
-    second: {fileID: 2100000, guid: c713b682ca6413d40830372e0e0430fd, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Hair6
-    second: {fileID: 2100000, guid: 07b787b10f287bf41a3b167752a0007b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Moustache5
-    second: {fileID: 2100000, guid: b10fc8fa32f256b41bd20bf933961920, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Shoes6
-    second: {fileID: 2100000, guid: df28b4a5a4510d34d9fe2f6c97e30f39, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: blinn7
-    second: {fileID: 2100000, guid: 486a5f24efd345a4aad6a2671f7e8310, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: phong4
-    second: {fileID: 2100000, guid: ffc7f93315c38f044a1f9daf6f1c74d9, type: 2}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Body_diffuse
-    second: {fileID: 2800000, guid: 2fad22426d494ee4f834aa405b90136d, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Body_diffuse1
-    second: {fileID: 2800000, guid: 9409550617795a64cb314a9f3469d889, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Bottom_diffuse1
-    second: {fileID: 2800000, guid: 26ac86988a80e2c4caccc92475a5f5b1, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Bottom_normal
-    second: {fileID: 2800000, guid: 1bd70eceb680a7845abecff3a158141b, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Bottom_specular
-    second: {fileID: 2800000, guid: 8ab54f1990e2d1c4aa2bc2444172829e, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Hair_diffuse
-    second: {fileID: 2800000, guid: 2dade0391a98ae94ba6c1d4cbe715348, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Hair_normal
-    second: {fileID: 2800000, guid: 4adc2352d92c0af45b24b31e134d9224, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Hair_specular
-    second: {fileID: 2800000, guid: f35f27697cced1f4b9affdae251d323b, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Moustache_diffuse
-    second: {fileID: 2800000, guid: 8a0beb27365f9684ba520631a86db38f, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Moustache_normal
-    second: {fileID: 2800000, guid: a06a1b56c56c100498b4b7de414bf164, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Moustache_specular
-    second: {fileID: 2800000, guid: 564d28d4122dd3e489becf091a935e07, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Shoes_diffuse1
-    second: {fileID: 2800000, guid: 5f8f64b5741ce2146b1e790dac9f6aa0, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Shoes_normal
-    second: {fileID: 2800000, guid: 089b8ed0e90f5ea42b50debfd0dd189e, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_Shoes_specular
-    second: {fileID: 2800000, guid: b640672ba79976045953926569a61373, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: MaleBruteA_StdNM
-    second: {fileID: 2800000, guid: 5f7663113814ae54cae7b9826c586a7a, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: axe_DIF2
-    second: {fileID: 2800000, guid: 649a8667c9ec2af4ea3f4c7a142f9db4, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: axe_NM2
-    second: {fileID: 2800000, guid: 984b562d24a82ce4fb26dace459f44f4, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: axe_SPEC
-    second: {fileID: 2800000, guid: d74926bfd7c075746b7cf50663de1f0f, type: 3}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -171,7 +31,36 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Walking
+      takeName: mixamo.com
+      internalID: -203655887218126122
+      firstFrame: 0
+      lastFrame: 31
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -217,8 +106,7 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
-  referencedClips:
-  - d5a0bb5815821451583703f7a0217440
+  referencedClips: []
   importAnimation: 1
   humanDescription:
     serializedVersion: 3
@@ -1083,11 +971,11 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 33a11e7dc24e1ee49887787ed914e3c1, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0

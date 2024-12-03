@@ -24,7 +24,6 @@ public class sor_script : MonoBehaviour
     private float cloneLastAbilityTime = 0;
     private float infernoLastAbilityTime = 0;
     private float teleportLastAbilityTime = 0;
-
      void Start()
     {
         animator = GetComponent<Animator>();
@@ -86,7 +85,7 @@ public class sor_script : MonoBehaviour
     }
     void Update()
     {
-        
+
        if (Input.GetMouseButtonDown(1) && waitingForRightClick == false && waitingForRightUltimate == false && waitingForRightDefensive == false) 
         {
             animator.SetBool("throwing", true);
@@ -189,21 +188,43 @@ public class sor_script : MonoBehaviour
         }
 
 
-        if (Input.GetMouseButtonDown(0)){ 
+          if (Input.GetMouseButtonDown(0)){
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if(Physics.Raycast(ray, out hit,100)){
+            if(Physics.Raycast(ray, out hit)){
                  hitPoint = hit.point;
                 navMeshAgent.destination = hit.point;
                 animator.SetBool("walking", true);
+                
             }
-
         }
         if( Vector3.Distance(navMeshAgent.transform.position, hitPoint)<= 0.8f){
-           
-           animator.SetBool("walking", false);
+            animator.SetBool("walking", false);
            navMeshAgent.velocity = Vector3.zero;
         }
        
+
+        if (navMeshAgent.remainingDistance >7.0f)
+        { 
+          
+             animator.SetBool("walking", false);
+            animator.SetBool("running", true);
+               
+            navMeshAgent.speed = 10.0f; 
+
+
+        }
+        if (navMeshAgent.remainingDistance > 0.8f && navMeshAgent.remainingDistance <7.0)
+        {
+            animator.SetBool("running", false);
+            animator.SetBool("walking", true);
+            navMeshAgent.speed = 3.5f;
+            
+        }
+
+
     }
+        
+       
+    
 }

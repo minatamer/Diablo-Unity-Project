@@ -7,6 +7,7 @@ public class BarbarianAnimatorController : MonoBehaviour
     private Animator animator;
     private NavMeshAgent navMeshAgent;
     public GameObject shieldAura; // Reference to the Shield Aura GameObject
+    private Vector3 hitPoint;
 
     // Cooldown durations (in seconds)
     private float bashCooldown = 1f;
@@ -42,28 +43,54 @@ public class BarbarianAnimatorController : MonoBehaviour
         }
 
         // Mouse-based movement (run to destination)
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hit;
+       if (Input.GetMouseButtonDown(0)){
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if(Physics.Raycast(ray, out hit)){
+                 hitPoint = hit.point;
+                 Debug.Log(hitPoint);
+                navMeshAgent.destination = hit.point;
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                navMeshAgent.SetDestination(hit.point);
-                animator.SetBool("isRunning", true);
-                navMeshAgent.isStopped = false;
+                animator.SetBool("walking", true);
+                
             }
         }
+        if( Vector3.Distance(navMeshAgent.transform.position, hitPoint)<= 0.8f){
+
+            animator.SetBool("walking", false);
+           navMeshAgent.velocity = Vector3.zero;
+        }
+       
+
+        if (navMeshAgent.remainingDistance >7.0f)
+        { 
+           
+            
+            animator.SetBool("isRunning", true);
+              animator.SetBool("walking", false);
+            navMeshAgent.speed = 10.0f; 
+
+
+        }
+        if (navMeshAgent.remainingDistance > 0.8f && navMeshAgent.remainingDistance <7.0)
+        {
+          
+            animator.SetBool("isRunning", false);
+            animator.SetBool("walking", true);
+            navMeshAgent.speed = 3.5f;
+            
+        }
+
 
         // Stop running when reaching destination
-        if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-        {
-            if (animator.GetBool("isRunning"))
-            {
-                animator.SetBool("isRunning", false);
-            }
-            navMeshAgent.isStopped = true;
-        }
+        // if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        // {
+        //     if (animator.GetBool("isRunning"))
+        //     {
+        //         animator.SetBool("isRunning", false);
+        //     }
+        //     navMeshAgent.isStopped = true;
+        // }
 
         // Handle Bash ability with cooldown
         if (Input.GetKeyDown(KeyCode.B) && !isBashOnCooldown)

@@ -11,7 +11,9 @@ using UnityEditor.Rendering;
 
 public class gameController : MonoBehaviour
 {
-    private int healthPoints = 100;
+
+    public static gameController Instance { get; private set; }
+    public int healthPoints = 100;
     private int xp = 0;
     private int level = 1;
     private int abilityPoints = 0;
@@ -29,7 +31,9 @@ public class gameController : MonoBehaviour
     public GameObject brutePrefab;  // Assign the Brute prefab in the Inspector
     public GameObject arissaPrefab;
 
-
+     public GameObject Camp;
+     public GameObject MinionPrefab;
+     public GameObject DemonPrefab;
     // public TMP_Text[] abilitiesNames = new TMP_Text[4];
     public Button[] buttons = new Button[4];
 
@@ -41,6 +45,12 @@ public class gameController : MonoBehaviour
 
 
     void Awake(){
+         if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // Ensure there's only one instance
+            return;
+        }
+         Instance = this;
            cooldownVal[0].text = "1";
            cooldownVal[1].text = "_";
            cooldownVal[2].text = "_";
@@ -86,7 +96,15 @@ public class gameController : MonoBehaviour
         {
             // Instantiate the selected character at position (-3, 0, -7)
             //GameObject newObject = Instantiate(characterToInstantiate, new Vector3(297.46f, 3.67f, 8.6f), Quaternion.identity);
-            GameObject newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
+             GameObject newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
+            //  GameObject camp = Instantiate( Camp, new Vector3(200.13f, 3.5f, 135.12f), Quaternion.identity);
+            //   initializeCamp( camp ,   10,0,1);
+            //   camp.AddComponent<CampController>(); 
+            //   GameObject campTwo = Instantiate( Camp, new Vector3(244.13f, 3.5f, 171.12f), Quaternion.identity);
+            //  initializeCamp( campTwo ,   14,2,2);
+            //    campTwo.AddComponent<CampControllerTwo>(); 
+            //  newObject.SetActive(true);
+
             CameraFollow cameraFollow = mainCamera.GetComponent<CameraFollow>();
             if (cameraFollow != null)
             {
@@ -101,7 +119,32 @@ public class gameController : MonoBehaviour
         }
     }
 
+    private void initializeCamp(GameObject camp ,  int numberOfMinions, int numberofDemons,int campNum){
 
+        float spacing = 2.0f; 
+        Vector3 startPosition = camp.transform.position + new Vector3(-((numberOfMinions - 1) * spacing) / 2, 0, 0); // Start centered around camp
+
+        for (int i = 0; i < numberOfMinions; i++)
+        {
+            float randomOffsetY = UnityEngine.Random.Range(-0.5f, 0.5f);
+            float randomOffsetZ = UnityEngine.Random.Range(-0.5f, 0.5f);
+            Vector3 minionPosition = startPosition + new Vector3(i * spacing, randomOffsetY, randomOffsetZ);
+            GameObject minion = Instantiate(MinionPrefab, minionPosition, Quaternion.identity);
+            if(campNum == 1){
+            minion.tag = "Minion"; 
+            }
+             if(campNum == 2){
+            minion.tag = "Minion2"; 
+            }
+            minion.transform.parent = camp.transform;
+        }
+        if(numberofDemons!=0){
+
+            Instantiate(DemonPrefab, new Vector3(225.01f, 3.67f, 187.78f), Quaternion.identity);
+            Instantiate(DemonPrefab, new Vector3(264.5f, 3.67f, 187.78f), Quaternion.identity);
+        }
+
+    }
      void OnButtonClicked(Button clickedButton)
     {
         // Get and use the clicked button's instance
