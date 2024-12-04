@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 689914076143490965}
   - component: {fileID: 3109916554081914142}
   - component: {fileID: 7936267542421456038}
-  - component: {fileID: 8259019169973177693}
   m_Layer: 0
   m_Name: Camp1_Trigger
   m_TagString: Untagged
@@ -106,15 +105,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8259019169973177693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6125634656030457057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbb2d8ff17f08eb4b98472c8d6a73f40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

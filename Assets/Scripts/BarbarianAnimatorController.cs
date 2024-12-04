@@ -67,7 +67,6 @@ public class BarbarianAnimatorController : MonoBehaviour
            
             
             animator.SetBool("isRunning", true);
-              animator.SetBool("walking", false);
             navMeshAgent.speed = 10.0f; 
 
 

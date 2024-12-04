@@ -234,6 +234,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: isRunning
     m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: walking
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1001843410481775944}
   m_Solo: 0
@@ -270,7 +273,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -203655887218126122, guid: 487399381834e3b48a863828eac725e6, type: 3}
+  m_Motion: {fileID: -203655887218126122, guid: a5ddb4b1342244f378da9f733e13e309, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -406,7 +409,7 @@ AnimatorStateMachine:
     m_Position: {x: 850, y: 20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8605860047737405384}
-    m_Position: {x: 1020, y: 250, z: 0}
+    m_Position: {x: 1150, y: 250, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

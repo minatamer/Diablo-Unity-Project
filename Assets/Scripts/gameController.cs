@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using Unity.VisualScripting;
 using System.Runtime.InteropServices;
 using UnityEditor.Rendering;
+using Unity.AI.Navigation;
 
 public class gameController : MonoBehaviour
 {
@@ -42,6 +43,7 @@ public class gameController : MonoBehaviour
     private int[] locked = new int[4];
 
     public Camera mainCamera;
+
 
 
     void Awake(){
@@ -94,16 +96,14 @@ public class gameController : MonoBehaviour
 
         if (characterToInstantiate != null)
         {
-            // Instantiate the selected character at position (-3, 0, -7)
-            //GameObject newObject = Instantiate(characterToInstantiate, new Vector3(297.46f, 3.67f, 8.6f), Quaternion.identity);
              GameObject newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
-            //  GameObject camp = Instantiate( Camp, new Vector3(200.13f, 3.5f, 135.12f), Quaternion.identity);
-            //   initializeCamp( camp ,   10,0,1);
-            //   camp.AddComponent<CampController>(); 
-            //   GameObject campTwo = Instantiate( Camp, new Vector3(244.13f, 3.5f, 171.12f), Quaternion.identity);
-            //  initializeCamp( campTwo ,   14,2,2);
-            //    campTwo.AddComponent<CampControllerTwo>(); 
-            //  newObject.SetActive(true);
+             GameObject camp = Instantiate( Camp, new Vector3(200.13f, 3.5f, 135.12f), Quaternion.identity);
+              initializeCamp( camp ,   10,0,1);
+              camp.AddComponent<CampController>();
+            GameObject campTwo = Instantiate(Camp, new Vector3(244.13f, 3.5f, 171.12f), Quaternion.identity);
+            initializeCamp(campTwo, 14, 2, 2);
+            campTwo.AddComponent<CampControllerTwo>();
+            newObject.SetActive(true);
 
             CameraFollow cameraFollow = mainCamera.GetComponent<CameraFollow>();
             if (cameraFollow != null)
@@ -138,11 +138,18 @@ public class gameController : MonoBehaviour
             }
             minion.transform.parent = camp.transform;
         }
-        if(numberofDemons!=0){
 
-            Instantiate(DemonPrefab, new Vector3(225.01f, 3.67f, 187.78f), Quaternion.identity);
-            Instantiate(DemonPrefab, new Vector3(264.5f, 3.67f, 187.78f), Quaternion.identity);
+        if (campNum == 2)
+        {
+            GameObject demon1 = Instantiate(DemonPrefab, new Vector3(260f, 3.67f, 187f), Quaternion.identity);
+            GameObject demon2 = Instantiate(DemonPrefab, new Vector3(230f, 3.67f, 187f), Quaternion.identity);
+            demon1.tag = "Demon";
+            demon2.tag = "Demon";
         }
+        
+        
+
+         
 
     }
      void OnButtonClicked(Button clickedButton)

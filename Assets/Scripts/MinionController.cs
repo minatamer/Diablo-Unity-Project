@@ -19,7 +19,7 @@ public class MinionController : MonoBehaviour
         if(other.gameObject.CompareTag("Player")){
             
                animator.SetBool("Punch", true);
-            //    gameController.Instance.healthPoints -= 5;
+                gameController.Instance.healthPoints -= 5;
 
         }
 

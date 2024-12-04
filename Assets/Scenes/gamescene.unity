@@ -404,6 +404,7 @@ MonoBehaviour:
   - {fileID: 1327726083}
   - {fileID: 50442917}
   mainCamera: {fileID: 1538185414}
+  groundObject: {fileID: 1606038169}
 --- !u!4 &200385390
 Transform:
   m_ObjectHideFlags: 0

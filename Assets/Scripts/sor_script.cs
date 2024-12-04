@@ -207,9 +207,9 @@ public class sor_script : MonoBehaviour
         if (navMeshAgent.remainingDistance >7.0f)
         { 
           
-             animator.SetBool("walking", false);
+           
             animator.SetBool("running", true);
-               
+            // animator.SetBool("walking", false);
             navMeshAgent.speed = 10.0f; 
 
 
