@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using System.Runtime.InteropServices;
 using UnityEditor.Rendering;
 using Unity.AI.Navigation;
-
+using UnityEngine.SceneManagement; 
 public class gameController : MonoBehaviour
 {
 
@@ -20,21 +20,21 @@ public class gameController : MonoBehaviour
     private int abilityPoints = 0;
     private int healingPotions = 0;
     private int runeFragments = 0;
-    public TMP_Text points_text ;
-    public TMP_Text xp_text ;
-    public TMP_Text level_text ;
-    public TMP_Text healing_potions_text ;
-    public TMP_Text ability_points_text ;
-    public TMP_Text rune_fragments_count ;
+    public TMP_Text points_text;
+    public TMP_Text xp_text;
+    public TMP_Text level_text;
+    public TMP_Text healing_potions_text;
+    public TMP_Text ability_points_text;
+    public TMP_Text rune_fragments_count;
     public Image healthBar;
     public Image xpBar;
 
     public GameObject brutePrefab;  // Assign the Brute prefab in the Inspector
     public GameObject arissaPrefab;
 
-     public GameObject Camp;
-     public GameObject MinionPrefab;
-     public GameObject DemonPrefab;
+    public GameObject Camp;
+    public GameObject MinionPrefab;
+    public GameObject DemonPrefab;
     // public TMP_Text[] abilitiesNames = new TMP_Text[4];
     public Button[] buttons = new Button[4];
 
@@ -46,30 +46,30 @@ public class gameController : MonoBehaviour
 
 
 
-    void Awake(){
-         if (Instance != null && Instance != this)
+    void Awake() {
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject); // Ensure there's only one instance
             return;
         }
-         Instance = this;
-           cooldownVal[0].text = "1";
-           cooldownVal[1].text = "_";
-           cooldownVal[2].text = "_";
-           cooldownVal[3].text = "_";
+        Instance = this;
+        cooldownVal[0].text = "1";
+        cooldownVal[1].text = "_";
+        cooldownVal[2].text = "_";
+        cooldownVal[3].text = "_";
 
-          
 
-        
-       if (PlayerPrefs.GetString("SelectedCharacter")== "Sorcerer"){ 
-          buttons[0].GetComponentInChildren<TMP_Text>().text = "Fireball";
-          buttons[1].GetComponentInChildren<TMP_Text>().text= "Teleport";
-          buttons[2].GetComponentInChildren<TMP_Text>().text= "Clone";
-          buttons[3].GetComponentInChildren<TMP_Text>().text = "Inferno";
-        
 
-      }
-      else{
+
+        if (PlayerPrefs.GetString("SelectedCharacter") == "Sorcerer") {
+            buttons[0].GetComponentInChildren<TMP_Text>().text = "Fireball";
+            buttons[1].GetComponentInChildren<TMP_Text>().text = "Teleport";
+            buttons[2].GetComponentInChildren<TMP_Text>().text = "Clone";
+            buttons[3].GetComponentInChildren<TMP_Text>().text = "Inferno";
+
+
+        }
+        else {
             buttons[0].GetComponentInChildren<TMP_Text>().text = "Bash";
             buttons[1].GetComponentInChildren<TMP_Text>().text = "Shield";
             buttons[2].GetComponentInChildren<TMP_Text>().text = "Iron Maelstrom";
@@ -83,7 +83,10 @@ public class gameController : MonoBehaviour
         string selectedCharacter = PlayerPrefs.GetString("SelectedCharacter");
         Debug.Log($"Selected character is: {selectedCharacter}");
         GameObject characterToInstantiate = null;
-
+        //if (pauseButton != null)
+        //{
+        //    pauseButton.onClick.AddListener(PauseGame);
+        //}
         // Check the selected character and assign the corresponding prefab
         if (selectedCharacter == "Barbarian")
         {
@@ -96,10 +99,10 @@ public class gameController : MonoBehaviour
 
         if (characterToInstantiate != null)
         {
-             GameObject newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
-             GameObject camp = Instantiate( Camp, new Vector3(200.13f, 3.5f, 135.12f), Quaternion.identity);
-              initializeCamp( camp ,   10,0,1);
-              camp.AddComponent<CampController>();
+            GameObject newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
+            GameObject camp = Instantiate(Camp, new Vector3(200.13f, 3.5f, 135.12f), Quaternion.identity);
+            initializeCamp(camp, 10, 0, 1);
+            camp.AddComponent<CampController>();
             GameObject campTwo = Instantiate(Camp, new Vector3(244.13f, 3.5f, 171.12f), Quaternion.identity);
             initializeCamp(campTwo, 14, 2, 2);
             campTwo.AddComponent<CampControllerTwo>();
@@ -118,6 +121,21 @@ public class gameController : MonoBehaviour
             Debug.LogError("No character selected or character prefab not assigned.");
         }
     }
+    public void PauseGame()
+    {
+        if (SceneManager.GetSceneByName("PauseScene").isLoaded)
+        {
+            Debug.LogWarning("PauseScene is already loaded.");
+            return;
+        }
+
+        Debug.Log("Game Paused");
+        Time.timeScale = 0; // Pause the game
+
+        // Load the Pause Scene additively
+        SceneManager.LoadScene("PauseScene", LoadSceneMode.Additive);
+    }
+
 
     private void initializeCamp(GameObject camp ,  int numberOfMinions, int numberofDemons,int campNum){
 

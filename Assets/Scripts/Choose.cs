@@ -12,12 +12,17 @@ public class Choose : MonoBehaviour
     public GameObject sorcererObject;  // Assign the Sorcerer GameObject in the Inspector
 
     private string selectedCharacter = ""; // No character selected by default
+    public GameObject barbarianPanel;  // Assign the Barbarian description panel in the Inspector
+    public GameObject sorcererPanel;
 
     void Start()
     {
         // Ensure both characters are deactivated initially
         barbarianObject.SetActive(false);
         sorcererObject.SetActive(false);
+        barbarianPanel.SetActive(false);
+        sorcererPanel.SetActive(false);
+
 
         // Ensure toggles are unticked initially
         barbarianToggle.isOn = false;
@@ -40,7 +45,8 @@ public class Choose : MonoBehaviour
             barbarianObject.SetActive(true);
             sorcererObject.SetActive(false);
 
-            // Untick Sorcerer toggle
+            barbarianPanel.SetActive(true);
+            sorcererPanel.SetActive(false);
             sorcererToggle.isOn = false;
         }
     }
@@ -53,7 +59,8 @@ public class Choose : MonoBehaviour
             selectedCharacter = "Sorcerer";
             sorcererObject.SetActive(true);
             barbarianObject.SetActive(false);
-
+            sorcererPanel.SetActive(true);
+            barbarianPanel.SetActive(false);
             // Untick Barbarian toggle
             barbarianToggle.isOn = false;
         }
