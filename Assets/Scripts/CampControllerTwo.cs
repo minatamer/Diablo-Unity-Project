@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,9 +16,22 @@ public class CampControllerTwo : MonoBehaviour
 
     private List<GameObject> aggressiveDemons = new List<GameObject>();
     private List<Vector3> aggressiveDemonsOriginalPositions = new List<Vector3>();
+    private bool runeInstantiated = false;
 
+    void Update(){
+         GameObject[] allMinions = GameObject.FindGameObjectsWithTag("Minion2");
+        GameObject[] allDemons = GameObject.FindGameObjectsWithTag("Demon");
 
+         if(allMinions.Length == 0  && allDemons.Length ==0 && runeInstantiated == false){
+              
+                GameObject rune=  Instantiate(  gameController.Instance.RuneFragment, new Vector3(transform.position.x, -0.03f, transform.position.z), Quaternion.identity);
+                rune.tag = "Rune";
+                runeInstantiated = true;
+       
 
+         }
+                
+    }
 
     private void OnTriggerEnter(Collider other)
     {

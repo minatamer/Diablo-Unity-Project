@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,7 +10,7 @@ public class sor_script : MonoBehaviour
     Animator animator ;
     NavMeshAgent navMeshAgent;
     private Vector3 hitPoint;
-    private Vector3 targetPosition;
+    private Vector3 targetPosition ;
     public GameObject fireball;
     public Transform shootingPoint;
     private GameObject currentFireball; 
@@ -24,6 +25,8 @@ public class sor_script : MonoBehaviour
     private float cloneLastAbilityTime = 0;
     private float infernoLastAbilityTime = 0;
     private float teleportLastAbilityTime = 0;
+    private float fireBallThrownAtTime;
+    private int noFire ;
      void Start()
     {
         animator = GetComponent<Animator>();
@@ -85,10 +88,32 @@ public class sor_script : MonoBehaviour
     }
     void Update()
     {
+        //  int level =  gameController.Instance.level ;
+       
 
-       if (Input.GetMouseButtonDown(1) && waitingForRightClick == false && waitingForRightUltimate == false && waitingForRightDefensive == false) 
+    //    if(Input.GetKeyDown(KeyCode.F) && gameController.Instance.healthPoints != level*100 && gameController.Instance.healingPotions !=0){
+    //     Debug.Log("drinkkkkkkk");
+    //      animator.SetTrigger("drink");
+    //     }
+        noFire = 1;
+       
+        if(Input.GetKeyDown(KeyCode.E) && UseAbility(infernoLastAbilityTime , 15) == false  ||
+            Input.GetKeyDown(KeyCode.W) && UseAbility(teleportLastAbilityTime , 10) == false ||
+            Input.GetKeyDown(KeyCode.Q) && UseAbility(cloneLastAbilityTime , 10) == false)
         {
-            animator.SetBool("throwing", true);
+            noFire = 0;
+         
+            
+        }
+       
+    
+        if (noFire == 1)
+        {   
+            
+          if (Input.GetMouseButtonDown(1) && waitingForRightClick == false && waitingForRightUltimate == false && waitingForRightDefensive == false) 
+        {      
+            animator.SetBool("throwing",true);
+            fireBallThrownAtTime = Time.time;
             currentFireball = Instantiate(fireball , shootingPoint.transform.position  , Quaternion.identity);
             currentFireball.transform.parent =  shootingPoint;
 
@@ -99,27 +124,18 @@ public class sor_script : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 Vector3 hitPoint = hit.point;
-                Debug.Log("Hit point: " + hitPoint);
                 targetPosition = hitPoint;
             }
             else{                
                 targetPosition =  mousePos;
             }
+           
             }
-
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Throwing") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f)
-        {    
-             if(fireBallDestroyed == false && currentFireball != null){ // target reached or not 
-
-                animator.SetBool("throwing", false);
-                currentFireball.transform.parent = null;
-                FireInStraightLine(targetPosition);
-
-             }
-        
         }
-
+        
+            
+        releaseBall();
+       
         if(fireBallDestroyed == true ){
             fireBallDestroyed = false;
         }
@@ -130,7 +146,8 @@ public class sor_script : MonoBehaviour
             waitingForRightUltimate = true; 
             infernoLastAbilityTime  = Time.time ;
         }
-      
+
+       
         if (waitingForRightUltimate && Input.GetMouseButtonDown(1))
         {
             Debug.Log("Right mouse button clicked after pressing E!");
@@ -221,10 +238,38 @@ public class sor_script : MonoBehaviour
             navMeshAgent.speed = 3.5f;
             
         }
+        
+
 
 
     }
-        
-       
-    
+   
+    private void releaseBall(){
+             if ( Time.time - fireBallThrownAtTime >= 1.0f)
+         {                
+              if(fireBallDestroyed == false && currentFireball != null){ // target reached or not 
+                 currentFireball.transform.parent = null;
+                 FireInStraightLine(targetPosition);
+             }
+              animator.SetBool("throwing", false);
+              fireBallThrownAtTime = 0.0f;  
+        }
+    }
+
+    private void OnTriggerEnter(Collider other){
+        if(other.gameObject.tag == "Rune"){
+            gameController.Instance.runeFragments ++;
+            Destroy(other.gameObject);
+
+        }
+        if(other.gameObject.tag == "Potion"){
+            if(  gameController.Instance.healingPotions < 3 ){
+            gameController.Instance.healingPotions ++;
+            Destroy(other.gameObject);
+            }
+        }
+
+    }
+   
 }
+

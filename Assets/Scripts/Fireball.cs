@@ -20,7 +20,7 @@ public class Fireball : MonoBehaviour
 
    void OnTriggerEnter(Collider other)
 {
-    if (other.gameObject.CompareTag("Minion")  || other.gameObject.CompareTag("Minion2")) 
+    if (other.gameObject.CompareTag("Minion")  || other.gameObject.CompareTag("Minion2")|| other.gameObject.CompareTag("Minion3")) 
     {
         sorScript.SetFireBallDestroyed(true);
         sorScript.SetCurrentFireball(null);
@@ -29,7 +29,7 @@ public class Fireball : MonoBehaviour
         Destroy(gameObject); // Destroy the fireball
      }
 
-    if (other.gameObject.CompareTag("Demon"))
+    if (other.gameObject.CompareTag("Demon") ||other.gameObject.CompareTag("Demon11")||other.gameObject.CompareTag("Demon12"))
     {
         sorScript.SetFireBallDestroyed(true);
         sorScript.SetCurrentFireball(null);

@@ -16,10 +16,10 @@ public class gameController : MonoBehaviour
     public static gameController Instance { get; private set; }
     public int healthPoints = 100;
     private int xp = 0;
-    private int level = 1;
+    public int level = 1;
     private int abilityPoints = 0;
-    private int healingPotions = 0;
-    private int runeFragments = 0;
+    public int healingPotions = 0;
+    public int runeFragments = 0;
     public TMP_Text points_text;
     public TMP_Text xp_text;
     public TMP_Text level_text;
@@ -35,6 +35,15 @@ public class gameController : MonoBehaviour
     public GameObject Camp;
     public GameObject MinionPrefab;
     public GameObject DemonPrefab;
+
+    public GameObject RuneFragment;
+    public GameObject Potion;
+    public GameObject campOne;
+    public GameObject campTwo;
+    public GameObject campThree;
+    
+    public bool barbarianShield = false;
+
     // public TMP_Text[] abilitiesNames = new TMP_Text[4];
     public Button[] buttons = new Button[4];
 
@@ -99,13 +108,23 @@ public class gameController : MonoBehaviour
 
         if (characterToInstantiate != null)
         {
-            GameObject newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
-            GameObject camp = Instantiate(Camp, new Vector3(200.13f, 3.5f, 135.12f), Quaternion.identity);
-            initializeCamp(camp, 10, 0, 1);
-            camp.AddComponent<CampController>();
-            GameObject campTwo = Instantiate(Camp, new Vector3(244.13f, 3.5f, 171.12f), Quaternion.identity);
+             GameObject newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
+            // GameObject camp = Instantiate(Camp, new Vector3(200.13f, -10f, 135.12f), Quaternion.identity);
+             initializeCamp(campOne, 10, 0, 1);
+
+           // camp.AddComponent<CampController>();
+           // GameObject campTwo = Instantiate(Camp, new Vector3(244.13f, -10f, 171.12f), Quaternion.identity);
             initializeCamp(campTwo, 14, 2, 2);
-            campTwo.AddComponent<CampControllerTwo>();
+           // campTwo.AddComponent<CampControllerTwo>();
+
+
+            //GameObject campThree = Instantiate(Camp, new Vector3(244.13f, -10f,81.2f), Quaternion.identity);
+            initializeCamp(campThree, 18, 4, 3);
+           // campThree.AddComponent<CampControllerThree>();
+
+
+             initializePotions( -196f,  386.1f,  320.4f ,  -94f ,  20);
+             
             newObject.SetActive(true);
 
             CameraFollow cameraFollow = mainCamera.GetComponent<CameraFollow>();
@@ -136,8 +155,22 @@ public class gameController : MonoBehaviour
         SceneManager.LoadScene("PauseScene", LoadSceneMode.Additive);
     }
 
+  private void initializePotions(float xMin, float xMax, float zMax , float zMin , int numberOfPotions){
 
+    for(int i=0;i<numberOfPotions;i++){
+          System.Random random = new System.Random();
+
+    float x = (float)(random.NextDouble() * (xMax - (xMin)) + (xMin));
+    float z = (float)(random.NextDouble() * (zMax - (zMin)) + (zMin));
+    GameObject potion = Instantiate(Potion, new Vector3(x, 0.84f, z),  Quaternion.Euler(0, 0, 90));
+    potion.tag= "Potion";
+
+    }
+  }
     private void initializeCamp(GameObject camp ,  int numberOfMinions, int numberofDemons,int campNum){
+         Collider campCollider = camp.GetComponent<Collider>();
+         Bounds bounds = campCollider.bounds;
+         initializePotions( bounds.min.x,  bounds.max.x,   bounds.max.z ,   bounds.min.z , 2);
 
         float spacing = 2.0f; 
         Vector3 startPosition = camp.transform.position + new Vector3(-((numberOfMinions - 1) * spacing) / 2, 0, 0); // Start centered around camp
@@ -154,6 +187,9 @@ public class gameController : MonoBehaviour
              if(campNum == 2){
             minion.tag = "Minion2"; 
             }
+            if(campNum == 3){
+            minion.tag = "Minion3"; 
+            }
             minion.transform.parent = camp.transform;
         }
 
@@ -163,6 +199,18 @@ public class gameController : MonoBehaviour
             GameObject demon2 = Instantiate(DemonPrefab, new Vector3(230f, 3.67f, 187f), Quaternion.identity);
             demon1.tag = "Demon";
             demon2.tag = "Demon";
+        }
+
+        if(campNum == 3){
+
+            GameObject demon1 = Instantiate(DemonPrefab, new Vector3(260f, 3.67f, 92.4f), Quaternion.identity);
+            GameObject demon2 = Instantiate(DemonPrefab, new Vector3(215f, 3.67f, 61.4f), Quaternion.identity);
+            GameObject demon3 = Instantiate(DemonPrefab, new Vector3(215f, 3.67f, 92.4f), Quaternion.identity);
+            GameObject demon4 = Instantiate(DemonPrefab, new Vector3(212f, 3.67f, 92.4f), Quaternion.identity);
+            demon1.tag = "Demon11";
+            demon2.tag = "Demon12";
+             demon3.tag = "Demon12";
+            demon4.tag = "Demon11";
         }
         
         
@@ -185,6 +233,20 @@ public class gameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+         if(Input.GetKeyDown(KeyCode.F)){
+            Debug.Log("pressed f");
+         if(healthPoints != 100*level && healingPotions !=0){
+                 Debug.Log("pressed f");
+                 int increment = (int) (0.5*level*100);
+
+                 healthPoints +=increment;
+                 healthPoints = Math.Min(100*level,healthPoints);
+                 healingPotions --;
+                
+
+
+        }
+        }
         if(level == 4 ){
             xp = 400;
         }
@@ -199,5 +261,7 @@ public class gameController : MonoBehaviour
         xpBar.fillAmount =  (float)xp/(100*level);
 
     }
+
+   
 
 }

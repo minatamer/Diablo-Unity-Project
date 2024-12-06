@@ -10,6 +10,12 @@ TagManager:
   - Demon
   - Boss
   - Minion2
+  - Demon1
+  - Demon12
+  - Demon11
+  - Minion3
+  - Rune
+  - Potion
   layers:
   - Default
   - TransparentFX

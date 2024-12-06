@@ -17,11 +17,25 @@ public class MinionController : MonoBehaviour
     private void OnTriggerEnter(Collider other){
 
         if(other.gameObject.CompareTag("Player")){
-            
-               animator.SetBool("Punch", true);
+                              animator.SetBool("Punch", true);
+
+            if( PlayerPrefs.GetString("SelectedCharacter") == "Barbarian" ){//barbarian
+
+                BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
+               if(barbarianScript.shield == false){
+                      gameController.Instance.healthPoints -= 5;
+                        Animator player = other.gameObject.GetComponent<Animator>();
+                         player.SetTrigger("hit"); 
+               }
+            }
+            else{//arisa
                 gameController.Instance.healthPoints -= 5;
+                Animator player = other.gameObject.GetComponent<Animator>();
+                player.SetTrigger("hit"); 
+            }
 
         }
+        
 
 
     }

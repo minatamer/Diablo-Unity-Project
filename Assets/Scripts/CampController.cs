@@ -9,11 +9,25 @@ public class CampController : MonoBehaviour
 
     private List<GameObject> aggressiveMinions = new List<GameObject>();
     private List<Vector3> aggressiveMinionsOriginalPositions = new List<Vector3>();
+    private bool runeInstantiated = false;
 
 
 
 
+    void Update(){
+       
+         GameObject[] allMinions = GameObject.FindGameObjectsWithTag("Minion");
+         if(allMinions.Length == 0 && runeInstantiated == false )  {
+              
+                GameObject rune=  Instantiate(  gameController.Instance.RuneFragment, new Vector3(transform.position.x, 0.597f, transform.position.z), Quaternion.identity);
+                rune.tag = "Rune";
+       
+                runeInstantiated = true;
+         
 
+        }
+                
+    }
 
     private void OnTriggerEnter(Collider other)
     {

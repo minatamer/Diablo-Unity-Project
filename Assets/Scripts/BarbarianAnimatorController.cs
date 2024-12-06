@@ -26,6 +26,8 @@ public class BarbarianAnimatorController : MonoBehaviour
 
     private GameObject enemy;
 
+    public bool shield = false;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -41,6 +43,7 @@ public class BarbarianAnimatorController : MonoBehaviour
         {
             ActivateShield();
         }
+
 
         // Mouse-based movement (run to destination)
        if (Input.GetMouseButtonDown(0)){
@@ -92,19 +95,39 @@ public class BarbarianAnimatorController : MonoBehaviour
         // }
 
         // Handle Bash ability with cooldown
-        if (Input.GetKeyDown(KeyCode.B) && !isBashOnCooldown)
+        if (Input.GetMouseButtonDown(1) && !isBashOnCooldown)
         {
-            animator.SetTrigger("Bash");
-            StartCoroutine(BashCooldown());
+            Vector3 posClicked = GetMouseWorldPosition();
+            float distanceFromBarbarian = Vector3.Distance(posClicked, transform.position);
+            if(distanceFromBarbarian <= 5f){
+                animator.SetTrigger("Bash");
+                StartCoroutine(BashCooldown());
+            }
+            else {
+                Debug.Log("far from barbarian");
+            }
         }
+        //  if (animator.GetCurrentAnimatorStateInfo(0).IsName("IronMaelstrom") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.01f)
+        // {
+        //    // Debug.Log("EDRAB TANY 3AYEZ ATOOB");
+        //     if (enemyCollision == true)
+        //     {
+        //         Debug.Log("lefi bina denia");
+        //         MinionController minionController = enemy.gameObject.GetComponent<MinionController>();
+        //         minionController.hp -= 10;
+        //         enemyCollision = false;
+        //     }
+
+        // }
+
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Bash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.01f)
         {
-            Debug.Log("EDRAB TANY 3AYEZ ATOOB");
+           // Debug.Log("EDRAB TANY 3AYEZ ATOOB");
             if (enemyCollision == true)
             {
                 Debug.Log("EDRAB TANY 3AYEZ ATOOB");
                 MinionController minionController = enemy.gameObject.GetComponent<MinionController>();
-                minionController.hp -= 20;
+                minionController.hp -= 5;
                 enemyCollision = false;
             }
 
@@ -121,23 +144,37 @@ public class BarbarianAnimatorController : MonoBehaviour
         // Handle Iron Maelstrom ability with cooldown
         if (Input.GetKeyDown(KeyCode.Q) && !isIronMaelstromOnCooldown)
         {
+
             animator.SetTrigger("IronMaelstrom");
             StartCoroutine(IronMaelstromCooldown());
         }
     }
+Vector3 GetMouseWorldPosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            return hit.point;
+        }
 
+        Debug.LogWarning("Mouse click did not hit a valid position.");
+        return Vector3.zero; // Return a default invalid position
+    }
     private void ActivateShield()
     {
         Debug.Log("Shield activated!");
+        shield  = true;
         shieldAura.SetActive(true);
         StartCoroutine(DisableShieldAfterTime(3f)); // Shield lasts for 3 seconds
         StartCoroutine(ShieldCooldown()); // Start the shield cooldown
+     
     }
 
     private IEnumerator DisableShieldAfterTime(float duration)
     {
         yield return new WaitForSeconds(duration);
         shieldAura.SetActive(false);
+        shield  = false;
     }
 
     // Bash cooldown logic
@@ -183,6 +220,7 @@ public class BarbarianAnimatorController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Minion"))
         {
+            
             Debug.Log("7asal collision");
             enemy = collision.gameObject;
             enemyCollision = true;
