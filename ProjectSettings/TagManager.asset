@@ -16,6 +16,7 @@ TagManager:
   - Minion3
   - Rune
   - Potion
+  - Spike
   layers:
   - Default
   - TransparentFX

@@ -128,7 +128,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Standing 1H Magic Attack 03
+  m_Name: Summon
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -235,7 +235,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Jumping
+  m_Name: Divebomb
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -374,7 +374,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Standing 2H Magic Area Attack 01
+  m_Name: Spikes
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:

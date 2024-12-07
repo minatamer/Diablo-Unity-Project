@@ -44,6 +44,8 @@ public class gameController : MonoBehaviour
     
     public bool barbarianShield = false;
 
+    public bool bossLevel = true;
+
     // public TMP_Text[] abilitiesNames = new TMP_Text[4];
     public Button[] buttons = new Button[4];
 
@@ -108,18 +110,39 @@ public class gameController : MonoBehaviour
 
         if (characterToInstantiate != null)
         {
-             GameObject newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
+            GameObject newObject;
+            if (bossLevel)
+            {
+                newObject = Instantiate(characterToInstantiate, new Vector3(0f, 4f, -24f), Quaternion.identity);
+            }
+            else
+            {
+                newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
+            }
+                
             // GameObject camp = Instantiate(Camp, new Vector3(200.13f, -10f, 135.12f), Quaternion.identity);
-             initializeCamp(campOne, 10, 0, 1);
+            if (!bossLevel)
+            {
+                initializeCamp(campOne, 10, 0, 1);
+            }
 
-           // camp.AddComponent<CampController>();
-           // GameObject campTwo = Instantiate(Camp, new Vector3(244.13f, -10f, 171.12f), Quaternion.identity);
-            initializeCamp(campTwo, 14, 2, 2);
-           // campTwo.AddComponent<CampControllerTwo>();
+
+            // camp.AddComponent<CampController>();
+            // GameObject campTwo = Instantiate(Camp, new Vector3(244.13f, -10f, 171.12f), Quaternion.identity);
+            if (!bossLevel)
+            {
+                initializeCamp(campTwo, 14, 2, 2);
+            }
+
+            // campTwo.AddComponent<CampControllerTwo>();
 
 
             //GameObject campThree = Instantiate(Camp, new Vector3(244.13f, -10f,81.2f), Quaternion.identity);
-            initializeCamp(campThree, 18, 4, 3);
+            if (!bossLevel){
+                initializeCamp(campThree, 18, 4, 3);
+            }
+
+                
            // campThree.AddComponent<CampControllerThree>();
 
 

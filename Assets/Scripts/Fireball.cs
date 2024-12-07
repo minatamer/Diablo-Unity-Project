@@ -39,6 +39,39 @@ public class Fireball : MonoBehaviour
         enemyScript.UpdateHealthBar();
         Destroy(gameObject); // Destroy the fireball
     }
+
+        if (other.gameObject.CompareTag("Boss"))
+        {
+            sorScript.SetFireBallDestroyed(true);
+            sorScript.SetCurrentFireball(null);
+            BossController enemyScript = other.gameObject.GetComponent<BossController>();//update with ennemy script name
+            if (enemyScript.auraActive)
+            {
+                gameController.Instance.healthPoints -= 20;
+                enemyScript.auraActive = false;
+            }
+            else
+            {
+                if (enemyScript.currentShieldHealth > 0)
+                {
+                    enemyScript.currentShieldHealth -= 5;
+                    if (enemyScript.currentShieldHealth < 0)
+                    {
+                        int damage = enemyScript.currentShieldHealth;
+                        enemyScript.currentShieldHealth = 0;
+                        enemyScript.hp += damage;
+
+                    }
+                }
+                else
+                {
+                    enemyScript.hp -= 5;
+                }
+            }
+
+            //enemyScript.UpdateHealthBar();
+            Destroy(gameObject); // Destroy the fireball
+        }
     }
 
 }
