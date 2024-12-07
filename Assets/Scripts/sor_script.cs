@@ -26,7 +26,6 @@ public class sor_script : MonoBehaviour
     private float infernoLastAbilityTime = 0;
     private float teleportLastAbilityTime = 0;
     private float fireBallThrownAtTime;
-    private int noFire ;
      void Start()
     {
         animator = GetComponent<Animator>();
@@ -84,6 +83,7 @@ public class sor_script : MonoBehaviour
     {
         Destroy(clonedInstance, 5f);
         yield return new WaitForSeconds(5f); 
+        gameObject.tag= "Player";
         cloneLastAbilityTime = Time.time; 
     }
     void Update()
@@ -95,43 +95,43 @@ public class sor_script : MonoBehaviour
     //     Debug.Log("drinkkkkkkk");
     //      animator.SetTrigger("drink");
     //     }
-        noFire = 1;
-       
-        if(Input.GetKeyDown(KeyCode.E) && UseAbility(infernoLastAbilityTime , 15) == false  ||
-            Input.GetKeyDown(KeyCode.W) && UseAbility(teleportLastAbilityTime , 10) == false ||
-            Input.GetKeyDown(KeyCode.Q) && UseAbility(cloneLastAbilityTime , 10) == false)
-        {
-            noFire = 0;
-         
-            
-        }
-       
     
-        if (noFire == 1)
-        {   
+
             
-          if (Input.GetMouseButtonDown(1) && waitingForRightClick == false && waitingForRightUltimate == false && waitingForRightDefensive == false) 
+           if ( Input.GetMouseButtonDown(1) && waitingForRightClick == false && waitingForRightUltimate == false && waitingForRightDefensive == false) 
         {      
-            animator.SetBool("throwing",true);
-            fireBallThrownAtTime = Time.time;
-            currentFireball = Instantiate(fireball , shootingPoint.transform.position  , Quaternion.identity);
-            currentFireball.transform.parent =  shootingPoint;
-
-            Vector3 mousePos = Input.mousePosition;
-            Ray ray = Camera.main.ScreenPointToRay(mousePos);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                Vector3 hitPoint = hit.point;
-                targetPosition = hitPoint;
+            if(waitingForRightClick == true && UseAbility(cloneLastAbilityTime , 10) == false ){
+                waitingForRightClick = false;
+                        }
+            else if(waitingForRightUltimate == true  && UseAbility(infernoLastAbilityTime , 15) == false ){
+                waitingForRightUltimate = false;
             }
-            else{                
-                targetPosition =  mousePos;
+            else if(waitingForRightDefensive == true && UseAbility(teleportLastAbilityTime , 10) == false ){
+                waitingForRightDefensive = false;
             }
+            else{
+                animator.SetBool("throwing",true);
+                fireBallThrownAtTime = Time.time;
+                currentFireball = Instantiate(fireball , shootingPoint.transform.position  , Quaternion.identity);
+                currentFireball.transform.parent =  shootingPoint;
+
+                Vector3 mousePos = Input.mousePosition;
+                Ray ray = Camera.main.ScreenPointToRay(mousePos);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    Vector3 hitPoint = hit.point;
+                    targetPosition = hitPoint;
+                }
+                else{                
+                    targetPosition =  mousePos;
+                }
+            }
+            }
+            //
            
-            }
-        }
+        
         
             
         releaseBall();
@@ -140,15 +140,15 @@ public class sor_script : MonoBehaviour
             fireBallDestroyed = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && UseAbility(infernoLastAbilityTime , 15) == true)
+        if (Input.GetKeyDown(KeyCode.E) )
         {
             Debug.Log("E key pressed. Waiting for right mouse click...");
             waitingForRightUltimate = true; 
-            infernoLastAbilityTime  = Time.time ;
+          //  infernoLastAbilityTime  = Time.time ;
         }
 
        
-        if (waitingForRightUltimate && Input.GetMouseButtonDown(1))
+        if (waitingForRightUltimate && Input.GetMouseButtonDown(1) && UseAbility(infernoLastAbilityTime , 15) == true)
         {
             Debug.Log("Right mouse button clicked after pressing E!");
             waitingForRightUltimate = false;
@@ -162,28 +162,28 @@ public class sor_script : MonoBehaviour
         }       
 
        
-        if (Input.GetKeyDown(KeyCode.W) && UseAbility(teleportLastAbilityTime , 10) == true)
+        if (Input.GetKeyDown(KeyCode.W) )
         {
             Debug.Log("W key pressed. Waiting for right mouse click...");
             waitingForRightDefensive = true; 
-            teleportLastAbilityTime = Time.time;
         }
       
-        if (waitingForRightDefensive && Input.GetMouseButtonDown(1))
+        if (waitingForRightDefensive && Input.GetMouseButtonDown(1)&& UseAbility(teleportLastAbilityTime , 10) == true)
         {
-            Debug.Log("Right mouse button clicked after pressing W!");
+            Debug.Log("Right mouse button clicked after pressing W!!!!!");
             Vector3 spawnPosition = GetMouseWorldPosition();
             navMeshAgent.transform.position = spawnPosition;
             waitingForRightDefensive = false; 
+            teleportLastAbilityTime = Time.time;
         }       
        
-       if (Input.GetKeyDown(KeyCode.Q) && UseAbility(cloneLastAbilityTime , 10) == true)
+       if (Input.GetKeyDown(KeyCode.Q) )
         {
             Debug.Log("Q key pressed. Waiting for right mouse click...");
             waitingForRightClick = true; 
         }
         
-        if (waitingForRightClick && Input.GetMouseButtonDown(1))
+        if (waitingForRightClick && Input.GetMouseButtonDown(1) && UseAbility(cloneLastAbilityTime , 10) == true)
         {
             Debug.Log("Right mouse button clicked after pressing Q!");
             waitingForRightClick = false;
@@ -198,6 +198,8 @@ public class sor_script : MonoBehaviour
                  clonedinstance.transform.localRotation = transform.localRotation;
                  Debug.Log("Sorcerer clone created at: " + spawnPosition);
                  //clone created in a place where enemy can track him 
+                 cloneAnimator.tag = "Player";
+                 gameObject.tag= "OriginalPlayer";
                  //enemy run towards the clone 
                  //clone explodes   damage to the enemies surrounding the area
                 StartCoroutine(HandleCloneCooldown(clonedinstance));
@@ -238,9 +240,6 @@ public class sor_script : MonoBehaviour
             navMeshAgent.speed = 3.5f;
             
         }
-        
-
-
 
     }
    

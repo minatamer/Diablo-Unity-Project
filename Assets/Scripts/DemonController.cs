@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+
 
 public class DemonController : MonoBehaviour
 {
      public int hp = 40;
      private Animator animator ;
      private   NavMeshAgent agent ;
+    
+     public Image healthBarImage;
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +66,7 @@ public class DemonController : MonoBehaviour
 
 
         float position1X = 215f;
-        float position2X= 255f;
+        float position2X = 255f;
         Vector3 currentPosition = transform.position;
 
         // Toggle between the two positions
@@ -86,6 +90,10 @@ public class DemonController : MonoBehaviour
         }
 
 
+    }
+   public void UpdateHealthBar()
+    {
+            healthBarImage.fillAmount =  ((float)hp / 40);
     }
     private void OnTriggerEnter(Collider other){
 

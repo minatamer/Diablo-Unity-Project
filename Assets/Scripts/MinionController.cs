@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class MinionController : MonoBehaviour
 {
     // Start is called before the first frame update
     public int hp = 20;
     Animator animator ;
+    public Image healthBarImage;
+
 
     void Start()
     {
@@ -38,6 +42,10 @@ public class MinionController : MonoBehaviour
         
 
 
+    }
+    public void UpdateHealthBar()
+    {
+            healthBarImage.fillAmount =  ((float)hp / 20);
     }
     // Update is called once per frame
     void Update()
