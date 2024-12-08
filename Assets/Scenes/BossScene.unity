@@ -4586,8 +4586,12 @@ PrefabInstance:
       value: Nightshade J Friedrich
       objectReference: {fileID: 0}
     - target: {fileID: 8669796136655273073, guid: 4033046cb98539a46bbe483a16f158bc, type: 3}
+      propertyPath: hp
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8669796136655273073, guid: 4033046cb98539a46bbe483a16f158bc, type: 3}
       propertyPath: phase
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8669796136655273073, guid: 4033046cb98539a46bbe483a16f158bc, type: 3}
       propertyPath: minion
@@ -4605,6 +4609,10 @@ PrefabInstance:
       propertyPath: arenaCenter
       value: 
       objectReference: {fileID: 1906824149}
+    - target: {fileID: 8669796136655273073, guid: 4033046cb98539a46bbe483a16f158bc, type: 3}
+      propertyPath: currentShieldHealth
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8669796136655273073, guid: 4033046cb98539a46bbe483a16f158bc, type: 3}
       propertyPath: spikesTimelineDirector
       value: 

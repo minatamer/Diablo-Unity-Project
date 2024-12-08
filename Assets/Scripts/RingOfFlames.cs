@@ -45,7 +45,13 @@ public class RingOfFlames : MonoBehaviour
                 enemyScript.hp -= 2;
                 enemyScript.UpdateHealthBar();
             }
-           
+            if (enemyObject.tag.Contains("Boss"))
+            {
+                BossController enemyScript = enemyObject.GetComponent<BossController>();
+                enemyScript.hp -= 2;
+                //enemyScript.UpdateHealthBar();
+            }
+
 
         }
         else {
@@ -60,6 +66,12 @@ public class RingOfFlames : MonoBehaviour
                 DemonController enemyScript = enemyObject.GetComponent<DemonController>();
                 enemyScript.hp -= 10;
                 enemyScript.UpdateHealthBar();
+            }
+            if (enemyObject.tag.Contains("Boss"))
+            {
+                BossController enemyScript = enemyObject.GetComponent<BossController>();
+                enemyScript.hp -= 10;
+                //enemyScript.UpdateHealthBar();
             }
             enemiesWithinRing.Add(enemyObject);
         }

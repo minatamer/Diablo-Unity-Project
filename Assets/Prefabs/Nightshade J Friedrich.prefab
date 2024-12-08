@@ -242,14 +242,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   phase: 1
   shieldHealth: 50
-  hp: 50
+  hp: 1
+  currentShieldHealth: 1
   auraActive: 0
   shieldRegenDelay: 10
   arenaCenter: {fileID: 0}
-  spikesTimelineDirector: {fileID: 0}
   auraSphere: {fileID: 978237647248822236}
   minion: {fileID: 919132149155446097, guid: a52f7cde8ed0b7d408d15fc7f11ed9ff, type: 3}
-  minionsAlive: 0
+  SpikePrefab: {fileID: 0}
+  shield: {fileID: 0}
 --- !u!65 &-8786351817609343834
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Playables;
+using static UnityEngine.GraphicsBuffer;
 
 public class BossController : MonoBehaviour
 {
@@ -30,11 +33,12 @@ public class BossController : MonoBehaviour
 
     public GameObject minion;
 
-    private List<GameObject> minions = new List<GameObject>();
+    public List<GameObject> minions = new List<GameObject>();
 
     public GameObject SpikePrefab;
 
     private bool FireSpikes = false;
+    private bool RaiseSpikes = false;
     private GameObject spikeOne;
     private GameObject spikeTwo;
     private GameObject spikeThree;
@@ -68,16 +72,21 @@ public class BossController : MonoBehaviour
     void FireInStraightLine(GameObject spike)
     {
         GameObject player = GameObject.FindWithTag("Player");
-        Vector3 direction = (player.transform.position - spike.transform.position).normalized;
+        Vector3 direction = (new Vector3(player.transform.position.x, player.transform.position.y - 3, player.transform.position.z) - spike.transform.position).normalized;
         Rigidbody rb = spike.GetComponent<Rigidbody>();
         rb.isKinematic = false;
-        Vector3 force = new Vector3(direction.x, direction.y, direction.z) * 0.5f;
+        Vector3 force = new Vector3(direction.x, direction.y, direction.z) * 2f;
         rb.AddForce(force, ForceMode.VelocityChange);
-
     }
 
     private void Update()
     {
+        GameObject target = GameObject.FindWithTag("clonedPlayer");
+        if (target == null)
+        {
+            target = GameObject.FindWithTag("Player");
+        }
+        transform.LookAt(target.transform);
         if (!auraActive)
         {
             auraSphere.SetActive(false);
@@ -97,11 +106,17 @@ public class BossController : MonoBehaviour
             {
                 //GO TO PHASE 2 
                 phase = 2;
+                lilithAnimator.SetTrigger("Die");
                 return;
             }
             else
             {
-                GameObject player = GameObject.FindWithTag("Player");
+                GameObject player = GameObject.FindWithTag("clonedPlayer");
+                if(player == null)
+                {
+                    player = GameObject.FindWithTag("Player");
+                }
+                
                 for (int i= minions.Count-1 ; i >= 0 ; i--)
                 {
                     if (minions[i] == null)
@@ -112,6 +127,7 @@ public class BossController : MonoBehaviour
                     {
                         NavMeshAgent agent = minions[i].GetComponent<NavMeshAgent>();
                         agent.SetDestination(player.transform.position);
+                        agent.stoppingDistance = 1.5f;
                     }
 
                 }
@@ -136,6 +152,7 @@ public class BossController : MonoBehaviour
         {
             if (!Phase2CoroutineStarted)
             {
+                Debug.Log("dakhalt el if");
                 hp = 50;
                 currentShieldHealth = 50;
                 shieldActive = true;
@@ -177,53 +194,102 @@ public class BossController : MonoBehaviour
                 //Debug.Log(lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
                 if (lilithAnimator.GetCurrentAnimatorStateInfo(0).IsName("Spikes") )
                 {
-                    FireSpikes = true;
+
+                    RaiseSpikes = true;
 
                 }
+            }
+            if (lilithAnimator.GetCurrentAnimatorStateInfo(0).IsName("Cast") )
+            {
+                auraActive = true;
+                auraSphere.SetActive(true);
+            }
+                
+
+            if (spikeOne != null && spikeOne.transform.position.y >= 5f)
+            {
+                RaiseSpikes = false;
+
+                Rigidbody rb = spikeOne.GetComponent<Rigidbody>();
+                rb.velocity = Vector3.zero;
+
+                Rigidbody rb2 = spikeTwo.GetComponent<Rigidbody>();
+                rb2.velocity = Vector3.zero;
+
+
+                Rigidbody rb3 = spikeThree.GetComponent<Rigidbody>();
+                rb3.velocity = Vector3.zero;
+
+                FireSpikes = true;
+            }
+
+                        if(spikeOne != null && spikeOne.transform.position.y >= 5f)
+            {
+                RaiseSpikes = false;
+
+                Rigidbody rb = spikeOne.GetComponent<Rigidbody>();
+                rb.velocity = Vector3.zero;
+
+                Rigidbody rb2 = spikeTwo.GetComponent<Rigidbody>();
+                rb2.velocity = Vector3.zero;
+
+
+                Rigidbody rb3 = spikeThree.GetComponent<Rigidbody>();
+                rb3.velocity = Vector3.zero;
+
+                FireSpikes = true;
+            }
+
+            if (RaiseSpikes)
+            {
+                if(spikeOne != null)
+                {
+                    Rigidbody rb = spikeOne.GetComponent<Rigidbody>();
+                    rb.isKinematic = false;
+                    rb.velocity = Vector3.up * 4.0f;
+                }
+
+                if (spikeTwo != null)
+                {
+                    Rigidbody rb2 = spikeTwo.GetComponent<Rigidbody>();
+                    rb2.isKinematic = false;
+                    rb2.velocity = Vector3.up * 4.0f;
+                }
+
+
+
+                if (spikeThree != null)
+                {
+                    Rigidbody rb3 = spikeThree.GetComponent<Rigidbody>();
+                    rb3.isKinematic = false;
+                    rb3.velocity = Vector3.up * 4.0f;
+                }
+
             }
 
             if (FireSpikes)
             {
+                GameObject boss = GameObject.FindWithTag("Boss");
                 if (spikeOne != null)
                 {
-                    FireInStraightLine(spikeOne);
-                }
-                if (spikeTwo != null)
-                {
-                    FireInStraightLine(spikeTwo);
-                }
-                if (spikeThree != null)
-                {
-                    FireInStraightLine(spikeThree);
+                    float distance = Vector3.Distance(spikeOne.transform.position, boss.transform.position);
+                    if (distance > 20f)
+                    {
+                        Destroy(spikeOne);
+                        Destroy(spikeTwo);
+                        Destroy(spikeThree);
+                        FireSpikes = false;
+                    }
+                    else
+                    {
+                        FireInStraightLine(spikeOne);
+                        FireInStraightLine(spikeTwo);
+                        FireInStraightLine(spikeThree);
+                    }
+                   
                 }
             }
 
-            if (spikeOne != null)
-            {
-                if (spikeOne.transform.position.y < 0)
-                {
-                    Destroy(spikeOne);
-                    spikeOne = null;
-                }
-            }
-            if (spikeTwo != null)
-            {
-                if (spikeTwo.transform.position.y < 0)
-                {
-                    Destroy(spikeTwo);
-                    spikeTwo = null;
-                }
-
-            }
-            if (spikeThree != null)
-            {
-                if (spikeThree.transform.position.y < 0)
-                {
-                    Destroy(spikeThree);
-                    spikeThree = null;
-                }
-
-            }
 
         }
     }
@@ -241,11 +307,7 @@ public class BossController : MonoBehaviour
     {
         if (!auraActive )
         {
-           //TODO: Reflect the Wanderer's damage and deal additional damage
-           //TODO: Deactivate aura after one use
-            lilithAnimator.SetTrigger("Cast");
-           auraActive = true;
-           auraSphere.SetActive(true);  
+            lilithAnimator.SetTrigger("Cast"); 
         }
         else
         {
@@ -265,9 +327,9 @@ public class BossController : MonoBehaviour
             }
             FireSpikes = false;
             lilithAnimator.SetTrigger("Spikes");
-           spikeOne = Instantiate(SpikePrefab, new Vector3(transform.position.x + 1.5f , transform.position.y+6f , transform.position.z), Quaternion.Euler(70, 0, 0));
-           spikeTwo = Instantiate(SpikePrefab, new Vector3(transform.position.x -1.5f, transform.position.y + 6f, transform.position.z), Quaternion.Euler(70, 0, 0));
-           spikeThree = Instantiate(SpikePrefab, new Vector3(transform.position.x, transform.position.y + 6f, transform.position.z + 1.5f), Quaternion.Euler(70, 0, 0));
+           spikeOne = Instantiate(SpikePrefab, new Vector3(transform.position.x + 1.5f , transform.position.y+0.5f , transform.position.z), Quaternion.Euler(70, 0, 0));
+           spikeTwo = Instantiate(SpikePrefab, new Vector3(transform.position.x -1.5f, transform.position.y + 0.5f, transform.position.z), Quaternion.Euler(70, 0, 0));
+           spikeThree = Instantiate(SpikePrefab, new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z + 1.5f), Quaternion.Euler(70, 0, 0));
         }
     }
 

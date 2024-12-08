@@ -1,4 +1,5 @@
 using System.Collections; // Required for IEnumerator and Coroutines
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -28,6 +29,10 @@ public class BarbarianAnimatorController : MonoBehaviour
 
     public bool shield = false;
 
+    private bool waitingForRightClick;
+
+    private bool bossChargeDamage = false;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -38,6 +43,26 @@ public class BarbarianAnimatorController : MonoBehaviour
 
     void Update()
     {
+
+        if (Input.GetMouseButtonDown(1) && waitingForRightClick == true)
+        {
+            if (isChargeOnCooldown == true)
+            {
+                waitingForRightClick = false;
+            }
+            else
+            {
+                Debug.Log("Charge Right clicked pressed");
+                Vector3 position = GetMouseWorldPosition();
+
+                
+                navMeshAgent.destination = position;
+                animator.SetTrigger("Charge");
+                StartCoroutine(ChargeCooldown());
+                StartCoroutine(ResetToIdleAfterCharge());
+                waitingForRightClick = false;
+            }
+        }
         // Handle Shield ability with cooldown
         if (Input.GetKeyDown(KeyCode.W) && !isShieldOnCooldown)
         {
@@ -51,7 +76,7 @@ public class BarbarianAnimatorController : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(ray, out hit)){
                  hitPoint = hit.point;
-                 Debug.Log(hitPoint);
+                 //Debug.Log(hitPoint);
                 navMeshAgent.destination = hit.point;
 
                 animator.SetBool("walking", true);
@@ -95,30 +120,103 @@ public class BarbarianAnimatorController : MonoBehaviour
         // }
 
         // Handle Bash ability with cooldown
-        if (Input.GetMouseButtonDown(1) && !isBashOnCooldown)
+        if (Input.GetMouseButtonDown(1) && !isBashOnCooldown && waitingForRightClick == false)
         {
             Vector3 posClicked = GetMouseWorldPosition();
+            float radius = 2f;
+            GameObject foundObject = null;
+            Collider[] hitColliders = Physics.OverlapSphere(posClicked, radius);
+
+            foreach (Collider collider in hitColliders)
+            {
+                string tag = collider.gameObject.tag;
+                if (tag.Contains("Minion") || tag.Contains("Demon") || tag.Contains("Boss"))
+                {
+                    foundObject = collider.gameObject;
+                    break;
+                }
+            }
+
             float distanceFromBarbarian = Vector3.Distance(posClicked, transform.position);
-            if(distanceFromBarbarian <= 5f){
+            
+            if(distanceFromBarbarian <= 5f && foundObject != null){
                 animator.SetTrigger("Bash");
                 StartCoroutine(BashCooldown());
             }
             else {
-                Debug.Log("far from barbarian");
+                //Debug.Log("far from barbarian");
             }
         }
-        //  if (animator.GetCurrentAnimatorStateInfo(0).IsName("IronMaelstrom") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.01f)
-        // {
-        //    // Debug.Log("EDRAB TANY 3AYEZ ATOOB");
-        //     if (enemyCollision == true)
-        //     {
-        //         Debug.Log("lefi bina denia");
-        //         MinionController minionController = enemy.gameObject.GetComponent<MinionController>();
-        //         minionController.hp -= 10;
-        //         enemyCollision = false;
-        //     }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("IronMaelstrom") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.01f)
+        {
+            if (enemyCollision == true)
+            {
+                //Debug.Log("lefi bina denia");
 
-        // }
+                if (enemy.tag.Contains("Minion"))
+                {
+                    MinionController enemyScript = enemy.GetComponent<MinionController>();
+                    enemyScript.hp -= 10;
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Demon"))
+                {
+                    DemonController enemyScript = enemy.GetComponent<DemonController>();
+                    enemyScript.hp -= 10;
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Boss"))
+                {
+                    BossController enemyScript = enemy.GetComponent<BossController>();
+                    enemyScript.hp -= 10;
+                    //enemyScript.UpdateHealthBar();
+                }
+
+                enemyCollision = false;
+            }
+
+
+        }
+
+        if (animator.GetCurrentAnimatorStateInfo(1).IsName("Charge"))
+        {
+            transform.position = animator.transform.position;
+            Debug.Log("charge animation");
+            if (enemyCollision == true)
+            {
+                if (enemy.tag.Contains("Minion"))
+                {
+                    MinionController enemyScript = enemy.GetComponent<MinionController>();
+                    enemyScript.hp -= 50;  //DO A BIG DAMAGE THAT WILL KILL THEM 
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Demon"))
+                {
+                    DemonController enemyScript = enemy.GetComponent<DemonController>();
+                    enemyScript.hp -= 50; //DO A BIG DAMAGE THAT WILL KILL THEM 
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Boss"))
+                {
+                    BossController enemyScript = enemy.GetComponent<BossController>();
+                    if (bossChargeDamage == false)
+                    {
+                        enemyScript.hp -= 20;
+                        bossChargeDamage = true;
+                    }
+                    
+                    //enemyScript.UpdateHealthBar();
+                }
+                enemyCollision = false;
+            }
+
+        }
+
+        if(animator.GetCurrentAnimatorStateInfo(1).IsName("New State"))
+        {
+            //Debug.Log("BOSS CHARGE DAMAGE RESET");
+            bossChargeDamage = false;
+        }
 
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Bash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.01f)
         {
@@ -126,8 +224,25 @@ public class BarbarianAnimatorController : MonoBehaviour
             if (enemyCollision == true)
             {
                 Debug.Log("EDRAB TANY 3AYEZ ATOOB");
-                MinionController minionController = enemy.gameObject.GetComponent<MinionController>();
-                minionController.hp -= 5;
+                if (enemy.tag.Contains("Minion"))
+                {
+                    MinionController enemyScript = enemy.GetComponent<MinionController>();
+                    enemyScript.hp -= 5;
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Demon"))
+                {
+                    DemonController enemyScript = enemy.GetComponent<DemonController>();
+                    enemyScript.hp -= 5;
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Boss"))
+                {
+                    BossController enemyScript = enemy.GetComponent<BossController>();
+                    enemyScript.hp -= 5;
+                    //enemyScript.UpdateHealthBar();
+                }
+
                 enemyCollision = false;
             }
 
@@ -136,9 +251,9 @@ public class BarbarianAnimatorController : MonoBehaviour
         // Handle Charge ability with cooldown
         if (Input.GetKeyDown(KeyCode.E) && !isChargeOnCooldown)
         {
-            animator.SetTrigger("Charge");
-            StartCoroutine(ChargeCooldown());
-            StartCoroutine(ResetToIdleAfterCharge());
+            Debug.Log("E is pressed!");
+            waitingForRightClick = true;
+
         }
 
         // Handle Iron Maelstrom ability with cooldown
@@ -216,14 +331,36 @@ Vector3 GetMouseWorldPosition()
         animator.ResetTrigger("Charge");
     }
 
-    private void OnTriggerEnter(Collider collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Minion"))
+        if (other.gameObject.tag.Contains("Minion") || other.gameObject.tag.Contains("Demon") || other.gameObject.tag.Contains("Boss"))
         {
-            
             Debug.Log("7asal collision");
-            enemy = collision.gameObject;
+            enemy = other.gameObject;
             enemyCollision = true;
         }
+
+
+        if (other.gameObject.tag == "Rune")
+        {
+            gameController.Instance.runeFragments++;
+            Destroy(other.gameObject);
+
+        }
+        if (other.gameObject.tag == "Potion")
+        {
+            if (gameController.Instance.healingPotions < 3)
+            {
+                gameController.Instance.healingPotions++;
+                Destroy(other.gameObject);
+            }
+        }
+        if (other.gameObject.tag == "Spike")
+        {
+            gameController.Instance.healthPoints -= 30;
+            //Destroy(other.gameObject);
+        }
+
+
     }
 }

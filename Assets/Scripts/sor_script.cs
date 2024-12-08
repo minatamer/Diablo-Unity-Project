@@ -84,9 +84,48 @@ public class sor_script : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         GameObject explosion =  Instantiate(explosionPrefab, new Vector3(clonedInstance.transform.position.x,clonedInstance.transform.position.y+5f,clonedInstance.transform.position.z), Quaternion.identity);
+        //cause damage to enemies around 
+        string[] enemyTags = { "Minion", "Minion2", "Minion3", "Demon11", "Demon12", "Demon", "Boss" };
+        List<GameObject> enemies = new List<GameObject>();
+
+        foreach (string tag in enemyTags)
+        {
+            GameObject[] taggedEnemies = GameObject.FindGameObjectsWithTag(tag);
+            enemies.AddRange(taggedEnemies);
+        }
+
+        GameObject[] enemyArray = enemies.ToArray();
+
+        foreach (GameObject enemy in enemyArray)
+        {
+            float distance = Vector3.Distance(enemy.transform.position, clonedInstance.transform.position);
+            if (distance < 5f)
+            {
+                if (enemy.tag.Contains("Minion"))
+                {
+                    MinionController enemyScript = enemy.gameObject.GetComponent<MinionController>();
+                    enemyScript.hp -= 10;
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Demon"))
+                {
+                    DemonController enemyScript = enemy.gameObject.GetComponent<DemonController>();
+                    enemyScript.hp -= 10;
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Boss"))
+                {
+                    BossController enemyScript = enemy.gameObject.GetComponent<BossController>();
+                    enemyScript.hp -= 10;
+                    //enemyScript.UpdateHealthBar();
+                }
+            }
+        }
+
+
         Destroy(explosion, 1.0f);
         Destroy(clonedInstance);
-        //cause damage to enemies around 
+
         gameObject.tag= "Player";
         cloneLastAbilityTime = Time.time; 
     }
@@ -269,6 +308,7 @@ public class sor_script : MonoBehaviour
         if (other.gameObject.tag == "Spike")
         {
             gameController.Instance.healthPoints -= 30;
+            //Destroy(other.gameObject);
         }
 
     }

@@ -45,7 +45,11 @@ public class Fireball : MonoBehaviour
             sorScript.SetFireBallDestroyed(true);
             sorScript.SetCurrentFireball(null);
             BossController enemyScript = other.gameObject.GetComponent<BossController>();//update with ennemy script name
-            if (enemyScript.auraActive)
+            if (enemyScript.minions.Count > 0)
+            {
+                return;
+            }
+            else if (enemyScript.auraActive)
             {
                 gameController.Instance.healthPoints -= 20;
                 enemyScript.auraActive = false;

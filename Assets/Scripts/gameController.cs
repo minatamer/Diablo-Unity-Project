@@ -44,7 +44,7 @@ public class gameController : MonoBehaviour
     
     public bool barbarianShield = false;
 
-    private bool bossLevel = false;
+    public bool bossLevel = true;
 
     // public TMP_Text[] abilitiesNames = new TMP_Text[4];
     public Button[] buttons = new Button[4];
