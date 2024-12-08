@@ -196,7 +196,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 4.5559e-41, y: 3.85929e+22, z: 1.02e-43, w: 5.9e-44}
+  m_BoundingSphereOverride: {x: 4.5825e-41, y: 0, z: 0, w: 1e-45}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -402,6 +402,7 @@ MonoBehaviour:
   campOne: {fileID: 621235086}
   campTwo: {fileID: 1175779686}
   campThree: {fileID: 1797965383}
+  barbarianShield: 0
   buttons:
   - {fileID: 691621696}
   - {fileID: 526180140}

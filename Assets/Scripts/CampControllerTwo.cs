@@ -153,7 +153,8 @@ public class CampControllerTwo : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        string tag = other.tag == "clonedPlayer" ? "clonedPlayer" : "Player";
+        if (other.CompareTag(tag))
         {
 
             foreach (GameObject minion in aggressiveMinions)

@@ -32,23 +32,36 @@ public class RingOfFlames : MonoBehaviour
     {
         isChecking = true;
         Debug.Log($"Enemy detected:");
-        //for every ennemy reduce its damage points by 10
-        // then by 2 if stayed longer 
         GameObject enemyObject = enemy.gameObject;
-
         if(enemiesWithinRing.Contains(enemyObject)){
 
-        // EnemyScript enemyScript = enemyObject.GetComponent<EnemyScript>();//update with ennemy script name
-        // enemyScript.damagePoints -= 2;
-            Debug.Log("decreased by 2 ");
+            if(enemyObject.tag.Contains("Minion")){
+                MinionController enemyScript = enemyObject.GetComponent<MinionController>();
+                enemyScript.hp -= 2;
+                enemyScript.UpdateHealthBar();
+            }
+            if(enemyObject.tag.Contains("Demon")){
+                DemonController enemyScript = enemyObject.GetComponent<DemonController>();
+                enemyScript.hp -= 2;
+                enemyScript.UpdateHealthBar();
+            }
+           
 
         }
         else {
-         // EnemyScript enemyScript = enemyObject.GetComponent<EnemyScript>();//update with ennemy script name
-         // enemyScript.damagePoints -= 10;
-            Debug.Log("decreased by 10 ");
-            enemiesWithinRing.Add(enemyObject);
 
+            if(enemyObject.tag.Contains("Minion")){
+             
+                MinionController enemyScript = enemyObject.GetComponent<MinionController>();
+                enemyScript.hp -= 10;
+                enemyScript.UpdateHealthBar();
+            }
+            if(enemyObject.tag.Contains("Demon")){
+                DemonController enemyScript = enemyObject.GetComponent<DemonController>();
+                enemyScript.hp -= 10;
+                enemyScript.UpdateHealthBar();
+            }
+            enemiesWithinRing.Add(enemyObject);
         }
         yield return new WaitForSeconds(1f);
         isChecking = false; 

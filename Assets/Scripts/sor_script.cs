@@ -26,6 +26,7 @@ public class sor_script : MonoBehaviour
     private float infernoLastAbilityTime = 0;
     private float teleportLastAbilityTime = 0;
     private float fireBallThrownAtTime;
+    public GameObject explosionPrefab;
      void Start()
     {
         animator = GetComponent<Animator>();
@@ -81,8 +82,11 @@ public class sor_script : MonoBehaviour
     }
     private IEnumerator HandleCloneCooldown(GameObject clonedInstance)
     {
-        Destroy(clonedInstance, 5f);
-        yield return new WaitForSeconds(5f); 
+        yield return new WaitForSeconds(5f);
+        GameObject explosion =  Instantiate(explosionPrefab, new Vector3(clonedInstance.transform.position.x,clonedInstance.transform.position.y+5f,clonedInstance.transform.position.z), Quaternion.identity);
+        Destroy(explosion, 1.0f);
+        Destroy(clonedInstance);
+        //cause damage to enemies around 
         gameObject.tag= "Player";
         cloneLastAbilityTime = Time.time; 
     }
@@ -129,10 +133,6 @@ public class sor_script : MonoBehaviour
                 }
             }
             }
-            //
-           
-        
-        
             
         releaseBall();
        
@@ -191,17 +191,16 @@ public class sor_script : MonoBehaviour
              if (spawnPosition != Vector3.zero) // Ensure a valid position was returned
             {
                  clonedinstance = Instantiate(sorcererClone, spawnPosition, Quaternion.identity);
+                 Destroy(clonedinstance.GetComponent<sor_script>());
                  Animator cloneAnimator = clonedinstance.GetComponent<Animator>();
                  AnimatorOverrideController overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
                  cloneAnimator.runtimeAnimatorController = overrideController;
                  clonedinstance.transform.localScale = transform.localScale;
                  clonedinstance.transform.localRotation = transform.localRotation;
                  Debug.Log("Sorcerer clone created at: " + spawnPosition);
-                 //clone created in a place where enemy can track him 
-                 cloneAnimator.tag = "Player";
+                 clonedinstance.tag = "clonedPlayer";
                  gameObject.tag= "OriginalPlayer";
-                 //enemy run towards the clone 
-                 //clone explodes   damage to the enemies surrounding the area
+                 //clone explodes  damage to the enemies surrounding the area
                 StartCoroutine(HandleCloneCooldown(clonedinstance));
             }          
         }

@@ -17,6 +17,8 @@ TagManager:
   - Rune
   - Potion
   - Spike
+  - OriginalPlayer
+  - clonedPlayer
   layers:
   - Default
   - TransparentFX

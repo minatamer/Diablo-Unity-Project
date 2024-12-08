@@ -44,7 +44,7 @@ public class gameController : MonoBehaviour
     
     public bool barbarianShield = false;
 
-    public bool bossLevel = true;
+    private bool bossLevel = false;
 
     // public TMP_Text[] abilitiesNames = new TMP_Text[4];
     public Button[] buttons = new Button[4];
@@ -111,7 +111,7 @@ public class gameController : MonoBehaviour
         if (characterToInstantiate != null)
         {
             GameObject newObject;
-            if (bossLevel)
+            if (bossLevel == true)
             {
                 newObject = Instantiate(characterToInstantiate, new Vector3(0f, 4f, -24f), Quaternion.identity);
             }
@@ -121,7 +121,7 @@ public class gameController : MonoBehaviour
             }
                 
             // GameObject camp = Instantiate(Camp, new Vector3(200.13f, -10f, 135.12f), Quaternion.identity);
-            if (!bossLevel)
+            if (bossLevel == false)
             {
                 initializeCamp(campOne, 10, 0, 1);
             }
@@ -129,7 +129,7 @@ public class gameController : MonoBehaviour
 
             // camp.AddComponent<CampController>();
             // GameObject campTwo = Instantiate(Camp, new Vector3(244.13f, -10f, 171.12f), Quaternion.identity);
-            if (!bossLevel)
+            if (bossLevel == false)
             {
                 initializeCamp(campTwo, 14, 2, 2);
             }
@@ -138,7 +138,7 @@ public class gameController : MonoBehaviour
 
 
             //GameObject campThree = Instantiate(Camp, new Vector3(244.13f, -10f,81.2f), Quaternion.identity);
-            if (!bossLevel){
+            if (bossLevel == false){
                 initializeCamp(campThree, 18, 4, 3);
             }
 

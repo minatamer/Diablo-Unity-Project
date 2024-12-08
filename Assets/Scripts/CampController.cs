@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -31,7 +32,6 @@ public class CampController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
         if (other.gameObject.CompareTag("Player"))
         {
             GameObject[] allMinions = GameObject.FindGameObjectsWithTag("Minion");
@@ -95,25 +95,24 @@ public class CampController : MonoBehaviour
                 originalPositions.RemoveAt(index);
             }
 
-
-        }
+            }
+        
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        string tag = other.tag == "clonedPlayer" ? "clonedPlayer" : "Player";
+        if (other.CompareTag(tag))
         {
-            int i =0;
+            int i = 0;
             foreach (GameObject minion in aggressiveMinions)
-            {
-               
+            {            
                 if(minion!=null){
                 NavMeshAgent agent = minion.GetComponent<NavMeshAgent>();
                 if (agent != null)
                 {
                     if (agent.destination != other.transform.position)
                     {
-
                         agent.SetDestination(other.transform.position);
                         agent.stoppingDistance = 2.5f;
                     }
@@ -124,9 +123,7 @@ public class CampController : MonoBehaviour
                     animator.SetBool("Run", true);
                 }
                 }
-                
-              
-                
+                            
                  i ++;
             }
             int size = aggressiveMinions.Count;
