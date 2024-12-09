@@ -117,42 +117,39 @@ public class sor_script : MonoBehaviour
                 {
                     BossController enemyScript = enemy.gameObject.GetComponent<BossController>();
                     enemyScript.hp -= 10;
-                    //enemyScript.UpdateHealthBar();
+                    enemyScript.UpdateHealthBar();
                 }
             }
         }
 
-
         Destroy(explosion, 1.0f);
         Destroy(clonedInstance);
-
+        clonedInstance = null;
         gameObject.tag= "Player";
         cloneLastAbilityTime = Time.time; 
     }
+    public void drink(){
+        animator.SetTrigger("drink");
+    }
+    
     void Update()
     {
-        //  int level =  gameController.Instance.level ;
-       
+        UpdateAbilitiesCoolDown();
 
-    //    if(Input.GetKeyDown(KeyCode.F) && gameController.Instance.healthPoints != level*100 && gameController.Instance.healingPotions !=0){
-    //     Debug.Log("drinkkkkkkk");
-    //      animator.SetTrigger("drink");
-    //     }
     
-
-            
-           if ( Input.GetMouseButtonDown(1) && waitingForRightClick == false && waitingForRightUltimate == false && waitingForRightDefensive == false) 
+     if ( Input.GetMouseButtonDown(1)) 
         {      
-            if(waitingForRightClick == true && UseAbility(cloneLastAbilityTime , 10) == false ){
+            if(waitingForRightClick == true && (UseAbility(cloneLastAbilityTime , 10) == false ||  gameController.Instance.locked[2] != -1 )){
                 waitingForRightClick = false;
-                        }
-            else if(waitingForRightUltimate == true  && UseAbility(infernoLastAbilityTime , 15) == false ){
+            }
+            else if(waitingForRightUltimate == true  && (UseAbility(infernoLastAbilityTime , 15) == false ||  gameController.Instance.locked[3] != -1 )){
                 waitingForRightUltimate = false;
             }
-            else if(waitingForRightDefensive == true && UseAbility(teleportLastAbilityTime , 10) == false ){
+            else if(waitingForRightDefensive == true && (UseAbility(teleportLastAbilityTime , 10) == false ||  gameController.Instance.locked[1] != -1 )){
                 waitingForRightDefensive = false;
             }
-            else{
+            else if(waitingForRightClick == false && waitingForRightUltimate == false && waitingForRightDefensive == false ){
+
                 animator.SetBool("throwing",true);
                 fireBallThrownAtTime = Time.time;
                 currentFireball = Instantiate(fireball , shootingPoint.transform.position  , Quaternion.identity);
@@ -183,16 +180,15 @@ public class sor_script : MonoBehaviour
         {
             Debug.Log("E key pressed. Waiting for right mouse click...");
             waitingForRightUltimate = true; 
-          //  infernoLastAbilityTime  = Time.time ;
         }
 
        
-        if (waitingForRightUltimate && Input.GetMouseButtonDown(1) && UseAbility(infernoLastAbilityTime , 15) == true)
+        if (waitingForRightUltimate && Input.GetMouseButtonDown(1) && UseAbility(infernoLastAbilityTime , 15) == true && gameController.Instance.locked[3] == -1)
         {
             Debug.Log("Right mouse button clicked after pressing E!");
             waitingForRightUltimate = false;
             Vector3 spawnPosition = GetMouseWorldPosition();
-             if (spawnPosition != Vector3.zero) // Ensure a valid position was returned
+             if (spawnPosition != Vector3.zero) 
             {
                  dangInstance = Instantiate(dangArea, spawnPosition, Quaternion.Euler(0, 0, 90));
                  StartCoroutine(HandleInfernoCooldown(dangInstance));
@@ -201,18 +197,29 @@ public class sor_script : MonoBehaviour
         }       
 
        
-        if (Input.GetKeyDown(KeyCode.W) )
+        if (Input.GetKeyDown(KeyCode.W))
         {
             Debug.Log("W key pressed. Waiting for right mouse click...");
             waitingForRightDefensive = true; 
+            
         }
       
-        if (waitingForRightDefensive && Input.GetMouseButtonDown(1)&& UseAbility(teleportLastAbilityTime , 10) == true)
+        if (waitingForRightDefensive && Input.GetMouseButtonDown(1) && UseAbility(teleportLastAbilityTime , 10) == true && gameController.Instance.locked[1] == -1)
         {
-            Debug.Log("Right mouse button clicked after pressing W!!!!!");
-            Vector3 spawnPosition = GetMouseWorldPosition();
-            navMeshAgent.transform.position = spawnPosition;
-            waitingForRightDefensive = false; 
+             Debug.Log("Right mouse button clicked after pressing W!");
+             Vector3 spawnPosition = GetMouseWorldPosition();
+
+             // Validate spawn position and update
+             NavMeshHit hit;
+             if (NavMesh.SamplePosition(spawnPosition, out hit, 1.0f, NavMesh.AllAreas))
+             {
+                navMeshAgent.enabled = false; 
+                navMeshAgent.transform.position = hit.position;
+                navMeshAgent.enabled = true; 
+                Debug.Log($"Teleported to {hit.position}");
+             }
+        
+            waitingForRightDefensive = false;
             teleportLastAbilityTime = Time.time;
         }       
        
@@ -221,13 +228,14 @@ public class sor_script : MonoBehaviour
             Debug.Log("Q key pressed. Waiting for right mouse click...");
             waitingForRightClick = true; 
         }
+
         
-        if (waitingForRightClick && Input.GetMouseButtonDown(1) && UseAbility(cloneLastAbilityTime , 10) == true)
+        if (waitingForRightClick && Input.GetMouseButtonDown(1) && UseAbility(cloneLastAbilityTime , 10) == true && gameController.Instance.locked[2] == -1 )
         {
             Debug.Log("Right mouse button clicked after pressing Q!");
             waitingForRightClick = false;
             Vector3 spawnPosition = GetMouseWorldPosition();
-             if (spawnPosition != Vector3.zero) // Ensure a valid position was returned
+             if (spawnPosition != Vector3.zero) 
             {
                  clonedinstance = Instantiate(sorcererClone, spawnPosition, Quaternion.identity);
                  Destroy(clonedinstance.GetComponent<sor_script>());
@@ -239,13 +247,13 @@ public class sor_script : MonoBehaviour
                  Debug.Log("Sorcerer clone created at: " + spawnPosition);
                  clonedinstance.tag = "clonedPlayer";
                  gameObject.tag= "OriginalPlayer";
-                 //clone explodes  damage to the enemies surrounding the area
-                StartCoroutine(HandleCloneCooldown(clonedinstance));
+                 StartCoroutine(HandleCloneCooldown(clonedinstance));
             }          
         }
+        
 
 
-          if (Input.GetMouseButtonDown(0)){
+          if (Input.GetMouseButtonDown(0) &&  gameController.Instance.buttons[1].GetComponent<AbilitiesButtons>().isMouseOver == false &&  gameController.Instance.buttons[2].GetComponent<AbilitiesButtons>().isMouseOver == false &&  gameController.Instance.buttons[3].GetComponent<AbilitiesButtons>().isMouseOver == false){
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if(Physics.Raycast(ray, out hit)){
@@ -292,7 +300,23 @@ public class sor_script : MonoBehaviour
               fireBallThrownAtTime = 0.0f;  
         }
     }
+    private void UpdateAbilitiesCoolDown(){
+        for(int i =1;i<=3;i++){
+            if(gameController.Instance.locked[i]== -1){
+                if(i == 1 && UseAbility(teleportLastAbilityTime ,10) == false){
+                    gameController.Instance.cooldownVal[i].text =  Mathf.FloorToInt(10-(Time.time - teleportLastAbilityTime)).ToString();
+                }
 
+                else if(i == 2 && UseAbility(cloneLastAbilityTime ,10) == false ){
+                     gameController.Instance.cooldownVal[i].text =  Mathf.FloorToInt(10-(Time.time - cloneLastAbilityTime)).ToString();
+                }
+
+                else if(i == 3 && UseAbility(infernoLastAbilityTime ,15) == false){
+                      gameController.Instance.cooldownVal[i].text =  Mathf.FloorToInt(15-(Time.time - infernoLastAbilityTime)).ToString();
+                }
+            }
+        }
+    }
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.tag == "Rune"){
             gameController.Instance.runeFragments ++;

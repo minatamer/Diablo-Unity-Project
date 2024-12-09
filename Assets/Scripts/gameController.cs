@@ -10,14 +10,15 @@ using System.Runtime.InteropServices;
 using UnityEditor.Rendering;
 using Unity.AI.Navigation;
 using UnityEngine.SceneManagement; 
+using UnityEngine.EventSystems;
+
 public class gameController : MonoBehaviour
 {
-
     public static gameController Instance { get; private set; }
     public int healthPoints = 100;
     private int xp = 0;
     public int level = 1;
-    private int abilityPoints = 0;
+    public int abilityPoints = 0;
     public int healingPotions = 0;
     public int runeFragments = 0;
     public TMP_Text points_text;
@@ -44,18 +45,21 @@ public class gameController : MonoBehaviour
     
     public bool barbarianShield = false;
 
-    public bool bossLevel = true;
+    public bool bossLevel = false;
 
     // public TMP_Text[] abilitiesNames = new TMP_Text[4];
     public Button[] buttons = new Button[4];
 
     public TMP_Text[] cooldownVal = new TMP_Text[4];
 
-    private int[] locked = new int[4];
+    public int[] locked = new int[4];
 
     public Camera mainCamera;
 
-
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log("Button clicked!");
+    }
 
     void Awake() {
         if (Instance != null && Instance != this)
@@ -70,7 +74,7 @@ public class gameController : MonoBehaviour
         cooldownVal[3].text = "_";
 
 
-
+        locked[0] = -1;
 
         if (PlayerPrefs.GetString("SelectedCharacter") == "Sorcerer") {
             buttons[0].GetComponentInChildren<TMP_Text>().text = "Fireball";
@@ -86,6 +90,11 @@ public class gameController : MonoBehaviour
             buttons[2].GetComponentInChildren<TMP_Text>().text = "Iron Maelstrom";
             buttons[3].GetComponentInChildren<TMP_Text>().text = "Charge";
         }
+        
+        initializeButtonAbilities(buttons[1]);
+        initializeButtonAbilities(buttons[2]);
+        initializeButtonAbilities(buttons[3]);
+
 
     }
     // Start is called before the first frame update
@@ -129,6 +138,7 @@ public class gameController : MonoBehaviour
 
             // camp.AddComponent<CampController>();
             // GameObject campTwo = Instantiate(Camp, new Vector3(244.13f, -10f, 171.12f), Quaternion.identity);
+
             if (bossLevel == false)
             {
                 initializeCamp(campTwo, 14, 2, 2);
@@ -177,11 +187,17 @@ public class gameController : MonoBehaviour
         // Load the Pause Scene additively
         SceneManager.LoadScene("PauseScene", LoadSceneMode.Additive);
     }
-
+    private void initializeButtonAbilities(Button button){
+        ColorBlock colorBlock = button.colors;
+        colorBlock.disabledColor = new Color(0.5f, 0.5f, 0.5f, 1f); 
+        button.colors = colorBlock;
+        button.interactable = false ;
+    }
+    
   private void initializePotions(float xMin, float xMax, float zMax , float zMin , int numberOfPotions){
 
     for(int i=0;i<numberOfPotions;i++){
-          System.Random random = new System.Random();
+        System.Random random = new System.Random();
 
     float x = (float)(random.NextDouble() * (xMax - (xMin)) + (xMin));
     float z = (float)(random.NextDouble() * (zMax - (zMin)) + (zMin));
@@ -225,55 +241,74 @@ public class gameController : MonoBehaviour
         }
 
         if(campNum == 3){
-
             GameObject demon1 = Instantiate(DemonPrefab, new Vector3(260f, 3.67f, 92.4f), Quaternion.identity);
             GameObject demon2 = Instantiate(DemonPrefab, new Vector3(215f, 3.67f, 61.4f), Quaternion.identity);
             GameObject demon3 = Instantiate(DemonPrefab, new Vector3(215f, 3.67f, 92.4f), Quaternion.identity);
             GameObject demon4 = Instantiate(DemonPrefab, new Vector3(212f, 3.67f, 92.4f), Quaternion.identity);
             demon1.tag = "Demon11";
             demon2.tag = "Demon12";
-             demon3.tag = "Demon12";
+            demon3.tag = "Demon12";
             demon4.tag = "Demon11";
         }
-        
-        
-
-         
+               
 
     }
-     void OnButtonClicked(Button clickedButton)
-    {
-        // Get and use the clicked button's instance
-        Debug.Log("Clicked Button: " + clickedButton.GetComponentInChildren<TMP_Text>().text);
-    }
-    public void updateAbilities()
-{
-          foreach (Button button in buttons)
-        {
-            button.onClick.AddListener(() => OnButtonClicked(button)); // Pass the button instance
-        }
-    }
+    
+  
     // Update is called once per frame
     void Update()
     {
+       
+            for(int i = 1; i<=3; i++){
+                 if(abilityPoints > 0 ){
+                     buttons[i].interactable = true;
+                 }
+                else if(locked[i] != -1){
+                       buttons[i].interactable = false;
+                 }
+            }
+            
+       
          if(Input.GetKeyDown(KeyCode.F)){
             Debug.Log("pressed f");
          if(healthPoints != 100*level && healingPotions !=0){
                  Debug.Log("pressed f");
                  int increment = (int) (0.5*level*100);
-
                  healthPoints +=increment;
                  healthPoints = Math.Min(100*level,healthPoints);
                  healingPotions --;
-                
+                 if(PlayerPrefs.GetString("SelectedCharacter") == "Sorcerer"){
+                     GameObject player = GameObject.FindWithTag("Player");
+                     GameObject originalPlayer = GameObject.FindWithTag("OriginalPlayer");
+                     sor_script playerScript;
 
+                      if(player!= null){
+
+                       playerScript = player.GetComponent<sor_script>();
+                                           Debug.Log("helloooo");
+
+                      }
+                      else {
+                       playerScript = originalPlayer.GetComponent<sor_script>();
+                      }
+                      playerScript.drink();
+                      
+
+                 }
+
+                 else{//barbarian drink animation
+
+                 }
+                  
 
         }
         }
+       
         if(level == 4 ){
             xp = 400;
         }
-        updateAbilities();
+
+
         ability_points_text.text = "Ability Points: " + abilityPoints+"| ";
         rune_fragments_count.text = "RF: " + runeFragments;
         healing_potions_text.text = "Healing Potions: "+ healingPotions+"| ";
@@ -285,6 +320,7 @@ public class gameController : MonoBehaviour
 
     }
 
-   
+    
 
+    
 }

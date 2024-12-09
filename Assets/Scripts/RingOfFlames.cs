@@ -71,7 +71,7 @@ public class RingOfFlames : MonoBehaviour
             {
                 BossController enemyScript = enemyObject.GetComponent<BossController>();
                 enemyScript.hp -= 10;
-                //enemyScript.UpdateHealthBar();
+                enemyScript.UpdateHealthBar();
             }
             enemiesWithinRing.Add(enemyObject);
         }

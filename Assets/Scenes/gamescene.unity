@@ -382,6 +382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthPoints: 100
   level: 1
+  abilityPoints: 0
   healingPotions: 0
   runeFragments: 0
   points_text: {fileID: 2077067343}
@@ -403,6 +404,7 @@ MonoBehaviour:
   campTwo: {fileID: 1175779686}
   campThree: {fileID: 1797965383}
   barbarianShield: 0
+  bossLevel: 0
   buttons:
   - {fileID: 691621696}
   - {fileID: 526180140}
@@ -881,6 +883,7 @@ GameObject:
   - component: {fileID: 412856824}
   - component: {fileID: 412856823}
   - component: {fileID: 412856822}
+  - component: {fileID: 412856825}
   m_Layer: 5
   m_Name: b4
   m_TagString: Untagged
@@ -951,7 +954,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 412856823}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 412856825}
+        m_TargetAssemblyTypeName: AbilitiesButtons, Assembly-CSharp
+        m_MethodName: unlockUltimate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &412856823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -990,6 +1005,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 412856820}
   m_CullTransparentMesh: 1
+--- !u!114 &412856825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412856820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 260c23afb973c4f07adbd28ab28db9e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &447592342
 GameObject:
   m_ObjectHideFlags: 0
@@ -1269,6 +1296,7 @@ GameObject:
   - component: {fileID: 526180142}
   - component: {fileID: 526180141}
   - component: {fileID: 526180140}
+  - component: {fileID: 526180143}
   m_Layer: 5
   m_Name: b2
   m_TagString: Untagged
@@ -1339,7 +1367,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 526180141}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 526180143}
+        m_TargetAssemblyTypeName: AbilitiesButtons, Assembly-CSharp
+        m_MethodName: unlockDefensive
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &526180141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1378,6 +1418,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526180138}
   m_CullTransparentMesh: 1
+--- !u!114 &526180143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526180138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 260c23afb973c4f07adbd28ab28db9e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &590170864
 GameObject:
   m_ObjectHideFlags: 0
@@ -1900,6 +1952,7 @@ GameObject:
   - component: {fileID: 973579645}
   - component: {fileID: 973579644}
   - component: {fileID: 973579643}
+  - component: {fileID: 973579646}
   m_Layer: 5
   m_Name: b3
   m_TagString: Untagged
@@ -1970,7 +2023,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 973579644}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 973579646}
+        m_TargetAssemblyTypeName: AbilitiesButtons, Assembly-CSharp
+        m_MethodName: unlockWild
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &973579644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2009,6 +2074,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 973579641}
   m_CullTransparentMesh: 1
+--- !u!114 &973579646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973579641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 260c23afb973c4f07adbd28ab28db9e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &995320073
 GameObject:
   m_ObjectHideFlags: 0

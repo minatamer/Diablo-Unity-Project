@@ -73,7 +73,7 @@ public class Fireball : MonoBehaviour
                 }
             }
 
-            //enemyScript.UpdateHealthBar();
+            enemyScript.UpdateHealthBar();
             Destroy(gameObject); // Destroy the fireball
         }
     }

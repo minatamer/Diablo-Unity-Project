@@ -169,7 +169,7 @@ public class BarbarianAnimatorController : MonoBehaviour
                 {
                     BossController enemyScript = enemy.GetComponent<BossController>();
                     enemyScript.hp -= 10;
-                    //enemyScript.UpdateHealthBar();
+                    enemyScript.UpdateHealthBar();
                 }
 
                 enemyCollision = false;
@@ -203,9 +203,10 @@ public class BarbarianAnimatorController : MonoBehaviour
                     {
                         enemyScript.hp -= 20;
                         bossChargeDamage = true;
+                        enemyScript.UpdateHealthBar();
                     }
                     
-                    //enemyScript.UpdateHealthBar();
+                  
                 }
                 enemyCollision = false;
             }
@@ -240,7 +241,7 @@ public class BarbarianAnimatorController : MonoBehaviour
                 {
                     BossController enemyScript = enemy.GetComponent<BossController>();
                     enemyScript.hp -= 5;
-                    //enemyScript.UpdateHealthBar();
+                    enemyScript.UpdateHealthBar();
                 }
 
                 enemyCollision = false;

@@ -6,6 +6,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Playables;
 using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UI;
+using TMPro;
+
 
 public class BossController : MonoBehaviour
 {
@@ -23,6 +26,7 @@ public class BossController : MonoBehaviour
 
     public Transform arenaCenter;
     private Vector3[] minionSpawnPoints;
+    
 
     Animator lilithAnimator;
 
@@ -44,6 +48,14 @@ public class BossController : MonoBehaviour
     private GameObject spikeThree;
 
     public GameObject shield;
+    public Image healthBarImage;
+    public TMP_Text points_text ;
+
+    public Image shieldBarImage;
+    public TMP_Text points_shield_text ;
+
+
+
 
 
     private void Start()
@@ -53,7 +65,11 @@ public class BossController : MonoBehaviour
         auraActive = false;
         minionSpawnPoints = new Vector3[3];
         GenerateRandomSpawnPoints();
-        //
+        points_text.text = "50/50";
+        shieldBarImage.gameObject.SetActive(false);
+        points_shield_text.gameObject.SetActive(false);
+       
+      
 
     }
     private void GenerateRandomSpawnPoints()
@@ -78,7 +94,11 @@ public class BossController : MonoBehaviour
         Vector3 force = new Vector3(direction.x, direction.y, direction.z) * 2f;
         rb.AddForce(force, ForceMode.VelocityChange);
     }
-
+    public void UpdateHealthBar()
+    {
+            points_text.text = hp + "/50";
+            healthBarImage.fillAmount =  ((float)hp / 50);
+    }
     private void Update()
     {
         GameObject target = GameObject.FindWithTag("clonedPlayer");
@@ -159,6 +179,9 @@ public class BossController : MonoBehaviour
                 shieldRegenTimer = 0f;
                 lilithAnimator.SetTrigger("Phase2");
                 shield.SetActive(true);
+                 shieldBarImage.gameObject.SetActive(true);
+                 points_shield_text.gameObject.SetActive(true);
+                 points_shield_text.text = "50/50";
                 Phase2CoroutineStarted = true;
                 StartCoroutine(HandlePhase2Coroutine());
             }
@@ -170,12 +193,16 @@ public class BossController : MonoBehaviour
             }
             if (currentShieldHealth <=0)
             {
-                shield.SetActive(false);
+                 shieldBarImage.gameObject.SetActive(false);
+                 points_shield_text.gameObject.SetActive(false);
+                 shield.SetActive(false);
 
             }
             else
             {
-                shield.SetActive(true);
+                 shieldBarImage.gameObject.SetActive(true);
+                 points_shield_text.gameObject.SetActive(true);
+                 shield.SetActive(true);
             }
 
             if (!shieldActive && currentShieldHealth < shieldHealth)
@@ -183,9 +210,13 @@ public class BossController : MonoBehaviour
                 shieldRegenTimer += Time.deltaTime;
                 if (shieldRegenTimer >= shieldRegenDelay)
                 {
+
                     currentShieldHealth = shieldHealth;
                     shieldActive = true;
                     shieldRegenTimer = 0f;
+                    shieldBarImage.gameObject.SetActive(true);
+                    points_shield_text.gameObject.SetActive(true);
+                    points_shield_text.text = "50/50";
                 }
             }
 
