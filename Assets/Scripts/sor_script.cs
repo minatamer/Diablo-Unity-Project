@@ -105,18 +105,51 @@ public class sor_script : MonoBehaviour
                 {
                     MinionController enemyScript = enemy.gameObject.GetComponent<MinionController>();
                     enemyScript.hp -= 10;
+                    enemyScript.getHit();
                     enemyScript.UpdateHealthBar();
                 }
                 if (enemy.tag.Contains("Demon"))
                 {
                     DemonController enemyScript = enemy.gameObject.GetComponent<DemonController>();
                     enemyScript.hp -= 10;
+                    enemyScript.getHit();
                     enemyScript.UpdateHealthBar();
                 }
                 if (enemy.tag.Contains("Boss"))
                 {
                     BossController enemyScript = enemy.gameObject.GetComponent<BossController>();
-                    enemyScript.hp -= 10;
+
+                    if (enemyScript.minions.Count > 0)
+                    {
+                        Debug.Log(""); //do nothing
+                    }
+                    else if (enemyScript.auraActive)
+                    {
+                        gameController.Instance.healthPoints -= 25;
+                        enemyScript.auraActive = false;
+                    }
+                    else
+                    {
+                        if (enemyScript.currentShieldHealth > 0)
+                        {
+                            enemyScript.currentShieldHealth -= 10;
+                            if (enemyScript.currentShieldHealth < 0)
+                            {
+                                int damage = enemyScript.currentShieldHealth;
+                                enemyScript.currentShieldHealth = 0;
+                                enemyScript.hp += damage;
+
+                            }
+                            enemyScript.UpdateShieldBar();
+                        }
+                        else
+                        {
+                            enemyScript.hp -= 10;
+                            enemyScript.getHit();
+                            enemyScript.UpdateHealthBar();
+                        }
+                    }
+
                     enemyScript.UpdateHealthBar();
                 }
             }
@@ -250,10 +283,10 @@ public class sor_script : MonoBehaviour
                  StartCoroutine(HandleCloneCooldown(clonedinstance));
             }          
         }
-        
 
 
-          if (Input.GetMouseButtonDown(0) &&  gameController.Instance.buttons[1].GetComponent<AbilitiesButtons>().isMouseOver == false &&  gameController.Instance.buttons[2].GetComponent<AbilitiesButtons>().isMouseOver == false &&  gameController.Instance.buttons[3].GetComponent<AbilitiesButtons>().isMouseOver == false){
+
+        if (Input.GetMouseButtonDown(0) &&  gameController.Instance.buttons[1].GetComponent<AbilitiesButtons>().isMouseOver == false &&  gameController.Instance.buttons[2].GetComponent<AbilitiesButtons>().isMouseOver == false &&  gameController.Instance.buttons[3].GetComponent<AbilitiesButtons>().isMouseOver == false){
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if(Physics.Raycast(ray, out hit)){
@@ -288,7 +321,16 @@ public class sor_script : MonoBehaviour
         }
 
     }
-   
+    public void getHit()
+    {
+        if (!animator.GetCurrentAnimatorStateInfo(1).IsName("Hurt"))
+        {
+            animator.SetTrigger("hit");
+            //Debug.Log("hurt animation");
+        }
+
+    }
+
     private void releaseBall(){
              if ( Time.time - fireBallThrownAtTime >= 1.0f)
          {                
@@ -332,6 +374,7 @@ public class sor_script : MonoBehaviour
         if (other.gameObject.tag == "Spike")
         {
             gameController.Instance.healthPoints -= 30;
+            getHit();
             //Destroy(other.gameObject);
         }
 

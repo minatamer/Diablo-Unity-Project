@@ -86,57 +86,139 @@ public class DemonController : MonoBehaviour
 
         if (hp <= 0)
         {
+            agent.SetDestination(agent.transform.position);
+            animator.SetTrigger("Die");
+            //Destroy(gameObject);
+        }
+
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Die") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.70f)
+        {
             Destroy(gameObject);
         }
 
 
+
     }
-   public void UpdateHealthBar()
+
+    public void getHit()
+    {
+        if (!animator.GetCurrentAnimatorStateInfo(1).IsName("Hurt"))
+        {
+            animator.SetTrigger("Hit");
+            //Debug.Log("hurt animation");
+        }
+
+    }
+    public void UpdateHealthBar()
     {
             healthBarImage.fillAmount =  ((float)hp / 40);
     }
-    private void OnTriggerEnter(Collider other){
+
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (other.gameObject.CompareTag("Player"))
+        {
+            GameObject campTwo = GameObject.FindWithTag("CampTwo");
+            GameObject campThree = GameObject.FindWithTag("CampThree");
+
+            CampControllerTwo campTwoController = campTwo.gameObject.GetComponent<CampControllerTwo>();
+            CampControllerThree campThreeController = campThree.gameObject.GetComponent<CampControllerThree>();
+
+            if (campTwoController.aggressiveDemons.Contains(gameObject) || campThreeController.aggressiveDemons.Contains(gameObject))
+            {
+                animator.SetBool("attack", true);
+            }
+
+
+
+        }
+
+
+
+    }
+    private void OnTriggerStay(Collider other){
 
 
         if (other.gameObject.CompareTag("Player"))
         {
-            animator.SetBool("attack", true);
 
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Great Sword Slash") || animator.GetCurrentAnimatorStateInfo(0).IsName("Great Sword Slash 0"))
+            GameObject campTwo = GameObject.FindWithTag("CampTwo");
+            GameObject campThree = GameObject.FindWithTag("CampThree");
+
+            CampControllerTwo campTwoController = campTwo.gameObject.GetComponent<CampControllerTwo>();
+            CampControllerThree campThreeController = campThree.gameObject.GetComponent<CampControllerThree>();
+
+            if (campTwoController.aggressiveDemons.Contains(gameObject) || campThreeController.aggressiveDemons.Contains(gameObject))
             {
-                if(PlayerPrefs.GetString("SelectedCharacter") == "Barbarian" ){//barbarian shield
-                 BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
-                    if(barbarianScript.shield == false){
+                //animator.SetBool("attack", true);
+
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Great Sword Slash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.90f && animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.92f)
+                {
+                    if (PlayerPrefs.GetString("SelectedCharacter") == "Barbarian")
+                    {//barbarian shield
+                        BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
+                        if (barbarianScript.shield == false)
+                        {
+                            gameController.Instance.healthPoints -= 10;
+                            Animator player = other.gameObject.GetComponent<Animator>();
+                            player.SetTrigger("hit");
+                        }
+
+                    }
+                    else
+                    {//arisa
                         gameController.Instance.healthPoints -= 10;
                         Animator player = other.gameObject.GetComponent<Animator>();
                         player.SetTrigger("hit");
                     }
-
                 }
-                else{//arisa
-                gameController.Instance.healthPoints -= 10;
-                 Animator player = other.gameObject.GetComponent<Animator>();
-                 player.SetTrigger("hit");
-                }
-            }
 
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Goalie Throw"))
-            {
-                if(PlayerPrefs.GetString("SelectedCharacter") == "Barbarian" ){//barbarian
-                    BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
-                    if(barbarianScript.shield == false){ //barbarian
-                       gameController.Instance.healthPoints -= 15;
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Great Sword Slash 0") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.90f && animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.92f)
+                {
+                    if (PlayerPrefs.GetString("SelectedCharacter") == "Barbarian")
+                    {//barbarian shield
+                        BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
+                        if (barbarianScript.shield == false)
+                        {
+                            gameController.Instance.healthPoints -= 10;
+                            Animator player = other.gameObject.GetComponent<Animator>();
+                            player.SetTrigger("hit");
+                        }
+
+                    }
+                    else
+                    {//arisa
+                        gameController.Instance.healthPoints -= 10;
                         Animator player = other.gameObject.GetComponent<Animator>();
                         player.SetTrigger("hit");
                     }
-
                 }
-                else{//arisa
-                gameController.Instance.healthPoints -= 15;
-                 Animator player = other.gameObject.GetComponent<Animator>();
-                 player.SetTrigger("hit");
+
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Goalie Throw") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.85f && animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.855f)
+                {
+                    if (PlayerPrefs.GetString("SelectedCharacter") == "Barbarian")
+                    {//barbarian
+                        BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
+                        if (barbarianScript.shield == false)
+                        { //barbarian
+                            gameController.Instance.healthPoints -= 15;
+                            Animator player = other.gameObject.GetComponent<Animator>();
+                            player.SetTrigger("hit");
+                        }
+
+                    }
+                    else
+                    {//arisa
+                        gameController.Instance.healthPoints -= 15;
+                        Animator player = other.gameObject.GetComponent<Animator>();
+                        player.SetTrigger("hit");
+                    }
                 }
             }
+
+            
         }
     }
 

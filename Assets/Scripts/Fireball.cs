@@ -26,6 +26,7 @@ public class Fireball : MonoBehaviour
         sorScript.SetCurrentFireball(null);
         MinionController enemyScript = other.gameObject.GetComponent<MinionController>();//update with ennemy script name
         enemyScript.hp -= 5; //5
+        enemyScript.getHit();
         enemyScript.UpdateHealthBar();
         Destroy(gameObject); // Destroy the fireball
      }
@@ -36,6 +37,7 @@ public class Fireball : MonoBehaviour
         sorScript.SetCurrentFireball(null);
         DemonController enemyScript = other.gameObject.GetComponent<DemonController>();//update with ennemy script name
         enemyScript.hp -= 5; //5
+        enemyScript.getHit();
         enemyScript.UpdateHealthBar();
         Destroy(gameObject); // Destroy the fireball
     }
@@ -66,10 +68,13 @@ public class Fireball : MonoBehaviour
                         enemyScript.hp += damage;
 
                     }
+                    enemyScript.UpdateShieldBar();
                 }
                 else
                 {
                     enemyScript.hp -= 5;
+                    enemyScript.getHit();
+                    enemyScript.UpdateHealthBar();
                 }
             }
 

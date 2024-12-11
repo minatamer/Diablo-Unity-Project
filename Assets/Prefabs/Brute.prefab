@@ -135,6 +135,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 33a11e7dc24e1ee49887787ed914e3c1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 33a11e7dc24e1ee49887787ed914e3c1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 33a11e7dc24e1ee49887787ed914e3c1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 33a11e7dc24e1ee49887787ed914e3c1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -302,5 +314,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.1594534, y: 2.8438272, z: 1.9713113}
-  m_Center: {x: 0.20278239, y: 0.9219136, z: 0.03191492}
+  m_Size: {x: 2.6208143, y: 2.8438272, z: 1.7696289}
+  m_Center: {x: 0.09035635, y: 0.9219136, z: 0.13275604}

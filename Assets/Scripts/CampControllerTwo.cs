@@ -8,15 +8,17 @@ public class CampControllerTwo : MonoBehaviour
     private List<GameObject> minions = new List<GameObject>();
     private List<Vector3> originalPositions = new List<Vector3>();
 
-    private List<GameObject> aggressiveMinions = new List<GameObject>();
+    public List<GameObject> aggressiveMinions = new List<GameObject>();
     private List<Vector3> aggressiveMinionsOriginalPositions = new List<Vector3>();
 
     private List<GameObject> demons = new List<GameObject>();
     private List<Vector3> originalPositionsDemons = new List<Vector3>();
 
-    private List<GameObject> aggressiveDemons = new List<GameObject>();
+    public List<GameObject> aggressiveDemons = new List<GameObject>();
     private List<Vector3> aggressiveDemonsOriginalPositions = new List<Vector3>();
     private bool runeInstantiated = false;
+
+    private Dictionary<GameObject, Vector3> originalPositionsGeneral = new Dictionary<GameObject, Vector3>();
 
     void Update(){
          GameObject[] allMinions = GameObject.FindGameObjectsWithTag("Minion2");
@@ -46,17 +48,39 @@ public class CampControllerTwo : MonoBehaviour
             {
                 if (!minions.Contains(minion))
                 {
+
+                    if (!originalPositionsGeneral.ContainsKey(minion))
+                    {
+                        originalPositionsGeneral.Add(minion, minion.transform.position);
+                    }
+
                     minions.Add(minion);
-                    originalPositions.Add(minion.transform.position);
+
+                    originalPositionsGeneral.TryGetValue(minion, out Vector3 position);
+
+                    //originalPositions.Add(minion.transform.position);
+                    originalPositions.Add(position);
+
                 }
+
             }
 
             foreach (GameObject demon in allDemons)
             {
                 if (!demons.Contains(demon))
                 {
+                    if (!originalPositionsGeneral.ContainsKey(demon))
+                    {
+                        originalPositionsGeneral.Add(demon, demon.transform.position);
+                    }
+
                     demons.Add(demon);
-                    originalPositionsDemons.Add(demon.transform.position);
+                    originalPositionsGeneral.TryGetValue(demon, out Vector3 position);
+
+                    originalPositionsDemons.Add(position);
+                    //originalPositionsDemons.Add(demon.transform.position);
+
+              
                 }
             }
 
@@ -146,6 +170,8 @@ public class CampControllerTwo : MonoBehaviour
                 demons.RemoveAt(index);
                 originalPositionsDemons.RemoveAt(index);
             }
+
+            //Debug.Log(originalPositions[-1]);
 
 
         }
@@ -265,7 +291,9 @@ public class CampControllerTwo : MonoBehaviour
                 if (animator != null)
                 {
                     animator.SetBool("Run", false);
+                    animator.SetBool("Walk", true);
                 }
+
             }
             for (int i = 0; i < aggressiveDemons.Count; i++)
             {
@@ -274,7 +302,9 @@ public class CampControllerTwo : MonoBehaviour
                 {
                     agent.SetDestination(aggressiveDemonsOriginalPositions[i]);
                 }
+
             }
+
             aggressiveMinions.Clear();
             aggressiveMinionsOriginalPositions.Clear();
 

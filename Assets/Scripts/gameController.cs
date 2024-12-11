@@ -45,7 +45,7 @@ public class gameController : MonoBehaviour
     
     public bool barbarianShield = false;
 
-    public bool bossLevel = false;
+    public bool bossLevel = true;
 
     // public TMP_Text[] abilitiesNames = new TMP_Text[4];
     public Button[] buttons = new Button[4];
@@ -75,6 +75,9 @@ public class gameController : MonoBehaviour
 
 
         locked[0] = -1;
+        locked[1] = -1;
+        locked[2] = -1;
+        locked[3] = -1;
 
         if (PlayerPrefs.GetString("SelectedCharacter") == "Sorcerer") {
             buttons[0].GetComponentInChildren<TMP_Text>().text = "Fireball";

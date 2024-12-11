@@ -7,19 +7,21 @@ public class CampControllerThree: MonoBehaviour
     private List<GameObject> minions = new List<GameObject>();
     private List<Vector3> originalPositions = new List<Vector3>();
 
-    private List<GameObject> aggressiveMinions = new List<GameObject>();
+    public List<GameObject> aggressiveMinions = new List<GameObject>();
     private List<Vector3> aggressiveMinionsOriginalPositions = new List<Vector3>();
 
     private List<GameObject> demons = new List<GameObject>();
     private List<Vector3> originalPositionsDemons = new List<Vector3>();
 
-    private List<GameObject> aggressiveDemons = new List<GameObject>();
+    public List<GameObject> aggressiveDemons = new List<GameObject>();
     private List<Vector3> aggressiveDemonsOriginalPositions = new List<Vector3>();
 
     private bool runeInstantiated = false;
 
+    private Dictionary<GameObject, Vector3> originalPositionsGeneral = new Dictionary<GameObject, Vector3>();
 
-  void Update(){
+
+    void Update(){
          GameObject[] allMinions = GameObject.FindGameObjectsWithTag("Minion3");
         GameObject[] demonsWithTag11 = GameObject.FindGameObjectsWithTag("Demon11");
             GameObject[] demonsWithTag12 = GameObject.FindGameObjectsWithTag("Demon12");
@@ -57,17 +59,39 @@ public class CampControllerThree: MonoBehaviour
             {
                 if (!minions.Contains(minion))
                 {
+
+                    if (!originalPositionsGeneral.ContainsKey(minion))
+                    {
+                        originalPositionsGeneral.Add(minion, minion.transform.position);
+                    }
+
                     minions.Add(minion);
-                    originalPositions.Add(minion.transform.position);
+
+                    originalPositionsGeneral.TryGetValue(minion, out Vector3 position);
+
+                    //originalPositions.Add(minion.transform.position);
+                    originalPositions.Add(position);
+
                 }
+
             }
 
             foreach (GameObject demon in allDemons)
             {
                 if (!demons.Contains(demon))
                 {
+                    if (!originalPositionsGeneral.ContainsKey(demon))
+                    {
+                        originalPositionsGeneral.Add(demon, demon.transform.position);
+                    }
+
                     demons.Add(demon);
-                    originalPositionsDemons.Add(demon.transform.position);
+                    originalPositionsGeneral.TryGetValue(demon, out Vector3 position);
+
+                    originalPositionsDemons.Add(position);
+                    //originalPositionsDemons.Add(demon.transform.position);
+
+
                 }
             }
 

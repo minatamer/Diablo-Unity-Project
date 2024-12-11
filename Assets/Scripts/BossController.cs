@@ -12,7 +12,7 @@ using TMPro;
 
 public class BossController : MonoBehaviour
 {
-    public int phase = 0; 
+    public int phase = 2; 
 
     public int shieldHealth = 50;
 
@@ -72,18 +72,25 @@ public class BossController : MonoBehaviour
       
 
     }
+
+    public void getHit()
+    {
+        if (!lilithAnimator.GetCurrentAnimatorStateInfo(1).IsName("Hurt"))
+        {
+            lilithAnimator.SetTrigger("Hit");
+        }
+
+    }
     private void GenerateRandomSpawnPoints()
     {
-        for (int i = 0; i < minionSpawnPoints.Length; i++)
-        {
-            // Generate random x and z values between -3 and 3, keeping y as 0
-            float x = Random.Range(-3f, 3f);
-            float z = Random.Range(-3f, 3f);
-            Vector3 spawnPosition = new Vector3(x, 0f, z);
+        Vector3 spawnPosition1 = new Vector3(6, 0f, 6);
+        minionSpawnPoints[0] = spawnPosition1;
 
-            // Store the spawn point in the array
-            minionSpawnPoints[i] = spawnPosition;
-        }
+        Vector3 spawnPosition2 = new Vector3(6, 0f, 5);
+        minionSpawnPoints[1] = spawnPosition2;
+
+        Vector3 spawnPosition3 = new Vector3(-4, 0f, -5);
+        minionSpawnPoints[2] = spawnPosition3;
     }
     void FireInStraightLine(GameObject spike)
     {
@@ -98,6 +105,12 @@ public class BossController : MonoBehaviour
     {
             points_text.text = hp + "/50";
             healthBarImage.fillAmount =  ((float)hp / 50);
+    }
+
+    public void UpdateShieldBar()
+    {
+        points_shield_text.text = currentShieldHealth + "/50";
+        shieldBarImage.fillAmount = ((float)currentShieldHealth / 50);
     }
     private void Update()
     {
@@ -148,6 +161,8 @@ public class BossController : MonoBehaviour
                         NavMeshAgent agent = minions[i].GetComponent<NavMeshAgent>();
                         agent.SetDestination(player.transform.position);
                         agent.stoppingDistance = 1.5f;
+                        Animator animator = agent.GetComponent<Animator>();
+                        animator.SetBool("Run", true);
                     }
 
                 }
@@ -158,7 +173,22 @@ public class BossController : MonoBehaviour
                     //Debug.Log(lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
                     if (lilithAnimator.GetCurrentAnimatorStateInfo(0).IsName("Divebomb") && lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.65f && lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.651f && distance >= 1f && distance <= 15f)
                     {
-                        gameController.Instance.healthPoints -= 20;
+                        if (PlayerPrefs.GetString("SelectedCharacter") == "Barbarian")
+                        {//barbarian
+
+                            BarbarianAnimatorController barbarianScript = player.gameObject.GetComponent<BarbarianAnimatorController>();
+                            if (barbarianScript.shield == false)
+                            {
+                                gameController.Instance.healthPoints -= 20;
+                                barbarianScript.getHit();
+                            }
+                        }
+                        else
+                        {//arisa
+                            gameController.Instance.healthPoints -= 20;
+                            sor_script SorScript = player.gameObject.GetComponent<sor_script>();
+                            SorScript.getHit();
+                        }
                     }
                 }
 
@@ -197,17 +227,8 @@ public class BossController : MonoBehaviour
                  points_shield_text.gameObject.SetActive(false);
                  shield.SetActive(false);
 
-            }
-            else
-            {
-                 shieldBarImage.gameObject.SetActive(true);
-                 points_shield_text.gameObject.SetActive(true);
-                 shield.SetActive(true);
-            }
-
-            if (!shieldActive && currentShieldHealth < shieldHealth)
-            {
                 shieldRegenTimer += Time.deltaTime;
+                //Debug.Log(shieldRegenTimer);
                 if (shieldRegenTimer >= shieldRegenDelay)
                 {
 
@@ -218,7 +239,19 @@ public class BossController : MonoBehaviour
                     points_shield_text.gameObject.SetActive(true);
                     points_shield_text.text = "50/50";
                 }
+
             }
+            else
+            {
+                 shieldBarImage.gameObject.SetActive(true);
+                 points_shield_text.gameObject.SetActive(true);
+                 shield.SetActive(true);
+            }
+
+            //if (!shieldActive && currentShieldHealth <= 0)
+            //{
+
+            //}
 
             if (lilithAnimator.GetCurrentAnimatorStateInfo(0).IsName("Spikes"))
             {
@@ -230,7 +263,7 @@ public class BossController : MonoBehaviour
 
                 }
             }
-            if (lilithAnimator.GetCurrentAnimatorStateInfo(0).IsName("Cast") )
+            if (lilithAnimator.GetCurrentAnimatorStateInfo(0).IsName("Cast") && lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.90f && lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.92f)
             {
                 auraActive = true;
                 auraSphere.SetActive(true);
@@ -375,7 +408,11 @@ public class BossController : MonoBehaviour
 
     private void HandlePhase1()
     {
-        GameObject player = GameObject.FindWithTag("Player");
+        GameObject player = GameObject.FindWithTag("clonedPlayer");
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player");
+        }
         if (minions.Count == 0)
         {
             lilithAnimator.SetTrigger("Summon");
@@ -398,24 +435,6 @@ public class BossController : MonoBehaviour
         }  
     }
 
-    //public void TakeDamage(int damage)
-    //{
-    //    if (phase == 2 && shieldActive)
-    //    {
-    //        currentShieldHealth -= damage;
-    //        if (currentShieldHealth <= 0)
-    //        {
-    //            shieldActive = false;
-    //            damage = -currentShieldHealth; // Carry over excess damage
-    //        }
-    //        else
-    //        {
-    //            damage = 0;
-    //        }
-    //    }
-
-    //    hp -= damage;
-    //}
 
     private void OnTriggerEnter(Collider other)
     {

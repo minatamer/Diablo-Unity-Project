@@ -41,6 +41,16 @@ public class BarbarianAnimatorController : MonoBehaviour
         shieldAura.SetActive(false); // Ensure it's disabled initially
     }
 
+    public void getHit()
+    {
+        if (!animator.GetCurrentAnimatorStateInfo(1).IsName("Hurt"))
+        {
+            animator.SetTrigger("hit");
+            //Debug.Log("hurt animation");
+        }
+
+    }
+
     void Update()
     {
 
@@ -122,6 +132,7 @@ public class BarbarianAnimatorController : MonoBehaviour
         // Handle Bash ability with cooldown
         if (Input.GetMouseButtonDown(1) && !isBashOnCooldown && waitingForRightClick == false)
         {
+            Debug.Log("Bashing!");
             Vector3 posClicked = GetMouseWorldPosition();
             float radius = 2f;
             GameObject foundObject = null;
@@ -157,18 +168,50 @@ public class BarbarianAnimatorController : MonoBehaviour
                 {
                     MinionController enemyScript = enemy.GetComponent<MinionController>();
                     enemyScript.hp -= 10;
+                    enemyScript.getHit();
                     enemyScript.UpdateHealthBar();
                 }
                 if (enemy.tag.Contains("Demon"))
                 {
                     DemonController enemyScript = enemy.GetComponent<DemonController>();
                     enemyScript.hp -= 10;
+                    enemyScript.getHit();
                     enemyScript.UpdateHealthBar();
                 }
                 if (enemy.tag.Contains("Boss"))
                 {
-                    BossController enemyScript = enemy.GetComponent<BossController>();
-                    enemyScript.hp -= 10;
+                    BossController enemyScript = enemy.gameObject.GetComponent<BossController>();//update with ennemy script name
+                    if (enemyScript.minions.Count > 0)
+                    {
+                        return;
+                    }
+                    else if (enemyScript.auraActive)
+                    {
+                        gameController.Instance.healthPoints -= 25;
+                        enemyScript.auraActive = false;
+                    }
+                    else
+                    {
+                        if (enemyScript.currentShieldHealth > 0)
+                        {
+                            enemyScript.currentShieldHealth -= 10;
+                            if (enemyScript.currentShieldHealth < 0)
+                            {
+                                int damage = enemyScript.currentShieldHealth;
+                                enemyScript.currentShieldHealth = 0;
+                                enemyScript.hp += damage;
+
+                            }
+                            enemyScript.UpdateShieldBar();
+                        }
+                        else
+                        {
+                            enemyScript.hp -= 10;
+                            enemyScript.getHit();
+                            enemyScript.UpdateHealthBar();
+                        }
+                    }
+
                     enemyScript.UpdateHealthBar();
                 }
 
@@ -201,8 +244,38 @@ public class BarbarianAnimatorController : MonoBehaviour
                     BossController enemyScript = enemy.GetComponent<BossController>();
                     if (bossChargeDamage == false)
                     {
-                        enemyScript.hp -= 20;
                         bossChargeDamage = true;
+                        if (enemyScript.minions.Count > 0)
+                        {
+                            return;
+                        }
+                        else if (enemyScript.auraActive)
+                        {
+                            gameController.Instance.healthPoints -= 35;
+                            enemyScript.auraActive = false;
+                        }
+                        else
+                        {
+                            if (enemyScript.currentShieldHealth > 0)
+                            {
+                                enemyScript.currentShieldHealth -= 20;
+                                if (enemyScript.currentShieldHealth < 0)
+                                {
+                                    int damage = enemyScript.currentShieldHealth;
+                                    enemyScript.currentShieldHealth = 0;
+                                    enemyScript.hp += damage;
+
+                                }
+                                enemyScript.UpdateShieldBar();
+                            }
+                            else
+                            {
+                                enemyScript.hp -= 20;
+                                enemyScript.getHit();
+                                enemyScript.UpdateHealthBar();
+                            }
+                        }
+
                         enemyScript.UpdateHealthBar();
                     }
                     
@@ -229,18 +302,50 @@ public class BarbarianAnimatorController : MonoBehaviour
                 {
                     MinionController enemyScript = enemy.GetComponent<MinionController>();
                     enemyScript.hp -= 5;
+                    enemyScript.getHit();
                     enemyScript.UpdateHealthBar();
                 }
                 if (enemy.tag.Contains("Demon"))
                 {
                     DemonController enemyScript = enemy.GetComponent<DemonController>();
                     enemyScript.hp -= 5;
+                    enemyScript.getHit();
                     enemyScript.UpdateHealthBar();
                 }
                 if (enemy.tag.Contains("Boss"))
                 {
-                    BossController enemyScript = enemy.GetComponent<BossController>();
-                    enemyScript.hp -= 5;
+                    BossController enemyScript = enemy.gameObject.GetComponent<BossController>();//update with ennemy script name
+                    if (enemyScript.minions.Count > 0)
+                    {
+                        return;
+                    }
+                    else if (enemyScript.auraActive)
+                    {
+                        gameController.Instance.healthPoints -= 20;
+                        enemyScript.auraActive = false;
+                    }
+                    else
+                    {
+                        if (enemyScript.currentShieldHealth > 0)
+                        {
+                            enemyScript.currentShieldHealth -= 5;
+                            if (enemyScript.currentShieldHealth < 0)
+                            {
+                                int damage = enemyScript.currentShieldHealth;
+                                enemyScript.currentShieldHealth = 0;
+                                enemyScript.hp += damage;
+
+                            }
+                            enemyScript.UpdateShieldBar();
+                        }
+                        else
+                        {
+                            enemyScript.hp -= 5;
+                            enemyScript.getHit();
+                            enemyScript.UpdateHealthBar();
+                        }
+                    }
+
                     enemyScript.UpdateHealthBar();
                 }
 
@@ -359,6 +464,7 @@ Vector3 GetMouseWorldPosition()
         if (other.gameObject.tag == "Spike")
         {
             gameController.Instance.healthPoints -= 30;
+            getHit();
             //Destroy(other.gameObject);
         }
 

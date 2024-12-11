@@ -8,11 +8,11 @@ public class CampController : MonoBehaviour
     private List<GameObject> minions = new List<GameObject>();
     private List<Vector3> originalPositions = new List<Vector3>();
 
-    private List<GameObject> aggressiveMinions = new List<GameObject>();
+    public List<GameObject> aggressiveMinions = new List<GameObject>();
     private List<Vector3> aggressiveMinionsOriginalPositions = new List<Vector3>();
     private bool runeInstantiated = false;
 
-
+    private Dictionary<GameObject, Vector3> originalPositionsGeneral = new Dictionary<GameObject, Vector3>();
 
 
     void Update(){
@@ -40,8 +40,14 @@ public class CampController : MonoBehaviour
             {
                 if (!minions.Contains(minion))
                 {
+                    if (!originalPositionsGeneral.ContainsKey(minion))
+                    {
+                        originalPositionsGeneral.Add(minion, minion.transform.position);
+                    }
+
                     minions.Add(minion);
-                    originalPositions.Add(minion.transform.position);
+                    originalPositionsGeneral.TryGetValue(minion, out Vector3 position);
+                    originalPositions.Add(position);
                 }
             }
 
@@ -167,6 +173,7 @@ public class CampController : MonoBehaviour
                 if (animator != null)
                 {
                     animator.SetBool("Run", false);
+                    animator.SetBool("Walk", true);
                 }
             }
             aggressiveMinions.Clear();

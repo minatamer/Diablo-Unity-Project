@@ -115,15 +115,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 44619d21f7fb704408f83e4d61bb0739, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 1.9999999
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44619d21f7fb704408f83e4d61bb0739, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3
+      value: 1.9999999
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44619d21f7fb704408f83e4d61bb0739, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3
+      value: 1.9999999
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44619d21f7fb704408f83e4d61bb0739, type: 3}
       propertyPath: m_LocalPosition.x
@@ -249,8 +249,13 @@ MonoBehaviour:
   arenaCenter: {fileID: 0}
   auraSphere: {fileID: 978237647248822236}
   minion: {fileID: 919132149155446097, guid: a52f7cde8ed0b7d408d15fc7f11ed9ff, type: 3}
+  minions: []
   SpikePrefab: {fileID: 0}
   shield: {fileID: 0}
+  healthBarImage: {fileID: 0}
+  points_text: {fileID: 0}
+  shieldBarImage: {fileID: 0}
+  points_shield_text: {fileID: 0}
 --- !u!65 &-8786351817609343834
 BoxCollider:
   m_ObjectHideFlags: 0

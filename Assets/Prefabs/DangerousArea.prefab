@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1440211002304890632}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -3.9, y: 0.01999998, z: -8.331675}
+  m_LocalRotation: {x: 0.006391847, y: 0.0013370089, z: 0.7067574, w: 0.7074259}
+  m_LocalPosition: {x: -3.8993747, y: 0.019460395, z: -8.333183}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0.41, y: 0.626, z: 89.948}
 --- !u!198 &6185643497979664904
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4845,6 +4845,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e8064e876b2f42db9bc99c4d4b662f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ringRadius: 5
 --- !u!65 &428163765707187587
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4864,5 +4865,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.8213418, y: 11.05379, z: 10.788813}
-  m_Center: {x: 0.20067012, y: -0.037794113, z: 0.06594801}
+  m_Size: {x: 1.8213418, y: 10.242913, z: 10.60273}
+  m_Center: {x: 0.20067011, y: 0.009743453, z: 0.096485145}

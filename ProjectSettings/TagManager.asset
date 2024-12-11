@@ -19,6 +19,9 @@ TagManager:
   - Spike
   - OriginalPlayer
   - clonedPlayer
+  - CampTwo
+  - CampThree
+  - CampOne
   layers:
   - Default
   - TransparentFX
