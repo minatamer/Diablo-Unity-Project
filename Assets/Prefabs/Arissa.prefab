@@ -119,6 +119,7 @@ MonoBehaviour:
   sorcererClone: {fileID: 3127494860895753228}
   dangArea: {fileID: 1440211002304890632, guid: 7c26c0538f7df48e2af99c84d3d47165, type: 3}
   explosionPrefab: {fileID: 3265009732417457989, guid: 79f13a59cb7834608b68cdd2bcec7391, type: 3}
+  explosionDemonPrefab: {fileID: 3265009732417457989, guid: bb7ecfab3c355ec4882d9d0333999981, type: 3}
 --- !u!195 &8603407565291068018
 NavMeshAgent:
   m_ObjectHideFlags: 0

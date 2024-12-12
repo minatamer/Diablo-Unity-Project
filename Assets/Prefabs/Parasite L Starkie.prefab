@@ -461,6 +461,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 40
+  grenade: {fileID: 5141838523736138830, guid: 77bf3bd06bd1a0e4ca94ace4ec9235fd, type: 3}
+  shootingPoint: {fileID: 5813073852528122125}
+  explosionPrefab: {fileID: 3265009732417457989, guid: bb7ecfab3c355ec4882d9d0333999981, type: 3}
   healthBarImage: {fileID: 8216875204383594199}
 --- !u!65 &952795961348170538
 BoxCollider:
@@ -513,6 +516,11 @@ Rigidbody:
 --- !u!4 &4290110516261032237 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: a9c3ce1346e6c5746b263e4e6537dbf2, type: 3}
+  m_PrefabInstance: {fileID: 2466886289342066405}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5813073852528122125 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8255111157037086696, guid: a9c3ce1346e6c5746b263e4e6537dbf2, type: 3}
   m_PrefabInstance: {fileID: 2466886289342066405}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6123400600999472679

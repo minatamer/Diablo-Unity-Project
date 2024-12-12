@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class AbilitiesButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public bool isMouseOver = false;
-  public void unlockDefensive()
+
+    public void unlockDefensive()
 {
     gameController.Instance.abilityPoints--;
     Debug.Log("Defensive unlocked");

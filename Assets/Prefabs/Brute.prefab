@@ -246,6 +246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shieldAura: {fileID: 74540466219606721}
   shield: 0
+  explosionDemonPrefab: {fileID: 3265009732417457989, guid: bb7ecfab3c355ec4882d9d0333999981, type: 3}
 --- !u!195 &4705688396527389454
 NavMeshAgent:
   m_ObjectHideFlags: 0

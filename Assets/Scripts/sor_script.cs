@@ -21,13 +21,15 @@ public class sor_script : MonoBehaviour
     private GameObject clonedinstance;
      public GameObject dangArea ;
     private GameObject dangInstance;
-    private bool fireBallDestroyed = false;  
+    private bool fireBallDestroyed = false;
+    private float fireBallLastAbilityTime = 0;
     private float cloneLastAbilityTime = 0;
     private float infernoLastAbilityTime = 0;
     private float teleportLastAbilityTime = 0;
     private float fireBallThrownAtTime;
     public GameObject explosionPrefab;
-     void Start()
+    public GameObject explosionDemonPrefab;
+    void Start()
     {
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -185,6 +187,7 @@ public class sor_script : MonoBehaviour
 
                 animator.SetBool("throwing",true);
                 fireBallThrownAtTime = Time.time;
+                fireBallLastAbilityTime = Time.time;
                 currentFireball = Instantiate(fireball , shootingPoint.transform.position  , Quaternion.identity);
                 currentFireball.transform.parent =  shootingPoint;
 
@@ -332,20 +335,26 @@ public class sor_script : MonoBehaviour
     }
 
     private void releaseBall(){
-             if ( Time.time - fireBallThrownAtTime >= 1.0f)
-         {                
-              if(fireBallDestroyed == false && currentFireball != null){ // target reached or not 
-                 currentFireball.transform.parent = null;
-                 FireInStraightLine(targetPosition);
-             }
-              animator.SetBool("throwing", false);
-              fireBallThrownAtTime = 0.0f;  
+        if ( Time.time - fireBallThrownAtTime >= 1.0f){                
+            if(fireBallDestroyed == false && currentFireball != null){ // target reached or not 
+                currentFireball.transform.parent = null;
+                FireInStraightLine(targetPosition);
+            }
+        animator.SetBool("throwing", false);
+        fireBallThrownAtTime = 0.0f;
+        
+
         }
     }
     private void UpdateAbilitiesCoolDown(){
-        for(int i =1;i<=3;i++){
+        for(int i =0;i<=3;i++){
             if(gameController.Instance.locked[i]== -1){
-                if(i == 1 && UseAbility(teleportLastAbilityTime ,10) == false){
+                if (i == 0 && UseAbility(fireBallLastAbilityTime, 2) == false)
+                {
+                    gameController.Instance.cooldownVal[i].text = Mathf.FloorToInt(2 - (Time.time - fireBallLastAbilityTime)).ToString();
+                }
+
+                if (i == 1 && UseAbility(teleportLastAbilityTime ,10) == false){
                     gameController.Instance.cooldownVal[i].text =  Mathf.FloorToInt(10-(Time.time - teleportLastAbilityTime)).ToString();
                 }
 
@@ -375,6 +384,16 @@ public class sor_script : MonoBehaviour
         {
             gameController.Instance.healthPoints -= 30;
             getHit();
+            //Destroy(other.gameObject);
+        }
+
+        if (other.gameObject.tag == "Grenade")
+        {
+            GameObject explosion = Instantiate(explosionDemonPrefab, new Vector3(transform.position.x , transform.position.y + 3f, transform.position.z), Quaternion.identity);
+
+            getHit();
+            Destroy(explosion, 1.0f);
+            gameController.Instance.healthPoints -= 15;
             //Destroy(other.gameObject);
         }
 

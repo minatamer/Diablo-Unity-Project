@@ -11,10 +11,15 @@ public class BarbarianAnimatorController : MonoBehaviour
     private Vector3 hitPoint;
 
     // Cooldown durations (in seconds)
-    private float bashCooldown = 1f;
+    private float bashCooldown = 2f;
     private float ironMaelstromCooldown = 5f;
     private float shieldCooldown = 10f;
     private float chargeCooldown = 10f;
+
+    private float bashAbilityTime = 0;
+    private float shieldAbilityTime = 0;
+    private float ironMaelstromAbilityTime = 0;
+    private float chargeAbilityTime = 0;
 
     // Cooldown flags
     private bool isBashOnCooldown = false;
@@ -32,6 +37,8 @@ public class BarbarianAnimatorController : MonoBehaviour
     private bool waitingForRightClick;
 
     private bool bossChargeDamage = false;
+
+    public GameObject explosionDemonPrefab;
 
     void Start()
     {
@@ -51,8 +58,56 @@ public class BarbarianAnimatorController : MonoBehaviour
 
     }
 
+    private void UpdateAbilitiesCoolDown()
+    {
+        for (int i = 0; i <= 3; i++)
+        {
+            if (gameController.Instance.locked[i] == -1)
+            {
+                if (i == 0 && isBashOnCooldown == true)
+                {
+                    int cooldown = Mathf.FloorToInt(bashCooldown - (Time.time - bashAbilityTime));
+                    if (cooldown < 0)
+                    {
+                        cooldown = 0;
+                    }
+                    gameController.Instance.cooldownVal[i].text = cooldown.ToString();
+                }
+                if (i == 1 && isShieldOnCooldown == true)
+                {
+                    int cooldown = Mathf.FloorToInt(shieldCooldown - (Time.time - shieldAbilityTime));
+                    if (cooldown < 0)
+                    {
+                        cooldown = 0;
+                    }
+                    gameController.Instance.cooldownVal[i].text = cooldown.ToString();
+                }
+                if (i == 2 && isIronMaelstromOnCooldown == true)
+                {
+                    int cooldown = Mathf.FloorToInt(ironMaelstromCooldown - (Time.time - ironMaelstromAbilityTime));
+                    if (cooldown < 0)
+                    {
+                        cooldown = 0;
+                    }
+                    gameController.Instance.cooldownVal[i].text = cooldown.ToString();
+                }
+                if (i == 3 && isChargeOnCooldown == true)
+                {
+                    int cooldown = Mathf.FloorToInt(chargeCooldown - (Time.time - chargeAbilityTime));
+                    if (cooldown < 0)
+                    {
+                        cooldown = 0;
+                    }
+                    gameController.Instance.cooldownVal[i].text = cooldown.ToString();
+                }
+
+            }
+        }
+    }
+
     void Update()
     {
+        UpdateAbilitiesCoolDown();
 
         if (Input.GetMouseButtonDown(1) && waitingForRightClick == true)
         {
@@ -74,9 +129,9 @@ public class BarbarianAnimatorController : MonoBehaviour
             }
         }
         // Handle Shield ability with cooldown
-        if (Input.GetKeyDown(KeyCode.W) && !isShieldOnCooldown)
+        if (Input.GetKeyDown(KeyCode.W) && !isShieldOnCooldown && gameController.Instance.locked[1] == -1)
         {
-            ActivateShield();
+            StartCoroutine(ActivateShield());
         }
 
 
@@ -132,8 +187,10 @@ public class BarbarianAnimatorController : MonoBehaviour
         // Handle Bash ability with cooldown
         if (Input.GetMouseButtonDown(1) && !isBashOnCooldown && waitingForRightClick == false)
         {
-            Debug.Log("Bashing!");
+            Debug.Log("Entered bashing");
             Vector3 posClicked = GetMouseWorldPosition();
+            Debug.Log(posClicked);
+            posClicked.y = 0;
             float radius = 2f;
             GameObject foundObject = null;
             Collider[] hitColliders = Physics.OverlapSphere(posClicked, radius);
@@ -143,6 +200,7 @@ public class BarbarianAnimatorController : MonoBehaviour
                 string tag = collider.gameObject.tag;
                 if (tag.Contains("Minion") || tag.Contains("Demon") || tag.Contains("Boss"))
                 {
+                    Debug.Log("found object");
                     foundObject = collider.gameObject;
                     break;
                 }
@@ -150,7 +208,8 @@ public class BarbarianAnimatorController : MonoBehaviour
 
             float distanceFromBarbarian = Vector3.Distance(posClicked, transform.position);
             
-            if(distanceFromBarbarian <= 5f && foundObject != null){
+            if(distanceFromBarbarian <= 3f && foundObject != null){
+                Debug.Log("Bashing animation");
                 animator.SetTrigger("Bash");
                 StartCoroutine(BashCooldown());
             }
@@ -355,7 +414,7 @@ public class BarbarianAnimatorController : MonoBehaviour
         }
 
         // Handle Charge ability with cooldown
-        if (Input.GetKeyDown(KeyCode.E) && !isChargeOnCooldown)
+        if (Input.GetKeyDown(KeyCode.E) && !isChargeOnCooldown && gameController.Instance.locked[3] == -1)
         {
             Debug.Log("E is pressed!");
             waitingForRightClick = true;
@@ -363,7 +422,7 @@ public class BarbarianAnimatorController : MonoBehaviour
         }
 
         // Handle Iron Maelstrom ability with cooldown
-        if (Input.GetKeyDown(KeyCode.Q) && !isIronMaelstromOnCooldown)
+        if (Input.GetKeyDown(KeyCode.Q) && !isIronMaelstromOnCooldown && gameController.Instance.locked[2] == -1)
         {
 
             animator.SetTrigger("IronMaelstrom");
@@ -381,12 +440,13 @@ Vector3 GetMouseWorldPosition()
         Debug.LogWarning("Mouse click did not hit a valid position.");
         return Vector3.zero; // Return a default invalid position
     }
-    private void ActivateShield()
+    private IEnumerator ActivateShield()
     {
-        Debug.Log("Shield activated!");
+        //Debug.Log("Shield activated!");
         shield  = true;
         shieldAura.SetActive(true);
         StartCoroutine(DisableShieldAfterTime(3f)); // Shield lasts for 3 seconds
+        yield return new WaitForSeconds(3f);
         StartCoroutine(ShieldCooldown()); // Start the shield cooldown
      
     }
@@ -401,33 +461,44 @@ Vector3 GetMouseWorldPosition()
     // Bash cooldown logic
     private IEnumerator BashCooldown()
     {
+        yield return new WaitForSeconds(1f);
+        bashAbilityTime = Time.time;
         isBashOnCooldown = true;
         yield return new WaitForSeconds(bashCooldown); // Wait for cooldown duration
         isBashOnCooldown = false;
+        bashAbilityTime = 0;
     }
 
     // Iron Maelstrom cooldown logic
     private IEnumerator IronMaelstromCooldown()
     {
+        yield return new WaitForSeconds(2f);
+        ironMaelstromAbilityTime = Time.time;
         isIronMaelstromOnCooldown = true;
         yield return new WaitForSeconds(ironMaelstromCooldown); // Wait for cooldown duration
         isIronMaelstromOnCooldown = false;
+        ironMaelstromAbilityTime = 0;
     }
 
     // Shield cooldown logic
     private IEnumerator ShieldCooldown()
     {
+        shieldAbilityTime = Time.time;
         isShieldOnCooldown = true;
         yield return new WaitForSeconds(shieldCooldown); // Wait for cooldown duration
         isShieldOnCooldown = false;
+        shieldAbilityTime = 0;
     }
 
     // Charge cooldown logic
     private IEnumerator ChargeCooldown()
     {
+        yield return new WaitForSeconds(2f);
+        chargeAbilityTime = Time.time;
         isChargeOnCooldown = true;
         yield return new WaitForSeconds(chargeCooldown); // Wait for cooldown duration
         isChargeOnCooldown = false;
+        chargeAbilityTime = 0;
     }
 
     // Coroutine to reset to Idle after Charge
@@ -465,6 +536,16 @@ Vector3 GetMouseWorldPosition()
         {
             gameController.Instance.healthPoints -= 30;
             getHit();
+            //Destroy(other.gameObject);
+        }
+
+        if (other.gameObject.tag == "Grenade")
+        {
+            GameObject explosion = Instantiate(explosionDemonPrefab, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z), Quaternion.identity);
+
+            getHit();
+            Destroy(explosion, 1.0f);
+            gameController.Instance.healthPoints -= 15;
             //Destroy(other.gameObject);
         }
 

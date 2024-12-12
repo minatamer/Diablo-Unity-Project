@@ -22,6 +22,7 @@ TagManager:
   - CampTwo
   - CampThree
   - CampOne
+  - Grenade
   layers:
   - Default
   - TransparentFX

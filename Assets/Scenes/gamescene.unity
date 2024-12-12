@@ -381,8 +381,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: 100
+  xp: 0
   level: 1
-  abilityPoints: 1
+  abilityPoints: 0
   healingPotions: 0
   runeFragments: 0
   points_text: {fileID: 2077067343}
@@ -398,7 +399,7 @@ MonoBehaviour:
   Camp: {fileID: 6125634656030457057, guid: b1095217785c1463d941e5111f0c761a, type: 3}
   MinionPrefab: {fileID: 3125893102201477043, guid: 19aa225795fb14c45b5568d39428a86e, type: 3}
   DemonPrefab: {fileID: 3385948065458213812, guid: 3f5865a95255b5442ad8e4caab538c3f, type: 3}
-  RuneFragment: {fileID: 8779974172392960324, guid: b622e90c35982494387617b6e49072f0, type: 3}
+  RuneFragment: {fileID: 6679584506858118051, guid: 79e21ee963b08b74ebcf98721103511e, type: 3}
   Potion: {fileID: 2816738690486192442, guid: 3bb1c85a0ad354c5a9df57740d3f331e, type: 3}
   campOne: {fileID: 621235086}
   campTwo: {fileID: 1175779686}
@@ -3399,7 +3400,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 79d45bf749fa642c8b11f3f993880e2f, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: a12aa1bb37f2aeb43ac571f6a3385677, type: 2}
   m_BuildHeightMesh: 0
 --- !u!64 &1606038171
 MeshCollider:
@@ -4574,7 +4575,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -28, y: 338}
+  m_AnchoredPosition: {x: -28.000061, y: 338}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2136737314

@@ -170,6 +170,7 @@ public class MinionController : MonoBehaviour
         {
             agent.SetDestination(agent.transform.position);
             animator.SetTrigger("Die");
+            
             //Destroy(gameObject);
         }
 
@@ -182,6 +183,7 @@ public class MinionController : MonoBehaviour
 
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Die") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.70f)
         {
+            gameController.Instance.xp += 10;
             Destroy(gameObject);
         }
 

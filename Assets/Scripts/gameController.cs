@@ -16,7 +16,7 @@ public class gameController : MonoBehaviour
 {
     public static gameController Instance { get; private set; }
     public int healthPoints = 100;
-    private int xp = 0;
+    public int xp = 0;
     public int level = 1;
     public int abilityPoints = 0;
     public int healingPotions = 0;
@@ -68,16 +68,16 @@ public class gameController : MonoBehaviour
             return;
         }
         Instance = this;
-        cooldownVal[0].text = "1";
+        cooldownVal[0].text = "0";
         cooldownVal[1].text = "_";
         cooldownVal[2].text = "_";
         cooldownVal[3].text = "_";
 
 
         locked[0] = -1;
-        locked[1] = -1;
-        locked[2] = -1;
-        locked[3] = -1;
+        //locked[1] = -1;
+        //locked[2] = -1;
+        //locked[3] = -1;
 
         if (PlayerPrefs.GetString("SelectedCharacter") == "Sorcerer") {
             buttons[0].GetComponentInChildren<TMP_Text>().text = "Fireball";
@@ -307,8 +307,13 @@ public class gameController : MonoBehaviour
         }
         }
        
-        if(level == 4 ){
-            xp = 400;
+        if(xp >= 100*level && level!=4)
+        {
+            int overflow = xp - (100 * level) ;
+            level++;
+            abilityPoints++;
+            xp = overflow;
+            healthPoints = 100 * level;
         }
 
 
@@ -316,9 +321,9 @@ public class gameController : MonoBehaviour
         rune_fragments_count.text = "RF: " + runeFragments;
         healing_potions_text.text = "Healing Potions: "+ healingPotions+"| ";
         level_text.text = "|"+level.ToString()+ "|";
-        points_text.text = healthPoints + "/100";
+        points_text.text = healthPoints + "/" + (level * 100);
         xp_text.text = xp + "/"+  (level*100);
-        healthBar.fillAmount = (float)healthPoints/100;
+        healthBar.fillAmount = (float)healthPoints/(100*level);
         xpBar.fillAmount =  (float)xp/(100*level);
 
     }

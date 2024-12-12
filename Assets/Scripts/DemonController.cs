@@ -1,17 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 
 public class DemonController : MonoBehaviour
 {
      public int hp = 40;
      private Animator animator ;
-     private   NavMeshAgent agent ;
-    
-     public Image healthBarImage;
+     private NavMeshAgent agent ;
+    public GameObject grenade;
+    public Transform shootingPoint;
+
+    private GameObject currentGrenade;
+    private Vector3 grenadeTarget;
+    private float range;
+
+    private float grenadeTime;
+
+    public Image healthBarImage;
 
     // Start is called before the first frame update
     void Start()
@@ -94,6 +104,7 @@ public class DemonController : MonoBehaviour
 
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Die") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.70f)
         {
+            gameController.Instance.xp += 30;
             Destroy(gameObject);
         }
 
@@ -138,6 +149,22 @@ public class DemonController : MonoBehaviour
 
 
     }
+
+    void FireInStraightLine(Vector3 targetPosition)
+    {
+        Vector3 direction = (targetPosition - currentGrenade.transform.position).normalized;
+        Rigidbody rb = currentGrenade.GetComponent<Rigidbody>();
+        rb.isKinematic = false;
+        Vector3 force = new Vector3(direction.x, direction.y, direction.z) * 2f;
+        rb.AddForce(force, ForceMode.VelocityChange);
+
+    }
+
+    //private IEnumerator DeleteGrenade()
+    //{
+
+    //}
+
     private void OnTriggerStay(Collider other){
 
 
@@ -196,26 +223,77 @@ public class DemonController : MonoBehaviour
                     }
                 }
 
-                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Goalie Throw") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.85f && animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.855f)
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Goalie Throw"))
                 {
-                    if (PlayerPrefs.GetString("SelectedCharacter") == "Barbarian")
-                    {//barbarian
-                        BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
-                        if (barbarianScript.shield == false)
-                        { //barbarian
-                            gameController.Instance.healthPoints -= 15;
-                            Animator player = other.gameObject.GetComponent<Animator>();
-                            player.SetTrigger("hit");
-                        }
+                    if(currentGrenade == null)
+                    {
+                        Debug.Log("grenade instantiated");
+                        currentGrenade = Instantiate(grenade, shootingPoint.transform.position, Quaternion.identity);
+                        currentGrenade.transform.parent = shootingPoint;
+                    }
+                    
+                }
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Goalie Throw") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.40f && animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.41f)
+                {
+                    //throw and apply explosion
+                    GameObject target = GameObject.FindWithTag("clonedPlayer");
+                    if (target == null)
+                    {
+                        target = GameObject.FindWithTag("Player");
+                    }
+                    grenadeTarget = target.transform.position;
 
+                    currentGrenade.transform.parent = null;
+                    range = Vector3.Distance(target.transform.position, currentGrenade.transform.position);
+                    grenadeTime = Time.time;
+
+                    FireInStraightLine(grenadeTarget);
+                }
+
+                if(currentGrenade != null)
+                {
+                    GameObject target = GameObject.FindWithTag("clonedPlayer");
+                    if (target == null)
+                    {
+                        target = GameObject.FindWithTag("Player");
+                    }
+                    float distance = Vector3.Distance(target.transform.position, currentGrenade.transform.position);
+                    if (Time.time - grenadeTime > 0.5f)
+                    {
+                        Destroy(currentGrenade);
+                        currentGrenade = null;
                     }
                     else
-                    {//arisa
-                        gameController.Instance.healthPoints -= 15;
-                        Animator player = other.gameObject.GetComponent<Animator>();
-                        player.SetTrigger("hit");
+                    {
+                        FireInStraightLine(grenadeTarget);
                     }
+                    
                 }
+
+                //    if (animator.GetCurrentAnimatorStateInfo(0).IsName("Goalie Throw") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.85f && animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.855f)
+                //{
+
+                
+
+
+                //    if (PlayerPrefs.GetString("SelectedCharacter") == "Barbarian")
+                //    {//barbarian
+                //        BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
+                //        if (barbarianScript.shield == false)
+                //        { //barbarian
+                //            gameController.Instance.healthPoints -= 15;
+                //            Animator player = other.gameObject.GetComponent<Animator>();
+                //            player.SetTrigger("hit");
+                //        }
+
+                //    }
+                //    else
+                //    {//arisa
+                //        gameController.Instance.healthPoints -= 15;
+                //        Animator player = other.gameObject.GetComponent<Animator>();
+                //        player.SetTrigger("hit");
+                //    }
+                //}
             }
 
             
