@@ -51,7 +51,18 @@ public class PauseScene : MonoBehaviour
     public void Restart()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("gamescene");
+        if (gameController.Instance.bossLevel == false)
+        {
+            SceneManager.LoadScene("gamescene");
+        }
+        else
+        {
+            if (PlayerPrefs.HasKey("healthPoints"))
+            {
+                PlayerPrefs.DeleteKey("healthPoints"); //this will make it so that if the player restarts he will restart with the restart configuration instead
+            }
+            SceneManager.LoadScene("BossScene");
+        }
     }
     public void Quit()
     {

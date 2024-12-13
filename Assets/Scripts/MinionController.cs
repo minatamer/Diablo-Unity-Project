@@ -83,19 +83,23 @@ public class MinionController : MonoBehaviour
                             BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
                             if (barbarianScript.shield == false)
                             {
-                                gameController.Instance.healthPoints -= 5;
-                                //Animator player = other.gameObject.GetComponent<Animator>();
-                                //player.SetTrigger("hit");
+                                if (gameController.Instance.invincibility == false)
+                                {
+                                    gameController.Instance.healthPoints -= 5;
                                 barbarianScript.getHit();
+
+                                }
                             }
                         }
                         else
                         {//arisa
-                            gameController.Instance.healthPoints -= 5;
+                            if (gameController.Instance.invincibility == false)
+                            {
+                                gameController.Instance.healthPoints -= 5;
                             sor_script SorScript = other.gameObject.GetComponent<sor_script>();
-                            //Animator player = other.gameObject.GetComponent<Animator>();
-                            //player.SetTrigger("hit");
                             SorScript.getHit();
+
+                            }
                         }
                     }
                 }

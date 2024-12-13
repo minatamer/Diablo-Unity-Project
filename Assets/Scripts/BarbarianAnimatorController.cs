@@ -1,7 +1,9 @@
 using System.Collections; // Required for IEnumerator and Coroutines
+using System.Threading;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class BarbarianAnimatorController : MonoBehaviour
 {
@@ -105,11 +107,40 @@ public class BarbarianAnimatorController : MonoBehaviour
         }
     }
 
+    public void drink()
+    {
+        animator.SetTrigger("drink");
+    }
+
     void Update()
     {
         UpdateAbilitiesCoolDown();
 
-        if (Input.GetMouseButtonDown(1) && waitingForRightClick == true)
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (gameController.Instance.coolDownCheat == false)
+            {
+                bashCooldown = 0;
+                shieldCooldown = 0;
+                ironMaelstromCooldown = 0;
+                chargeCooldown = 0;
+                UpdateAbilitiesCoolDown();
+                gameController.Instance.coolDownCheat = true;
+            }
+            else
+            {
+
+                bashCooldown = 2f;
+                shieldCooldown = 10f;
+                ironMaelstromCooldown = 5f;
+                chargeCooldown = 10f;
+                UpdateAbilitiesCoolDown();
+                gameController.Instance.coolDownCheat = false;
+            }
+                
+        }
+
+            if (Input.GetMouseButtonDown(1) && waitingForRightClick == true)
         {
             if (isChargeOnCooldown == true)
             {
@@ -246,7 +277,11 @@ public class BarbarianAnimatorController : MonoBehaviour
                     }
                     else if (enemyScript.auraActive)
                     {
-                        gameController.Instance.healthPoints -= 25;
+                        if (gameController.Instance.invincibility == false)
+                        {
+                            gameController.Instance.healthPoints -= 25;
+                        }
+                            
                         enemyScript.auraActive = false;
                     }
                     else
@@ -310,7 +345,11 @@ public class BarbarianAnimatorController : MonoBehaviour
                         }
                         else if (enemyScript.auraActive)
                         {
-                            gameController.Instance.healthPoints -= 35;
+                            if (gameController.Instance.invincibility == false)
+                            {
+                                gameController.Instance.healthPoints -= 35;
+                            }
+                                
                             enemyScript.auraActive = false;
                         }
                         else
@@ -356,7 +395,7 @@ public class BarbarianAnimatorController : MonoBehaviour
            // Debug.Log("EDRAB TANY 3AYEZ ATOOB");
             if (enemyCollision == true)
             {
-                Debug.Log("EDRAB TANY 3AYEZ ATOOB");
+                //Debug.Log("EDRAB TANY 3AYEZ ATOOB");
                 if (enemy.tag.Contains("Minion"))
                 {
                     MinionController enemyScript = enemy.GetComponent<MinionController>();
@@ -380,7 +419,11 @@ public class BarbarianAnimatorController : MonoBehaviour
                     }
                     else if (enemyScript.auraActive)
                     {
-                        gameController.Instance.healthPoints -= 20;
+                        if (gameController.Instance.invincibility == false)
+                        {
+                            gameController.Instance.healthPoints -= 20;
+                        }
+                            
                         enemyScript.auraActive = false;
                     }
                     else
@@ -534,8 +577,12 @@ Vector3 GetMouseWorldPosition()
         }
         if (other.gameObject.tag == "Spike")
         {
-            gameController.Instance.healthPoints -= 30;
-            getHit();
+            if (gameController.Instance.invincibility == false)
+            {
+                gameController.Instance.healthPoints -= 30;
+                getHit();
+            }
+                
             //Destroy(other.gameObject);
         }
 
@@ -543,10 +590,33 @@ Vector3 GetMouseWorldPosition()
         {
             GameObject explosion = Instantiate(explosionDemonPrefab, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z), Quaternion.identity);
 
-            getHit();
+            if (gameController.Instance.invincibility == false)
+            {
+                getHit();
+            }
+               
             Destroy(explosion, 1.0f);
-            gameController.Instance.healthPoints -= 15;
+            if (gameController.Instance.invincibility == false)
+            {
+                gameController.Instance.healthPoints -= 15;
+            }
+                
             //Destroy(other.gameObject);
+        }
+
+        if (other.gameObject.tag == "Gate")
+        {
+            PlayerPrefs.SetInt("healingPotions", gameController.Instance.healingPotions);
+            PlayerPrefs.SetInt("xp", gameController.Instance.xp);
+            PlayerPrefs.SetInt("level", gameController.Instance.level);
+            PlayerPrefs.SetInt("healthPoints", gameController.Instance.healthPoints);
+            PlayerPrefs.SetInt("runeFragments", gameController.Instance.runeFragments);
+            PlayerPrefs.SetInt("abilityPoints", gameController.Instance.abilityPoints);
+            PlayerPrefs.SetInt("AbilityDefensive", gameController.Instance.locked[1]);
+            PlayerPrefs.SetInt("AbilityWild", gameController.Instance.locked[2]);
+            PlayerPrefs.SetInt("AbilityUltimate", gameController.Instance.locked[3]);
+            gameController.Instance.bossLevel = true;
+            SceneManager.LoadScene("BossScene");
         }
 
 

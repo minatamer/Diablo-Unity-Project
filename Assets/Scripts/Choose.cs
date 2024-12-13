@@ -80,6 +80,14 @@ public class Choose : MonoBehaviour
         PlayerPrefs.SetString("SelectedCharacter", selectedCharacter);
 
         // Load the gameplay scene
-        SceneManager.LoadScene("gamescene"); // Replace with your actual gameplay scene name
+        if(PlayerPrefs.GetString("SelectedLevel") == "Basic")
+        {
+            SceneManager.LoadScene("gamescene");
+        }
+        else
+        {
+            SceneManager.LoadScene("BossScene");
+        }
+         // Replace with your actual gameplay scene name
     }
 }

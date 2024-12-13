@@ -58,7 +58,16 @@ public class AbilitiesButtons : MonoBehaviour, IPointerEnterHandler, IPointerExi
         Debug.Log("Mouse is no longer over the button.");
     }
     void Update()
-    { 
-       
+    {
+        //Unlocks all locked abilities
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            gameController.Instance.abilityPoints += 3;
+            unlockDefensive();
+            unlockWild();
+            unlockUltimate();
+
+        }
+
     }
 }

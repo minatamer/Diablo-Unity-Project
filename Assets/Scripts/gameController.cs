@@ -11,6 +11,7 @@ using UnityEditor.Rendering;
 using Unity.AI.Navigation;
 using UnityEngine.SceneManagement; 
 using UnityEngine.EventSystems;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class gameController : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class gameController : MonoBehaviour
     
     public bool barbarianShield = false;
 
-    public bool bossLevel = true;
+    public bool bossLevel = false;
 
     // public TMP_Text[] abilitiesNames = new TMP_Text[4];
     public Button[] buttons = new Button[4];
@@ -56,9 +57,28 @@ public class gameController : MonoBehaviour
 
     public Camera mainCamera;
 
+    public bool invincibility = false;
+    public bool slowMotion = false;
+    public bool coolDownCheat = false;
+
+    public GameObject leftGate;
+    public GameObject rightGate;
+
+    public Transform leftPivotPoint;
+    public Transform rightPivotPoint;
+
+    public bool openGate = true;
+
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("Button clicked!");
+    }
+
+    private void changecolorOfAButton(Button button)
+    {
+        button.interactable = true;
+        Image buttonImage = button.GetComponent<Image>();
+        buttonImage.color = Color.white;
     }
 
     void Awake() {
@@ -75,9 +95,6 @@ public class gameController : MonoBehaviour
 
 
         locked[0] = -1;
-        //locked[1] = -1;
-        //locked[2] = -1;
-        //locked[3] = -1;
 
         if (PlayerPrefs.GetString("SelectedCharacter") == "Sorcerer") {
             buttons[0].GetComponentInChildren<TMP_Text>().text = "Fireball";
@@ -99,10 +116,47 @@ public class gameController : MonoBehaviour
         initializeButtonAbilities(buttons[3]);
 
 
+        if (bossLevel == true && PlayerPrefs.HasKey("AbilityDefensive"))
+        {
+            locked[1] = PlayerPrefs.GetInt("AbilityDefensive");
+            locked[2] = PlayerPrefs.GetInt("AbilityWild");
+            locked[3] = PlayerPrefs.GetInt("AbilityUltimate");
+            if (locked[1] == -1)
+            {
+                changecolorOfAButton(buttons[1]);
+            }
+            if (locked[2] == -1)
+            {
+                changecolorOfAButton(buttons[2]);
+            }
+            if (locked[3] == -1)
+            {
+                changecolorOfAButton(buttons[3]);
+            }
+        }
+
+
     }
     // Start is called before the first frame update
     void Start()
     {
+        if (bossLevel == true && PlayerPrefs.HasKey("healthPoints"))
+        {
+            healingPotions = PlayerPrefs.GetInt("healingPotions");
+            level = PlayerPrefs.GetInt("level");
+            xp = PlayerPrefs.GetInt("xp");
+            healthPoints = PlayerPrefs.GetInt("healthPoints");
+            runeFragments= PlayerPrefs.GetInt("runeFragments");
+            abilityPoints = PlayerPrefs.GetInt("abilityPoints");
+        }
+
+        else if (bossLevel == true)
+        {
+            level = 4;
+            healthPoints = 400;
+            abilityPoints = 3;
+        }
+
         string selectedCharacter = PlayerPrefs.GetString("SelectedCharacter");
         Debug.Log($"Selected character is: {selectedCharacter}");
         GameObject characterToInstantiate = null;
@@ -261,6 +315,29 @@ public class gameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        //Test if player has 3 runes and if within certain distance, start opening gate
+        GameObject player = GameObject.FindWithTag("Player");
+        float distance = Vector3.Distance(leftGate.transform.position, player.transform.position);
+        if (runeFragments == 3 && distance < 20f){
+            Debug.Log("you are near gate");
+            openGate = true;
+        }
+        if (openGate == true)
+        {
+            if(leftGate.transform.eulerAngles.y < 90f)
+            {
+                Quaternion rotation = Quaternion.AngleAxis(20f * Time.deltaTime, Vector3.up);
+                leftGate.transform.position = rotation * (leftGate.transform.position - leftPivotPoint.position) + leftPivotPoint.position;
+                leftGate.transform.rotation = rotation * leftGate.transform.rotation;
+
+                Quaternion rotationright = Quaternion.AngleAxis(-20f * Time.deltaTime, Vector3.up); // Negate the angle
+                rightGate.transform.position = rotationright * (rightGate.transform.position - rightPivotPoint.position) + rightPivotPoint.position;
+                rightGate.transform.rotation = rotationright * rightGate.transform.rotation;
+            }
+
+
+        }
        
             for(int i = 1; i<=3; i++){
                  if(abilityPoints > 0 ){
@@ -281,14 +358,13 @@ public class gameController : MonoBehaviour
                  healthPoints = Math.Min(100*level,healthPoints);
                  healingPotions --;
                  if(PlayerPrefs.GetString("SelectedCharacter") == "Sorcerer"){
-                     GameObject player = GameObject.FindWithTag("Player");
+                     player = GameObject.FindWithTag("Player");
                      GameObject originalPlayer = GameObject.FindWithTag("OriginalPlayer");
                      sor_script playerScript;
 
                       if(player!= null){
 
                        playerScript = player.GetComponent<sor_script>();
-                                           Debug.Log("helloooo");
 
                       }
                       else {
@@ -300,8 +376,22 @@ public class gameController : MonoBehaviour
                  }
 
                  else{//barbarian drink animation
+                    player = GameObject.FindWithTag("Player");
+                    GameObject originalPlayer = GameObject.FindWithTag("OriginalPlayer");
+                    BarbarianAnimatorController playerScript;
 
-                 }
+                    if (player != null)
+                    {
+
+                        playerScript = player.GetComponent<BarbarianAnimatorController>();
+
+                    }
+                    else
+                    {
+                        playerScript = originalPlayer.GetComponent<BarbarianAnimatorController>();
+                    }
+                    playerScript.drink();
+                }
                   
 
         }
@@ -325,6 +415,85 @@ public class gameController : MonoBehaviour
         xp_text.text = xp + "/"+  (level*100);
         healthBar.fillAmount = (float)healthPoints/(100*level);
         xpBar.fillAmount =  (float)xp/(100*level);
+
+
+        //Cheats
+        //Heal by 20
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            healthPoints += 20;
+            if(healthPoints > 100 * level)
+            {
+                healthPoints = 100 * level;
+            }
+        }
+        //Decrement health by 20
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            healthPoints -= 20;
+            if (healthPoints < 0)
+            {
+                healthPoints = 0;
+            }
+        }
+        //be invincible to damage
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (invincibility == false)
+            {
+                invincibility = true;
+            }
+            else
+            {
+                invincibility = false;
+            }
+        }
+
+        //Makes the gameplay in half speed when enabled
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            // Toggle slow motion state
+            slowMotion = !slowMotion;
+
+            // Apply time scale
+            Time.timeScale = slowMotion ? 0.5f : 1f;
+
+            // Adjust fixed delta time to maintain consistent physics
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        }
+
+        //Sets the cool down time for all the abilities to 0 HANDELED IN BARBARIAN AND SCORCERER SCRIPTS
+        //if (Input.GetKeyDown(KeyCode.C))
+        //{
+
+        //}
+
+        //Unlocks all locked abilities HANDELED IN ABILITY BUTTONS SCRIPT
+        //if (Input.GetKeyDown(KeyCode.U))
+        //{
+        //    locked[1] = -1;
+        //    locked[2] = -1;
+        //    locked[3] = -1;
+        //}
+
+        //Gain 1 ability point
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            abilityPoints++;
+        }
+
+        //Increment XP by 100
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            if (level != 4)
+            {
+                xp += 100;
+            }
+            
+        }
+
+
+
 
     }
 

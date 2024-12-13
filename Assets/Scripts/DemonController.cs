@@ -188,17 +188,25 @@ public class DemonController : MonoBehaviour
                         BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
                         if (barbarianScript.shield == false)
                         {
-                            gameController.Instance.healthPoints -= 10;
-                            Animator player = other.gameObject.GetComponent<Animator>();
-                            player.SetTrigger("hit");
+                            if(gameController.Instance.invincibility == false)
+                            {
+                                gameController.Instance.healthPoints -= 10;
+                                Animator player = other.gameObject.GetComponent<Animator>();
+                                player.SetTrigger("hit");
+                            }
+                            
                         }
 
                     }
                     else
                     {//arisa
-                        gameController.Instance.healthPoints -= 10;
-                        Animator player = other.gameObject.GetComponent<Animator>();
-                        player.SetTrigger("hit");
+                        if (gameController.Instance.invincibility == false)
+                        {
+                            gameController.Instance.healthPoints -= 10;
+                            Animator player = other.gameObject.GetComponent<Animator>();
+                            player.SetTrigger("hit");
+                        }
+                            
                     }
                 }
 
@@ -209,17 +217,25 @@ public class DemonController : MonoBehaviour
                         BarbarianAnimatorController barbarianScript = other.gameObject.GetComponent<BarbarianAnimatorController>();
                         if (barbarianScript.shield == false)
                         {
-                            gameController.Instance.healthPoints -= 10;
-                            Animator player = other.gameObject.GetComponent<Animator>();
-                            player.SetTrigger("hit");
+                            if (gameController.Instance.invincibility == false)
+                            {
+                                gameController.Instance.healthPoints -= 10;
+                                Animator player = other.gameObject.GetComponent<Animator>();
+                                player.SetTrigger("hit");
+                            }
+                                
                         }
 
                     }
                     else
                     {//arisa
-                        gameController.Instance.healthPoints -= 10;
-                        Animator player = other.gameObject.GetComponent<Animator>();
-                        player.SetTrigger("hit");
+                        if (gameController.Instance.invincibility == false)
+                        {
+                            gameController.Instance.healthPoints -= 10;
+                            Animator player = other.gameObject.GetComponent<Animator>();
+                            player.SetTrigger("hit");
+                        }
+                            
                     }
                 }
 

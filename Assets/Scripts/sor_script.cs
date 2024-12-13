@@ -29,6 +29,16 @@ public class sor_script : MonoBehaviour
     private float fireBallThrownAtTime;
     public GameObject explosionPrefab;
     public GameObject explosionDemonPrefab;
+
+
+    private int fireBallCooldown = 2;
+    private int cloneCooldown = 10;
+    private int infernoCooldown = 15;
+    private int teleportCooldown = 10;
+
+
+    private bool usedInferno = false;
+    private bool usedClone = false;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -79,12 +89,14 @@ public class sor_script : MonoBehaviour
     private IEnumerator HandleInfernoCooldown(GameObject dangInstance)
     {
         Destroy(dangInstance, 5f); 
-        yield return new WaitForSeconds(5f); 
+        yield return new WaitForSeconds(5f);
+        usedInferno = false;
         infernoLastAbilityTime = Time.time; 
     }
     private IEnumerator HandleCloneCooldown(GameObject clonedInstance)
     {
         yield return new WaitForSeconds(5f);
+        usedClone = false;
         GameObject explosion =  Instantiate(explosionPrefab, new Vector3(clonedInstance.transform.position.x,clonedInstance.transform.position.y+5f,clonedInstance.transform.position.z), Quaternion.identity);
         //cause damage to enemies around 
         string[] enemyTags = { "Minion", "Minion2", "Minion3", "Demon11", "Demon12", "Demon", "Boss" };
@@ -127,7 +139,11 @@ public class sor_script : MonoBehaviour
                     }
                     else if (enemyScript.auraActive)
                     {
-                        gameController.Instance.healthPoints -= 25;
+                        if (gameController.Instance.invincibility == false)
+                        {
+
+                            gameController.Instance.healthPoints -= 25;
+                        }
                         enemyScript.auraActive = false;
                     }
                     else
@@ -171,16 +187,41 @@ public class sor_script : MonoBehaviour
     {
         UpdateAbilitiesCoolDown();
 
-    
-     if ( Input.GetMouseButtonDown(1)) 
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (gameController.Instance.coolDownCheat == false)
+            {
+                fireBallCooldown = 0;
+                cloneCooldown = 0;
+                infernoCooldown = 0;
+                teleportCooldown = 0;
+                UpdateAbilitiesCoolDown();
+                gameController.Instance.coolDownCheat = true;
+            }
+            else
+            {
+
+                fireBallCooldown = 2;
+                cloneCooldown = 10;
+                teleportCooldown = 10;
+                infernoCooldown = 15;
+                UpdateAbilitiesCoolDown();
+                gameController.Instance.coolDownCheat = false;
+            }
+
+        }
+
+
+
+        if ( Input.GetMouseButtonDown(1)) 
         {      
-            if(waitingForRightClick == true && (UseAbility(cloneLastAbilityTime , 10) == false ||  gameController.Instance.locked[2] != -1 )){
+            if(waitingForRightClick == true && (UseAbility(cloneLastAbilityTime , cloneCooldown) == false ||  gameController.Instance.locked[2] != -1 )){
                 waitingForRightClick = false;
             }
-            else if(waitingForRightUltimate == true  && (UseAbility(infernoLastAbilityTime , 15) == false ||  gameController.Instance.locked[3] != -1 )){
+            else if(waitingForRightUltimate == true  && (UseAbility(infernoLastAbilityTime , infernoCooldown) == false ||  gameController.Instance.locked[3] != -1 )){
                 waitingForRightUltimate = false;
             }
-            else if(waitingForRightDefensive == true && (UseAbility(teleportLastAbilityTime , 10) == false ||  gameController.Instance.locked[1] != -1 )){
+            else if(waitingForRightDefensive == true && (UseAbility(teleportLastAbilityTime , teleportCooldown) == false ||  gameController.Instance.locked[1] != -1 )){
                 waitingForRightDefensive = false;
             }
             else if(waitingForRightClick == false && waitingForRightUltimate == false && waitingForRightDefensive == false ){
@@ -215,11 +256,15 @@ public class sor_script : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) )
         {
             Debug.Log("E key pressed. Waiting for right mouse click...");
-            waitingForRightUltimate = true; 
+            if (usedInferno == false)
+            {
+                waitingForRightUltimate = true;
+            }
+            
         }
 
        
-        if (waitingForRightUltimate && Input.GetMouseButtonDown(1) && UseAbility(infernoLastAbilityTime , 15) == true && gameController.Instance.locked[3] == -1)
+        if (waitingForRightUltimate && Input.GetMouseButtonDown(1) && UseAbility(infernoLastAbilityTime , infernoCooldown) == true && gameController.Instance.locked[3] == -1)
         {
             Debug.Log("Right mouse button clicked after pressing E!");
             waitingForRightUltimate = false;
@@ -227,6 +272,7 @@ public class sor_script : MonoBehaviour
              if (spawnPosition != Vector3.zero) 
             {
                  dangInstance = Instantiate(dangArea, spawnPosition, Quaternion.Euler(0, 0, 90));
+                usedInferno = true;
                  StartCoroutine(HandleInfernoCooldown(dangInstance));
 
             }   
@@ -240,7 +286,7 @@ public class sor_script : MonoBehaviour
             
         }
       
-        if (waitingForRightDefensive && Input.GetMouseButtonDown(1) && UseAbility(teleportLastAbilityTime , 10) == true && gameController.Instance.locked[1] == -1)
+        if (waitingForRightDefensive && Input.GetMouseButtonDown(1) && UseAbility(teleportLastAbilityTime , teleportCooldown) == true && gameController.Instance.locked[1] == -1)
         {
              Debug.Log("Right mouse button clicked after pressing W!");
              Vector3 spawnPosition = GetMouseWorldPosition();
@@ -262,11 +308,15 @@ public class sor_script : MonoBehaviour
        if (Input.GetKeyDown(KeyCode.Q) )
         {
             Debug.Log("Q key pressed. Waiting for right mouse click...");
-            waitingForRightClick = true; 
+            if(usedClone == false)
+            {
+                waitingForRightClick = true;
+            }
+             
         }
 
         
-        if (waitingForRightClick && Input.GetMouseButtonDown(1) && UseAbility(cloneLastAbilityTime , 10) == true && gameController.Instance.locked[2] == -1 )
+        if (waitingForRightClick && Input.GetMouseButtonDown(1) && UseAbility(cloneLastAbilityTime , cloneCooldown) == true && gameController.Instance.locked[2] == -1 )
         {
             Debug.Log("Right mouse button clicked after pressing Q!");
             waitingForRightClick = false;
@@ -274,6 +324,7 @@ public class sor_script : MonoBehaviour
              if (spawnPosition != Vector3.zero) 
             {
                  clonedinstance = Instantiate(sorcererClone, spawnPosition, Quaternion.identity);
+                usedClone = true;
                  Destroy(clonedinstance.GetComponent<sor_script>());
                  Animator cloneAnimator = clonedinstance.GetComponent<Animator>();
                  AnimatorOverrideController overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
@@ -348,24 +399,41 @@ public class sor_script : MonoBehaviour
     }
     private void UpdateAbilitiesCoolDown(){
         for(int i =0;i<=3;i++){
-            if(gameController.Instance.locked[i]== -1){
-                if (i == 0 && UseAbility(fireBallLastAbilityTime, 2) == false)
+            if (gameController.Instance.coolDownCheat == true)
+            {
+                gameController.Instance.cooldownVal[i].text = "0";
+            }
+
+            else
+            {
+                if (gameController.Instance.locked[i] == -1)
                 {
-                    gameController.Instance.cooldownVal[i].text = Mathf.FloorToInt(2 - (Time.time - fireBallLastAbilityTime)).ToString();
-                }
+                    if (i == 0 && UseAbility(fireBallLastAbilityTime, fireBallCooldown) == false)
+                    {
+                        gameController.Instance.cooldownVal[i].text = Mathf.FloorToInt(fireBallCooldown - (Time.time - fireBallLastAbilityTime)).ToString();
 
-                if (i == 1 && UseAbility(teleportLastAbilityTime ,10) == false){
-                    gameController.Instance.cooldownVal[i].text =  Mathf.FloorToInt(10-(Time.time - teleportLastAbilityTime)).ToString();
-                }
+                    }
 
-                else if(i == 2 && UseAbility(cloneLastAbilityTime ,10) == false ){
-                     gameController.Instance.cooldownVal[i].text =  Mathf.FloorToInt(10-(Time.time - cloneLastAbilityTime)).ToString();
-                }
+                    if (i == 1 && UseAbility(teleportLastAbilityTime, teleportCooldown) == false)
+                    {
+                        gameController.Instance.cooldownVal[i].text = Mathf.FloorToInt(teleportCooldown - (Time.time - teleportLastAbilityTime)).ToString();
+                    }
 
-                else if(i == 3 && UseAbility(infernoLastAbilityTime ,15) == false){
-                      gameController.Instance.cooldownVal[i].text =  Mathf.FloorToInt(15-(Time.time - infernoLastAbilityTime)).ToString();
+                    else if (i == 2 && UseAbility(cloneLastAbilityTime, cloneCooldown) == false)
+                    {
+                        gameController.Instance.cooldownVal[i].text = Mathf.FloorToInt(cloneCooldown - (Time.time - cloneLastAbilityTime)).ToString();
+                    }
+
+                    else if (i == 3 && UseAbility(infernoLastAbilityTime, infernoCooldown) == false)
+                    {
+                        gameController.Instance.cooldownVal[i].text = Mathf.FloorToInt(infernoCooldown - (Time.time - infernoLastAbilityTime)).ToString();
+                    }
                 }
             }
+
+
+
+            
         }
     }
     private void OnTriggerEnter(Collider other){
@@ -382,8 +450,12 @@ public class sor_script : MonoBehaviour
         }
         if (other.gameObject.tag == "Spike")
         {
-            gameController.Instance.healthPoints -= 30;
-            getHit();
+            if (gameController.Instance.invincibility == false)
+            {
+
+                gameController.Instance.healthPoints -= 30;
+                getHit();
+            }
             //Destroy(other.gameObject);
         }
 
@@ -391,9 +463,17 @@ public class sor_script : MonoBehaviour
         {
             GameObject explosion = Instantiate(explosionDemonPrefab, new Vector3(transform.position.x , transform.position.y + 3f, transform.position.z), Quaternion.identity);
 
-            getHit();
+            if (gameController.Instance.invincibility == false)
+            {
+
+                getHit();
+            }
             Destroy(explosion, 1.0f);
-            gameController.Instance.healthPoints -= 15;
+            if (gameController.Instance.invincibility == false)
+            {
+
+                gameController.Instance.healthPoints -= 15;
+            }
             //Destroy(other.gameObject);
         }
 
