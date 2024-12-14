@@ -28,6 +28,16 @@ public class BarbarianAnimatorController : MonoBehaviour
     private bool isIronMaelstromOnCooldown = false;
     private bool isShieldOnCooldown = false;
     private bool isChargeOnCooldown = false;
+    private AudioSource audioSource;
+     
+    public AudioClip shieldSound; 
+    public AudioClip chargeSound; 
+    public AudioClip hurtSound;
+    public AudioClip dieSound;
+    public AudioClip drinkSound;
+
+
+
 
     //collision
     private bool enemyCollision = false;
@@ -47,7 +57,8 @@ public class BarbarianAnimatorController : MonoBehaviour
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         shieldAura = transform.Find("ShieldAura").gameObject; // Locate the Shield Aura child object
-        shieldAura.SetActive(false); // Ensure it's disabled initially
+        shieldAura.SetActive(false); 
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void getHit()
@@ -55,6 +66,7 @@ public class BarbarianAnimatorController : MonoBehaviour
         if (!animator.GetCurrentAnimatorStateInfo(1).IsName("Hurt"))
         {
             animator.SetTrigger("hit");
+            audioSource.PlayOneShot(hurtSound);
             //Debug.Log("hurt animation");
         }
 
@@ -110,6 +122,7 @@ public class BarbarianAnimatorController : MonoBehaviour
     public void drink()
     {
         animator.SetTrigger("drink");
+        audioSource.PlayOneShot(drinkSound);
     }
 
     void Update()
@@ -154,6 +167,7 @@ public class BarbarianAnimatorController : MonoBehaviour
                 
                 navMeshAgent.destination = position;
                 animator.SetTrigger("Charge");
+                audioSource.PlayOneShot(chargeSound);
                 StartCoroutine(ChargeCooldown());
                 StartCoroutine(ResetToIdleAfterCharge());
                 waitingForRightClick = false;
@@ -163,6 +177,7 @@ public class BarbarianAnimatorController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W) && !isShieldOnCooldown && gameController.Instance.locked[1] == -1)
         {
             StartCoroutine(ActivateShield());
+            audioSource.PlayOneShot(shieldSound);
         }
 
 

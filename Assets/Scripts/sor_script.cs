@@ -39,10 +39,17 @@ public class sor_script : MonoBehaviour
 
     private bool usedInferno = false;
     private bool usedClone = false;
+    public AudioClip hurtSound;
+    public AudioClip dieSound;
+    public AudioClip drinkSound;
+    private AudioSource audioSource;
+    public AudioClip fireballSound;
     void Start()
     {
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
+
     }
     public void SetFireBallDestroyed(bool value)
     {
@@ -181,8 +188,10 @@ public class sor_script : MonoBehaviour
     }
     public void drink(){
         animator.SetTrigger("drink");
+        audioSource.PlayOneShot(drinkSound);
+
     }
-    
+
     void Update()
     {
         UpdateAbilitiesCoolDown();
@@ -227,6 +236,7 @@ public class sor_script : MonoBehaviour
             else if(waitingForRightClick == false && waitingForRightUltimate == false && waitingForRightDefensive == false ){
 
                 animator.SetBool("throwing",true);
+                audioSource.PlayOneShot(fireballSound);
                 fireBallThrownAtTime = Time.time;
                 fireBallLastAbilityTime = Time.time;
                 currentFireball = Instantiate(fireball , shootingPoint.transform.position  , Quaternion.identity);
@@ -380,6 +390,7 @@ public class sor_script : MonoBehaviour
         if (!animator.GetCurrentAnimatorStateInfo(1).IsName("Hurt"))
         {
             animator.SetTrigger("hit");
+            audioSource.PlayOneShot(hurtSound);
             //Debug.Log("hurt animation");
         }
 

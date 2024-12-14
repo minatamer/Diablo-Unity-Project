@@ -11,16 +11,23 @@ using UnityEngine.UI;
 public class MinionController : MonoBehaviour
 {
     // Start is called before the first frame update
-    public int hp = 20;
+    public int hp;
     Animator animator ;
     public Image healthBarImage;
     public NavMeshAgent agent;
-
+    private AudioSource audioSource;
+    public AudioClip deathSound;
 
     void Start()
     {
+        hp = 20;
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>(); // Add AudioSource if not already attached
+        }
     }
 
 
@@ -172,10 +179,20 @@ public class MinionController : MonoBehaviour
     {
         if (hp <= 0)
         {
+
             agent.SetDestination(agent.transform.position);
             animator.SetTrigger("Die");
-            
-            //Destroy(gameObject);
+           
+        }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+        {
+
+            if (deathSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(deathSound);
+
+                //Destroy(gameObject);
+            }
         }
 
         if (agent.remainingDistance <= 2f && !agent.pathPending)

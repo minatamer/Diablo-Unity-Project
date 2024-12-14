@@ -315,7 +315,13 @@ public class gameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if (healthPoints <= 0)
+        //{
+        //    Time.timeScale = 0f;
 
+        //    // Start the coroutine to load the Game Over scene after a short delay
+        //    StartCoroutine(LoadGameOverScene());
+        //}
         //Test if player has 3 runes and if within certain distance, start opening gate
         GameObject player = GameObject.FindWithTag("Player");
         float distance = Vector3.Distance(leftGate.transform.position, player.transform.position);
@@ -496,8 +502,16 @@ public class gameController : MonoBehaviour
 
 
     }
+    IEnumerator LoadGameOverScene()
+    {
+        // Wait for a few seconds (e.g., 2 seconds)
+        yield return new WaitForSecondsRealtime(2f);
 
-    
+        // Load the Game Over scene
+        SceneManager.LoadScene("GameOver");
+    }
 
-    
+
+
+
 }

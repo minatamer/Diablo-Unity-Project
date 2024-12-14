@@ -22,13 +22,17 @@ public class DemonController : MonoBehaviour
     private float grenadeTime;
 
     public Image healthBarImage;
+    private AudioSource audioSource;
+    public AudioClip explosionSound;
+    public AudioClip deathSound;
 
     // Start is called before the first frame update
     void Start()
     {
          animator = GetComponent<Animator>();
          agent = GetComponent<NavMeshAgent>();
-        
+        audioSource = gameObject.AddComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -98,7 +102,10 @@ public class DemonController : MonoBehaviour
         {
             agent.SetDestination(agent.transform.position);
             animator.SetTrigger("Die");
-            //Destroy(gameObject);
+            if (deathSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(deathSound);
+            }            //Destroy(gameObject);
         }
 
 
@@ -278,6 +285,10 @@ public class DemonController : MonoBehaviour
                     {
                         Destroy(currentGrenade);
                         currentGrenade = null;
+                        if (explosionSound != null && audioSource != null)
+                        {
+                            audioSource.PlayOneShot(explosionSound);
+                        }
                     }
                     else
                     {
@@ -326,6 +337,6 @@ public class DemonController : MonoBehaviour
     }
 
 
-
+    
 
 }

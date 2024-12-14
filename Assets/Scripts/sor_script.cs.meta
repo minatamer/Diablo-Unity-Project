@@ -3,7 +3,17 @@ guid: 6b907f6a6b9f34113b94c75a40a3dfef
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - fireball: {instanceID: 0}
+  - shootingPoint: {instanceID: 0}
+  - sorcererClone: {instanceID: 0}
+  - dangArea: {instanceID: 0}
+  - explosionPrefab: {instanceID: 0}
+  - explosionDemonPrefab: {instanceID: 0}
+  - hurtSound: {fileID: 8300000, guid: 4e0ad149c61097d438ea8bd778570834, type: 3}
+  - dieSound: {fileID: 8300000, guid: fa1092a5fb4a4a243a82ce642e043fa6, type: 3}
+  - drinkSound: {fileID: 8300000, guid: 25b77556b5719fd409fa8f0d30cd012e, type: 3}
+  - fireballSound: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
