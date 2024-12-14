@@ -187,6 +187,7 @@ public class MinionController : MonoBehaviour
         {
 
             agent.SetDestination(agent.transform.position);
+            audioSource.PlayOneShot(deathSound);
             animator.SetTrigger("Die");
            
         }
@@ -195,7 +196,7 @@ public class MinionController : MonoBehaviour
 
             if (deathSound != null && audioSource != null)
             {
-                audioSource.PlayOneShot(deathSound);
+                //audioSource.PlayOneShot(deathSound);
 
                 //Destroy(gameObject);
             }

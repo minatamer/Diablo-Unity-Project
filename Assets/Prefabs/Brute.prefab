@@ -253,6 +253,8 @@ MonoBehaviour:
   hurtSound: {fileID: 8300000, guid: 4e0ad149c61097d438ea8bd778570834, type: 3}
   dieSound: {fileID: 8300000, guid: fa1092a5fb4a4a243a82ce642e043fa6, type: 3}
   drinkSound: {fileID: 8300000, guid: 25b77556b5719fd409fa8f0d30cd012e, type: 3}
+  explosionSound: {fileID: 8300000, guid: f8bb063d76cbc124cbebee79961833d6, type: 3}
+  pickUpItemSound: {fileID: 8300000, guid: 11bc9cb3c5fc17e4cb8dbabe0e4293cd, type: 3}
   shield: 0
   explosionDemonPrefab: {fileID: 3265009732417457989, guid: bb7ecfab3c355ec4882d9d0333999981, type: 3}
 --- !u!195 &4705688396527389454

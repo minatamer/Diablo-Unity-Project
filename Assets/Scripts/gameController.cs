@@ -71,6 +71,13 @@ public class gameController : MonoBehaviour
 
     private bool deathAnimation = false;
 
+    public bool pause = false;
+
+    public AudioSource audioSource;
+
+    public AudioClip dieSound;
+
+
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("Button clicked!");
@@ -223,8 +230,10 @@ public class gameController : MonoBehaviour
             Debug.LogError("No character selected or character prefab not assigned.");
         }
     }
+
     public void PauseGame()
     {
+        pause = true;
         if (SceneManager.GetSceneByName("PauseScene").isLoaded)
         {
             Debug.LogWarning("PauseScene is already loaded.");
@@ -323,6 +332,7 @@ public class gameController : MonoBehaviour
             if(deathAnimation == false)
             {
                 animator.SetTrigger("die");
+                audioSource.PlayOneShot(dieSound);
                 deathAnimation = true;
             }
 
@@ -507,6 +517,19 @@ public class gameController : MonoBehaviour
             if (level != 4)
             {
                 xp += 100;
+            }
+            
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(pause == false)
+            {
+                PauseGame();
+            }
+            else
+            {
+                PauseScene.Instance.Resume();
             }
             
         }

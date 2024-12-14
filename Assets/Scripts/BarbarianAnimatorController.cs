@@ -35,6 +35,8 @@ public class BarbarianAnimatorController : MonoBehaviour
     public AudioClip hurtSound;
     public AudioClip dieSound;
     public AudioClip drinkSound;
+    public AudioClip explosionSound;
+    public AudioClip pickUpItemSound;
 
 
 
@@ -580,6 +582,7 @@ Vector3 GetMouseWorldPosition()
         if (other.gameObject.tag == "Rune")
         {
             gameController.Instance.runeFragments++;
+            audioSource.PlayOneShot(pickUpItemSound);
             Destroy(other.gameObject);
 
         }
@@ -588,6 +591,7 @@ Vector3 GetMouseWorldPosition()
             if (gameController.Instance.healingPotions < 3)
             {
                 gameController.Instance.healingPotions++;
+                audioSource.PlayOneShot(pickUpItemSound);
                 Destroy(other.gameObject);
             }
         }
@@ -605,6 +609,7 @@ Vector3 GetMouseWorldPosition()
         if (other.gameObject.tag == "Grenade")
         {
             GameObject explosion = Instantiate(explosionDemonPrefab, new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z), Quaternion.identity);
+            audioSource.PlayOneShot(explosionSound);
 
             if (gameController.Instance.invincibility == false)
             {

@@ -12,7 +12,15 @@ public class GameOver : MonoBehaviour
         //Scene currentScene = SceneManager.GetActiveScene();
         //SceneManager.LoadScene(currentScene.name);
         Time.timeScale = 1;
-        SceneManager.LoadScene("gamescene");
+        if(gameController.Instance.bossLevel == true)
+        {
+            SceneManager.LoadScene("BossScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("gamescene");
+        }
+       
     }
 
     

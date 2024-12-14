@@ -5,6 +5,7 @@ using UnityEngine.UI;  // Add this line to access UI components like Button
 
 public class PauseScene : MonoBehaviour
 {
+    public static PauseScene Instance { get; private set; }
     private UnityEngine.EventSystems.EventSystem gameEventSystem;  // Store reference to the EventSystem
     private AudioSource[] gameAudioSources;  // Store reference to game audio sources
     private AudioSource pauseSceneAudioSource;  // Store reference to the pause scene's audio source
@@ -12,6 +13,12 @@ public class PauseScene : MonoBehaviour
     //public AudioMixer audioMixer;
     void Start()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // Ensure there's only one instance
+            return;
+        }
+        Instance = this;
         // Find all audio sources in the game scene
         gameAudioSources = FindObjectsOfType<AudioSource>();
 
@@ -72,6 +79,7 @@ public class PauseScene : MonoBehaviour
 
     public void Resume()
     {
+        gameController.Instance.pause = false;
         Debug.Log("Resuming Game");
         Time.timeScale = 1; // Resume the game
         SceneManager.UnloadSceneAsync("PauseScene");

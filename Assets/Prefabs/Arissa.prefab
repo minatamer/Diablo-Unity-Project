@@ -126,7 +126,11 @@ MonoBehaviour:
   hurtSound: {fileID: 8300000, guid: 4e0ad149c61097d438ea8bd778570834, type: 3}
   dieSound: {fileID: 8300000, guid: fa1092a5fb4a4a243a82ce642e043fa6, type: 3}
   drinkSound: {fileID: 8300000, guid: 25b77556b5719fd409fa8f0d30cd012e, type: 3}
-  fireballSound: {fileID: 8300000, guid: 3c9a18769c46244458fc4ed9e275902e, type: 3}
+  fireballSound: {fileID: 8300000, guid: 5c59bf12ac68fcf4e9baa7e3fe1a2167, type: 3}
+  InfernoSound: {fileID: 8300000, guid: 0d25daf97a93cd845900c909686c2a30, type: 3}
+  CloneSound: {fileID: 8300000, guid: baa86635ffb4c3d43a382dd43086e6b8, type: 3}
+  ExplosionSound: {fileID: 8300000, guid: f8bb063d76cbc124cbebee79961833d6, type: 3}
+  pickUpItemSound: {fileID: 8300000, guid: 11bc9cb3c5fc17e4cb8dbabe0e4293cd, type: 3}
 --- !u!195 &8603407565291068018
 NavMeshAgent:
   m_ObjectHideFlags: 0

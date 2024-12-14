@@ -8,6 +8,7 @@ using UnityEngine.Playables;
 using static UnityEngine.GraphicsBuffer;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 
 public class BossController : MonoBehaviour
@@ -54,6 +55,15 @@ public class BossController : MonoBehaviour
     public Image shieldBarImage;
     public TMP_Text points_shield_text ;
 
+    private AudioSource audioSource;
+
+    public AudioClip summonMinonsSound;
+    public AudioClip stompDownSound;
+    public AudioClip castSpellSound;
+    public AudioClip swingHandSound;
+    public AudioClip getDamagedSound;
+    public AudioClip dieSound;
+
 
 
 
@@ -68,8 +78,9 @@ public class BossController : MonoBehaviour
         points_text.text = "50/50";
         shieldBarImage.gameObject.SetActive(false);
         points_shield_text.gameObject.SetActive(false);
-       
-      
+        audioSource = GetComponent<AudioSource>();
+
+
 
     }
 
@@ -77,6 +88,7 @@ public class BossController : MonoBehaviour
     {
         if (!lilithAnimator.GetCurrentAnimatorStateInfo(1).IsName("Hurt"))
         {
+            audioSource.PlayOneShot(getDamagedSound);
             lilithAnimator.SetTrigger("Hit");
         }
 
@@ -140,6 +152,7 @@ public class BossController : MonoBehaviour
                 //GO TO PHASE 2 
                 phase = 2;
                 lilithAnimator.SetTrigger("Die");
+                audioSource.PlayOneShot(dieSound);
                 return;
             }
             else
@@ -218,7 +231,9 @@ public class BossController : MonoBehaviour
             if (hp <= 0)
             {
                 lilithAnimator.SetTrigger("Die");
+                audioSource.PlayOneShot(dieSound);
                 //Destroy(gameObject); 
+                StartCoroutine(LoadGameWinScene());
                 return;
             }
             if (currentShieldHealth <=0)
@@ -258,7 +273,7 @@ public class BossController : MonoBehaviour
                 //Debug.Log(lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
                 if (lilithAnimator.GetCurrentAnimatorStateInfo(0).IsName("Spikes") )
                 {
-
+                    audioSource.PlayOneShot(swingHandSound);
                     RaiseSpikes = true;
 
                 }
@@ -267,6 +282,8 @@ public class BossController : MonoBehaviour
             {
                 auraActive = true;
                 auraSphere.SetActive(true);
+                audioSource.PlayOneShot(castSpellSound);
+
             }
                 
 
@@ -363,8 +380,14 @@ public class BossController : MonoBehaviour
         while (phase == 2 && hp > 0) 
         {
             HandlePhase2(); 
-            yield return new WaitForSeconds(10f); 
+            yield return new WaitForSeconds(20f); 
         }
+    }
+
+    IEnumerator LoadGameWinScene()
+    {
+        yield return new WaitForSecondsRealtime(4f);
+        SceneManager.LoadScene("YouWin");
     }
 
     private void HandlePhase2()
@@ -416,6 +439,7 @@ public class BossController : MonoBehaviour
         if (minions.Count == 0)
         {
             lilithAnimator.SetTrigger("Summon");
+            audioSource.PlayOneShot(summonMinonsSound);
             for (int i = 0; i < minionSpawnPoints.Length; i++)
             {
                 GameObject newMinion = Instantiate(minion, minionSpawnPoints[i], Quaternion.identity);
@@ -430,6 +454,7 @@ public class BossController : MonoBehaviour
         else
         {
             lilithAnimator.SetTrigger("Divebomb");
+            audioSource.PlayOneShot(stompDownSound);
 
 
         }  

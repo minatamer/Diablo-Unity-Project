@@ -45,6 +45,10 @@ public class sor_script : MonoBehaviour
     public AudioClip drinkSound;
     private AudioSource audioSource;
     public AudioClip fireballSound;
+    public AudioClip InfernoSound;
+    public AudioClip CloneSound;
+    public AudioClip ExplosionSound;
+    public AudioClip pickUpItemSound;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -105,6 +109,7 @@ public class sor_script : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         usedClone = false;
+        audioSource.PlayOneShot(ExplosionSound);
         GameObject explosion =  Instantiate(explosionPrefab, new Vector3(clonedInstance.transform.position.x,clonedInstance.transform.position.y+5f,clonedInstance.transform.position.z), Quaternion.identity);
         //cause damage to enemies around 
         string[] enemyTags = { "Minion", "Minion2", "Minion3", "Demon11", "Demon12", "Demon", "Boss" };
@@ -278,6 +283,7 @@ public class sor_script : MonoBehaviour
         if (waitingForRightUltimate && Input.GetMouseButtonDown(1) && UseAbility(infernoLastAbilityTime , infernoCooldown) == true && gameController.Instance.locked[3] == -1)
         {
             Debug.Log("Right mouse button clicked after pressing E!");
+            audioSource.PlayOneShot(InfernoSound);
             waitingForRightUltimate = false;
             Vector3 spawnPosition = GetMouseWorldPosition();
              if (spawnPosition != Vector3.zero) 
@@ -330,6 +336,7 @@ public class sor_script : MonoBehaviour
         if (waitingForRightClick && Input.GetMouseButtonDown(1) && UseAbility(cloneLastAbilityTime , cloneCooldown) == true && gameController.Instance.locked[2] == -1 )
         {
             Debug.Log("Right mouse button clicked after pressing Q!");
+            audioSource.PlayOneShot(CloneSound);
             waitingForRightClick = false;
             Vector3 spawnPosition = GetMouseWorldPosition();
              if (spawnPosition != Vector3.zero) 
@@ -452,12 +459,14 @@ public class sor_script : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.tag == "Rune"){
             gameController.Instance.runeFragments ++;
+            audioSource.PlayOneShot(pickUpItemSound);
             Destroy(other.gameObject);
 
         }
         if(other.gameObject.tag == "Potion"){
             if(  gameController.Instance.healingPotions < 3 ){
             gameController.Instance.healingPotions ++;
+            audioSource.PlayOneShot(pickUpItemSound);
             Destroy(other.gameObject);
             }
         }
@@ -475,7 +484,7 @@ public class sor_script : MonoBehaviour
         if (other.gameObject.tag == "Grenade")
         {
             GameObject explosion = Instantiate(explosionDemonPrefab, new Vector3(transform.position.x , transform.position.y + 3f, transform.position.z), Quaternion.identity);
-
+            audioSource.PlayOneShot(ExplosionSound);
             if (gameController.Instance.invincibility == false)
             {
 

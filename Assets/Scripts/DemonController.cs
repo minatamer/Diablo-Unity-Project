@@ -301,7 +301,7 @@ public class DemonController : MonoBehaviour
                         currentGrenade = null;
                         if (explosionSound != null && audioSource != null)
                         {
-                            audioSource.PlayOneShot(explosionSound);
+                            //audioSource.PlayOneShot(explosionSound);
                         }
                     }
                     else
