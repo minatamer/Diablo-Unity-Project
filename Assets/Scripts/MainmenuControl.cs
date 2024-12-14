@@ -20,6 +20,9 @@ public class MainmenuControl : MonoBehaviour
         // Add listeners to prevent both toggles from being ticked at the same time
         basicLevelToggle.onValueChanged.AddListener((isOn) => OnLevelToggleChanged(isOn, bossLevelToggle));
         bossLevelToggle.onValueChanged.AddListener((isOn) => OnLevelToggleChanged(isOn, basicLevelToggle));
+
+        //By default lets say basic level
+        PlayerPrefs.SetString("SelectedLevel", "Basic");
     }
     public void OpenLevelSelectPanel()
     {

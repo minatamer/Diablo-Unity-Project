@@ -33,7 +33,7 @@ public class MinionController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other){
 
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && gameController.Instance.healthPoints > 0)
         {
             if (gameController.Instance.bossLevel == false)
             {
@@ -177,6 +177,12 @@ public class MinionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (gameController.Instance.healthPoints <= 0)
+        {
+            animator.SetBool("Punch", false);
+        }
+
         if (hp <= 0)
         {
 
@@ -207,6 +213,8 @@ public class MinionController : MonoBehaviour
             gameController.Instance.xp += 10;
             Destroy(gameObject);
         }
+
+
 
 
 

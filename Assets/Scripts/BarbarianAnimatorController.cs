@@ -189,6 +189,7 @@ public class BarbarianAnimatorController : MonoBehaviour
                  hitPoint = hit.point;
                  //Debug.Log(hitPoint);
                 navMeshAgent.destination = hit.point;
+                navMeshAgent.stoppingDistance = 2f;
 
                 animator.SetBool("walking", true);
                 

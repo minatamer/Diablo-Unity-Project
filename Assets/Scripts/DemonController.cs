@@ -38,12 +38,21 @@ public class DemonController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       if(gameObject.tag == "Demon"){
+        if (gameController.Instance.healthPoints <= 0)
+        {
+            animator.SetBool("attack", false);
+        }
 
 
-        float position1Z = 187f;
-        float position2Z = 160f;
-        Vector3 currentPosition = transform.position;
+
+        if (gameObject.tag == "Demon"){
+
+
+            //float position1Z = 187f;
+            //float position2Z = 160f;
+            float position1Z = 256.5f;
+            float position2Z = 227f;
+            Vector3 currentPosition = transform.position;
 
         // Toggle between the two positions
         if ((position1Z - 0.5f) <= currentPosition.z && currentPosition.z  <= (position1Z + 0.5f))
@@ -60,9 +69,11 @@ public class DemonController : MonoBehaviour
 
        if(gameObject.tag == "Demon11"){//camp 3 patrolling along z axis 
 
-        float position1Z = 98.4f;
-        float position2Z = 62f;
-        Vector3 currentPosition = transform.position;
+            //float position1Z = 98.4f;
+            //float position2Z = 62f;
+            float position1Z = 168f;
+            float position2Z = 136.4f;
+            Vector3 currentPosition = transform.position;
 
         // Toggle between the two positions
         if ((position1Z - 0.5f) <= currentPosition.z && currentPosition.z  <= (position1Z + 0.5f))
@@ -79,9 +90,11 @@ public class DemonController : MonoBehaviour
         if(gameObject.tag == "Demon12"){ //camp 3 patrolling along x axis 
 
 
-        float position1X = 215f;
-        float position2X = 255f;
-        Vector3 currentPosition = transform.position;
+            //float position1X = 215f;
+            //float position2X = 255f;
+            float position1X = 310f;
+            float position2X = 340f;
+            Vector3 currentPosition = transform.position;
 
         // Toggle between the two positions
         if ((position1X - 0.5f) <= currentPosition.x && currentPosition.x   <= (position1X + 0.5f))
@@ -117,6 +130,7 @@ public class DemonController : MonoBehaviour
 
 
 
+
     }
 
     public void getHit()
@@ -136,7 +150,7 @@ public class DemonController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && gameController.Instance.healthPoints > 0)
         {
             GameObject campTwo = GameObject.FindWithTag("CampTwo");
             GameObject campThree = GameObject.FindWithTag("CampThree");

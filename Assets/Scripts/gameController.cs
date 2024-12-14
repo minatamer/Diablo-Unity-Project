@@ -69,6 +69,8 @@ public class gameController : MonoBehaviour
 
     public bool openGate = true;
 
+    private bool deathAnimation = false;
+
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("Button clicked!");
@@ -183,38 +185,29 @@ public class gameController : MonoBehaviour
             }
             else
             {
-                newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
+                //newObject = Instantiate(characterToInstantiate, new Vector3(227.13f, 3.67f, 135.12f), Quaternion.identity);
+                newObject = Instantiate(characterToInstantiate, new Vector3(230.8f, 3.67f, 17.6f), Quaternion.identity);
             }
                 
-            // GameObject camp = Instantiate(Camp, new Vector3(200.13f, -10f, 135.12f), Quaternion.identity);
             if (bossLevel == false)
             {
                 initializeCamp(campOne, 10, 0, 1);
             }
 
 
-            // camp.AddComponent<CampController>();
-            // GameObject campTwo = Instantiate(Camp, new Vector3(244.13f, -10f, 171.12f), Quaternion.identity);
-
             if (bossLevel == false)
             {
                 initializeCamp(campTwo, 14, 2, 2);
             }
 
-            // campTwo.AddComponent<CampControllerTwo>();
-
-
-            //GameObject campThree = Instantiate(Camp, new Vector3(244.13f, -10f,81.2f), Quaternion.identity);
             if (bossLevel == false){
                 initializeCamp(campThree, 18, 4, 3);
             }
 
-                
-           // campThree.AddComponent<CampControllerThree>();
 
+            //initializePotions(-196f, 386.1f, 320.4f, -94f, 20);
+            initializePotions(136.6f, 271.6f, 264.5f, 83.6f, 20);
 
-             initializePotions( -196f,  386.1f,  320.4f ,  -94f ,  20);
-             
             newObject.SetActive(true);
 
             CameraFollow cameraFollow = mainCamera.GetComponent<CameraFollow>();
@@ -291,17 +284,23 @@ public class gameController : MonoBehaviour
 
         if (campNum == 2)
         {
-            GameObject demon1 = Instantiate(DemonPrefab, new Vector3(260f, 3.67f, 187f), Quaternion.identity);
-            GameObject demon2 = Instantiate(DemonPrefab, new Vector3(230f, 3.67f, 187f), Quaternion.identity);
+            //GameObject demon1 = Instantiate(DemonPrefab, new Vector3(260f, 3.67f, 187f), Quaternion.identity);
+            //GameObject demon2 = Instantiate(DemonPrefab, new Vector3(230f, 3.67f, 187f), Quaternion.identity);
+            GameObject demon1 = Instantiate(DemonPrefab, new Vector3(225f, 3.67f, 256.5f), Quaternion.identity);
+            GameObject demon2 = Instantiate(DemonPrefab, new Vector3(192f, 3.67f, 256.5f), Quaternion.identity);
             demon1.tag = "Demon";
             demon2.tag = "Demon";
         }
 
         if(campNum == 3){
-            GameObject demon1 = Instantiate(DemonPrefab, new Vector3(260f, 3.67f, 92.4f), Quaternion.identity);
-            GameObject demon2 = Instantiate(DemonPrefab, new Vector3(215f, 3.67f, 61.4f), Quaternion.identity);
-            GameObject demon3 = Instantiate(DemonPrefab, new Vector3(215f, 3.67f, 92.4f), Quaternion.identity);
-            GameObject demon4 = Instantiate(DemonPrefab, new Vector3(212f, 3.67f, 92.4f), Quaternion.identity);
+            //GameObject demon1 = Instantiate(DemonPrefab, new Vector3(260f, 3.67f, 92.4f), Quaternion.identity);
+            //GameObject demon2 = Instantiate(DemonPrefab, new Vector3(215f, 3.67f, 61.4f), Quaternion.identity);
+            //GameObject demon3 = Instantiate(DemonPrefab, new Vector3(215f, 3.67f, 92.4f), Quaternion.identity);
+            //GameObject demon4 = Instantiate(DemonPrefab, new Vector3(212f, 3.67f, 92.4f), Quaternion.identity);
+            GameObject demon1 = Instantiate(DemonPrefab, new Vector3(341.6f, 3.67f, 167f), Quaternion.identity);
+            GameObject demon2 = Instantiate(DemonPrefab, new Vector3(309.8f, 3.67f, 135.4f), Quaternion.identity);
+            GameObject demon3 = Instantiate(DemonPrefab, new Vector3(309.8f, 3.67f, 167f), Quaternion.identity);
+            GameObject demon4 = Instantiate(DemonPrefab, new Vector3(307.5f, 3.67f, 167f), Quaternion.identity);
             demon1.tag = "Demon11";
             demon2.tag = "Demon12";
             demon3.tag = "Demon12";
@@ -315,20 +314,34 @@ public class gameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (healthPoints <= 0)
-        //{
-        //    Time.timeScale = 0f;
-
-        //    // Start the coroutine to load the Game Over scene after a short delay
-        //    StartCoroutine(LoadGameOverScene());
-        //}
-        //Test if player has 3 runes and if within certain distance, start opening gate
         GameObject player = GameObject.FindWithTag("Player");
-        float distance = Vector3.Distance(leftGate.transform.position, player.transform.position);
-        if (runeFragments == 3 && distance < 20f){
-            Debug.Log("you are near gate");
-            openGate = true;
+        if (healthPoints <= 0)
+        {
+            //Time.timeScale = 0f;
+            healthPoints = 0;
+            Animator animator = player.GetComponent<Animator>();
+            if(deathAnimation == false)
+            {
+                animator.SetTrigger("die");
+                deathAnimation = true;
+            }
+
+
+            // Start the coroutine to load the Game Over scene after a short delay
+            StartCoroutine(LoadGameOverScene());
         }
+        //Test if player has 3 runes and if within certain distance, start opening gate
+        
+        if(player != null)
+        {
+            float distance = Vector3.Distance(leftGate.transform.position, player.transform.position);
+            if (runeFragments == 3 && distance < 20f)
+            {
+                Debug.Log("you are near gate");
+                openGate = true;
+            }
+        }
+
         if (openGate == true)
         {
             if(leftGate.transform.eulerAngles.y < 90f)
@@ -504,10 +517,7 @@ public class gameController : MonoBehaviour
     }
     IEnumerator LoadGameOverScene()
     {
-        // Wait for a few seconds (e.g., 2 seconds)
-        yield return new WaitForSecondsRealtime(2f);
-
-        // Load the Game Over scene
+        yield return new WaitForSecondsRealtime(4f);
         SceneManager.LoadScene("GameOver");
     }
 

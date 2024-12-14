@@ -12,7 +12,7 @@ using TMPro;
 
 public class BossController : MonoBehaviour
 {
-    public int phase = 2; 
+    public int phase = 0; 
 
     public int shieldHealth = 50;
 

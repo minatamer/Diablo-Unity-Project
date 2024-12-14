@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class sor_script : MonoBehaviour
 {
@@ -356,6 +357,7 @@ public class sor_script : MonoBehaviour
             if(Physics.Raycast(ray, out hit)){
                  hitPoint = hit.point;
                 navMeshAgent.destination = hit.point;
+                navMeshAgent.stoppingDistance = 2f;
                 animator.SetBool("walking", true);
                 
             }
@@ -486,6 +488,21 @@ public class sor_script : MonoBehaviour
                 gameController.Instance.healthPoints -= 15;
             }
             //Destroy(other.gameObject);
+        }
+
+        if (other.gameObject.tag == "Gate")
+        {
+            PlayerPrefs.SetInt("healingPotions", gameController.Instance.healingPotions);
+            PlayerPrefs.SetInt("xp", gameController.Instance.xp);
+            PlayerPrefs.SetInt("level", gameController.Instance.level);
+            PlayerPrefs.SetInt("healthPoints", gameController.Instance.healthPoints);
+            PlayerPrefs.SetInt("runeFragments", gameController.Instance.runeFragments);
+            PlayerPrefs.SetInt("abilityPoints", gameController.Instance.abilityPoints);
+            PlayerPrefs.SetInt("AbilityDefensive", gameController.Instance.locked[1]);
+            PlayerPrefs.SetInt("AbilityWild", gameController.Instance.locked[2]);
+            PlayerPrefs.SetInt("AbilityUltimate", gameController.Instance.locked[3]);
+            gameController.Instance.bossLevel = true;
+            SceneManager.LoadScene("BossScene");
         }
 
     }
