@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RingOfFlames : MonoBehaviour
@@ -7,17 +8,65 @@ public class RingOfFlames : MonoBehaviour
     private HashSet<GameObject> enemiesWithinRing;
     private bool isChecking = false; // Flag to control 1-second interval
     public float ringRadius = 5f;   // Radius of the ring
+    private Dictionary<GameObject, float> damageTimers = new Dictionary<GameObject, float>();
+    public float damageInterval = 1.0f; // Damage interval in seconds
 
     void Start()
     {
         enemiesWithinRing = new HashSet<GameObject>();
     }
 
-    void Update()
+    //void Update()
+    //{
+    //    if (!isChecking)
+    //    {
+    //        StartCoroutine(ApplyDamageToEnemiesInsideRing());
+    //    }
+    //}
+
+    private void OnTriggerEnter(Collider enemyObject)
     {
-        if (!isChecking)
+        if (enemyObject.CompareTag("Minion") || enemyObject.CompareTag("Minion2") || enemyObject.CompareTag("Minion3") || enemyObject.CompareTag("Demon") || enemyObject.CompareTag("Demon11") || enemyObject.CompareTag("Demon12") || enemyObject.CompareTag("Boss"))
         {
-            StartCoroutine(ApplyDamageToEnemiesInsideRing());
+            //StartCoroutine(ApplyDamageToEnemiesInsideRing());
+
+                ApplyDamage(enemyObject.gameObject, 10); // Apply initial damage
+            damageTimers[enemyObject.gameObject] = Time.time;
+
+
+        }
+           
+    }
+
+    private void OnTriggerStay(Collider enemyObject)
+    {
+        if (enemyObject.CompareTag("Minion") || enemyObject.CompareTag("Minion2") ||
+            enemyObject.CompareTag("Minion3") || enemyObject.CompareTag("Demon") ||
+            enemyObject.CompareTag("Demon11") || enemyObject.CompareTag("Demon12") ||
+            enemyObject.CompareTag("Boss"))
+        {
+            GameObject enemy = enemyObject.gameObject;
+
+            // Check if this enemy is in the dictionary
+            if (damageTimers.TryGetValue(enemy, out float lastDamageTime))
+            {
+                // If enough time has passed, apply damage
+                if (Time.time - lastDamageTime >= damageInterval)
+                {
+                    ApplyDamage(enemy, 2); // Apply damage
+                    damageTimers[enemy] = Time.time; // Update last damage time
+                }
+            }
+
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // Remove the enemy from the dictionary when it leaves the trigger
+        if (damageTimers.ContainsKey(other.gameObject))
+        {
+            damageTimers.Remove(other.gameObject);
         }
     }
 
@@ -33,7 +82,7 @@ public class RingOfFlames : MonoBehaviour
             GameObject enemyObject = collider.gameObject;
 
             // Check if the collider belongs to a valid enemy
-            if (enemyObject.gameObject.CompareTag("Minion") || enemyObject.gameObject.CompareTag("Minion2") || enemyObject.gameObject.CompareTag("Minion3") || enemyObject.gameObject.CompareTag("Demon") || enemyObject.gameObject.CompareTag("Demon11") || enemyObject.gameObject.CompareTag("Demon12") || enemyObject.gameObject.CompareTag("Boss"))
+            if (enemyObject.CompareTag("Minion") || enemyObject.CompareTag("Minion2") || enemyObject.CompareTag("Minion3") || enemyObject.CompareTag("Demon") || enemyObject.CompareTag("Demon11") || enemyObject.CompareTag("Demon12") || enemyObject.CompareTag("Boss"))
             {
                 Debug.Log("ENEMY RING DETECTED");
                 if (enemiesWithinRing.Contains(enemyObject))
@@ -52,16 +101,17 @@ public class RingOfFlames : MonoBehaviour
         isChecking = false;
     }
 
+
     private void ApplyDamage(GameObject enemyObject, int damage)
     {
-        if (enemyObject.tag.Contains("Minion"))
+        if (enemyObject.CompareTag("Minion") || enemyObject.CompareTag("Minion2") || enemyObject.CompareTag("Minion3"))
         {
             MinionController enemyScript = enemyObject.GetComponent<MinionController>();
             enemyScript.hp -= damage;
             enemyScript.getHit();
             enemyScript.UpdateHealthBar();
         }
-        else if (enemyObject.tag.Contains("Demon"))
+        else if (enemyObject.CompareTag("Demon") || enemyObject.CompareTag("Demon11") || enemyObject.CompareTag("Demon12"))
         {
             DemonController enemyScript = enemyObject.GetComponent<DemonController>();
             enemyScript.hp -= damage;

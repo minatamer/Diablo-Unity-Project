@@ -74,22 +74,26 @@ public class CampController : MonoBehaviour
             foreach (int index in selectedIndices)
             {
                 GameObject selectedMinion = minions[index];
-                aggressiveMinions.Add(selectedMinion);
-                aggressiveMinionsOriginalPositions.Add(originalPositions[index]);
-
-                NavMeshAgent agent = selectedMinion.GetComponent<NavMeshAgent>();
-                if (agent != null)
+                if (selectedMinion != null)
                 {
-                    agent.SetDestination(other.transform.position);
-                    agent.speed = 5.0f;
+                    aggressiveMinions.Add(selectedMinion);
+                    aggressiveMinionsOriginalPositions.Add(originalPositions[index]);
+
+                    NavMeshAgent agent = selectedMinion.GetComponent<NavMeshAgent>();
+                    if (agent != null)
+                    {
+                        agent.SetDestination(other.transform.position);
+                        agent.speed = 5.0f;
+                    }
+
+                    // Trigger the "Run" animation
+                    Animator animator = selectedMinion.GetComponent<Animator>();
+                    if (animator != null)
+                    {
+                        animator.SetBool("Run", true);
+                    }
                 }
 
-                // Trigger the "Run" animation
-                Animator animator = selectedMinion.GetComponent<Animator>();
-                if (animator != null)
-                {
-                    animator.SetBool("Run", true);
-                }
             }
 
             // Remove selected minions from the original lists in reverse order to avoid index shifting
@@ -121,14 +125,15 @@ public class CampController : MonoBehaviour
                     if (agent.destination != other.transform.position)
                     {
                         agent.SetDestination(other.transform.position);
-                        agent.stoppingDistance = 2.5f;
+                            agent.stoppingDistance = 2.5f;
                     }
                 }
                 Animator animator = minion.GetComponent<Animator>();
                 if (animator != null && !animator.GetBool("Run"))
                 {
                     animator.SetBool("Run", true);
-                }
+                        animator.SetBool("Walk", false);
+                    }
                 }
                             
                  i ++;
@@ -168,6 +173,7 @@ public class CampController : MonoBehaviour
                 if (agent != null)
                 {
                     agent.SetDestination(aggressiveMinionsOriginalPositions[i]);
+                    agent.stoppingDistance = 2f;
                 }
 
                 Animator animator = aggressiveMinions[i].GetComponent<Animator>();

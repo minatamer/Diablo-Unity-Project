@@ -84,9 +84,12 @@ public class CampControllerTwo : MonoBehaviour
                 }
             }
 
+            Debug.Log(originalPositionsGeneral.Count);
+
 
             // Ensure we don't exceed the number of available minions
             int minionCountToSelect = Mathf.Min(minions.Count, 5);
+           
             int demonCountToSelect = Mathf.Min(demons.Count, 1);
 
 

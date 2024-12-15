@@ -95,10 +95,12 @@ public class CampControllerThree: MonoBehaviour
                 }
             }
 
+            Debug.Log(originalPositionsGeneral.Count);
 
             // Ensure we don't exceed the number of available minions
             int minionCountToSelect = Mathf.Min(minions.Count, 5);
             int demonCountToSelect = Mathf.Min(demons.Count, 1);
+
 
 
             HashSet<int> selectedIndicesMinions = new HashSet<int>();
@@ -128,23 +130,27 @@ public class CampControllerThree: MonoBehaviour
             foreach (int index in selectedIndicesMinions)
             {
                 GameObject selectedMinion = minions[index];
-                aggressiveMinions.Add(selectedMinion);
-                aggressiveMinionsOriginalPositions.Add(originalPositions[index]);
-
-                NavMeshAgent agent = selectedMinion.GetComponent<NavMeshAgent>();
-                if (agent != null)
+                if(selectedMinion != null)
                 {
-                    //Debug.Log("3 Trigger Enter set destiantion to " + other.transform.position);
-                    agent.SetDestination(other.transform.position);
-                    agent.speed = 5.0f;
+                    aggressiveMinions.Add(selectedMinion);
+                    aggressiveMinionsOriginalPositions.Add(originalPositions[index]);
+
+                    NavMeshAgent agent = selectedMinion.GetComponent<NavMeshAgent>();
+                    if (agent != null)
+                    {
+                        //Debug.Log("3 Trigger Enter set destiantion to " + other.transform.position);
+                        agent.SetDestination(other.transform.position);
+                        agent.speed = 5.0f;
+                    }
+
+                    // Trigger the "Run" animation
+                    Animator animator = selectedMinion.GetComponent<Animator>();
+                    if (animator != null)
+                    {
+                        animator.SetBool("Run", true);
+                    }
                 }
 
-                // Trigger the "Run" animation
-                Animator animator = selectedMinion.GetComponent<Animator>();
-                if (animator != null)
-                {
-                    animator.SetBool("Run", true);
-                }
             }
 
             // Process the selected demons

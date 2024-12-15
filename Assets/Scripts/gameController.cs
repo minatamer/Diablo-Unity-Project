@@ -387,9 +387,9 @@ public class gameController : MonoBehaviour
             
        
          if(Input.GetKeyDown(KeyCode.F)){
-            Debug.Log("pressed f");
+            //Debug.Log("pressed f");
          if(healthPoints != 100*level && healingPotions !=0){
-                 Debug.Log("pressed f");
+                 //Debug.Log("pressed f");
                  int increment = (int) (0.5*level*100);
                  healthPoints +=increment;
                  healthPoints = Math.Min(100*level,healthPoints);

@@ -286,7 +286,7 @@ public class sor_script : MonoBehaviour
             audioSource.PlayOneShot(InfernoSound);
             waitingForRightUltimate = false;
             Vector3 spawnPosition = GetMouseWorldPosition();
-            spawnPosition.y = 0f;
+            spawnPosition.y = 1f;
              if (spawnPosition != Vector3.zero) 
             {
                  dangInstance = Instantiate(dangArea, spawnPosition, Quaternion.Euler(0, 0, 90));

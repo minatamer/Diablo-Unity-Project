@@ -378,7 +378,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -2860935123421376233, guid: 13de2af09423db141b4d849d7f2b1957, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -590,13 +590,13 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
-  BypassEffects: 0
+  BypassEffects: 1
   BypassListenerEffects: 0
   BypassReverbZones: 0
   rolloffCustomCurve:
@@ -1720,7 +1720,6 @@ GameObject:
   - component: {fileID: 621235088}
   - component: {fileID: 621235087}
   - component: {fileID: 621235091}
-  - component: {fileID: 621235092}
   m_Layer: 0
   m_Name: CampOne
   m_TagString: CampOne
@@ -1828,27 +1827,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aggressiveMinions: []
---- !u!65 &621235092
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 621235086}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 10, y: 2.220446e-16, z: 10}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &691621694
 GameObject:
   m_ObjectHideFlags: 0
@@ -2902,7 +2880,6 @@ GameObject:
   - component: {fileID: 1175779689}
   - component: {fileID: 1175779688}
   - component: {fileID: 1175779692}
-  - component: {fileID: 1175779693}
   m_Layer: 0
   m_Name: CampTwo
   m_TagString: CampTwo
@@ -3011,27 +2988,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aggressiveMinions: []
   aggressiveDemons: []
---- !u!65 &1175779693
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1175779686}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 10, y: 2.220446e-16, z: 10}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1203100238
 GameObject:
   m_ObjectHideFlags: 0
@@ -3678,7 +3634,7 @@ Transform:
   m_GameObject: {fileID: 1606038169}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 81.1, y: -0.06, z: 105.7}
+  m_LocalPosition: {x: 188, y: -0.06, z: 186}
   m_LocalScale: {x: 61.81477, y: 1, z: 43.856182}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4152,7 +4108,6 @@ GameObject:
   - component: {fileID: 1797965386}
   - component: {fileID: 1797965385}
   - component: {fileID: 1797965389}
-  - component: {fileID: 1797965390}
   m_Layer: 0
   m_Name: CampThree
   m_TagString: CampThree
@@ -4261,27 +4216,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aggressiveMinions: []
   aggressiveDemons: []
---- !u!65 &1797965390
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1797965383}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 10, y: 2.220446e-16, z: 10}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1885434005
 GameObject:
   m_ObjectHideFlags: 0
@@ -4961,6 +4895,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terrain
       objectReference: {fileID: 0}
+    - target: {fileID: 1097124832850884364, guid: c14837c3921a71b43bfa44d76f8e9830, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1418125351384886306, guid: c14837c3921a71b43bfa44d76f8e9830, type: 3}
       propertyPath: m_NavMeshData
       value: 
@@ -4970,67 +4908,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c14837c3921a71b43bfa44d76f8e9830, type: 3}
---- !u!1001 &8303681694739643101
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2318448557406637750, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.83
-      objectReference: {fileID: 0}
-    - target: {fileID: 2318448557406637750, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2318448557406637750, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -7.48
-      objectReference: {fileID: 0}
-    - target: {fileID: 2318448557406637750, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.6875707
-      objectReference: {fileID: 0}
-    - target: {fileID: 2318448557406637750, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.005043547
-      objectReference: {fileID: 0}
-    - target: {fileID: 2318448557406637750, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7260972
-      objectReference: {fileID: 0}
-    - target: {fileID: 2318448557406637750, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.0019892561
-      objectReference: {fileID: 0}
-    - target: {fileID: 2318448557406637750, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0.232
-      objectReference: {fileID: 0}
-    - target: {fileID: 2318448557406637750, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 93.123
-      objectReference: {fileID: 0}
-    - target: {fileID: 2318448557406637750, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0.576
-      objectReference: {fileID: 0}
-    - target: {fileID: 3127494860895753228, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_Name
-      value: Arissa
-      objectReference: {fileID: 0}
-    - target: {fileID: 3127494860895753228, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: bf2f4d1d3f0250c40b2ccca173395813, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -5038,7 +4915,6 @@ SceneRoots:
   - {fileID: 1538185415}
   - {fileID: 42994827}
   - {fileID: 1203100242}
-  - {fileID: 8303681694739643101}
   - {fileID: 2025659184}
   - {fileID: 1131392897}
   - {fileID: 1776913507}

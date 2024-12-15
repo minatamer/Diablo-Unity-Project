@@ -236,23 +236,23 @@ public class BarbarianAnimatorController : MonoBehaviour
         // Handle Bash ability with cooldown
         if (Input.GetMouseButtonDown(1) && !isBashOnCooldown && waitingForRightClick == false)
         {
-            Debug.Log("Entered bashing");
+            //Debug.Log("Entered bashing");
             Vector3 posClicked = GetMouseWorldPosition();
-            posClicked.y = 0.5f;
-            Debug.Log(posClicked);
-            float radius = 10f;
+            //posClicked.y = 0.5f;
+            //Debug.Log(posClicked);
+            float radius = 20f;
             GameObject foundObject = null;
             Collider[] hitColliders = Physics.OverlapSphere(posClicked, radius);
-            Debug.Log("Length of colliders:" + hitColliders.Length);
+            //Debug.Log("Length of colliders:" + hitColliders.Length);
 
             foreach (Collider collider in hitColliders)
             {
                 string tag = collider.gameObject.tag;
-                Debug.Log("COLLIDER OBJECT :" + collider.tag);
+                //Debug.Log("COLLIDER OBJECT :" + collider.tag);
                 if (tag.Contains("Minion") || tag.Contains("Demon") || tag.Contains("Boss"))
                 {
                     foundObject = collider.gameObject;
-                    Debug.Log("FOUND OBJECT :" + foundObject.tag);
+                    //Debug.Log("FOUND OBJECT :" + foundObject.tag);
                     break;
                 }
             }
@@ -260,7 +260,7 @@ public class BarbarianAnimatorController : MonoBehaviour
             float distanceFromBarbarian = Vector3.Distance(posClicked, transform.position);
             
             if(distanceFromBarbarian <= 3f && foundObject != null){
-                Debug.Log("Bashing animation");
+                //Debug.Log("Bashing animation");
                 animator.SetTrigger("Bash");
                 StartCoroutine(BashCooldown());
             }
