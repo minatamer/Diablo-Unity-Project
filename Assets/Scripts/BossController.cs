@@ -27,6 +27,8 @@ public class BossController : MonoBehaviour
 
     public Transform arenaCenter;
     private Vector3[] minionSpawnPoints;
+
+    private int phase2SkillChoice = 0;
     
 
     Animator lilithAnimator;
@@ -184,8 +186,9 @@ public class BossController : MonoBehaviour
                 if (lilithAnimator.GetCurrentAnimatorStateInfo(0).IsName("Divebomb"))
                 {
                     //Debug.Log(lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-                    if (lilithAnimator.GetCurrentAnimatorStateInfo(0).IsName("Divebomb") && lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.65f && lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.651f && distance >= 1f && distance <= 15f)
+                    if (lilithAnimator.GetCurrentAnimatorStateInfo(0).IsName("Divebomb") && lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.65f && lilithAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.651f && distance >= 1f && distance <= 30f)
                     {
+                        //Debug.Log("WITHIN DISTANCE");
                         if (PlayerPrefs.GetString("SelectedCharacter") == "Barbarian")
                         {//barbarian
 
@@ -215,7 +218,6 @@ public class BossController : MonoBehaviour
         {
             if (!Phase2CoroutineStarted)
             {
-                Debug.Log("dakhalt el if");
                 hp = 50;
                 currentShieldHealth = 50;
                 shieldActive = true;
@@ -225,6 +227,7 @@ public class BossController : MonoBehaviour
                  shieldBarImage.gameObject.SetActive(true);
                  points_shield_text.gameObject.SetActive(true);
                  points_shield_text.text = "50/50";
+                UpdateShieldBar();
                 Phase2CoroutineStarted = true;
                 StartCoroutine(HandlePhase2Coroutine());
             }
@@ -253,6 +256,7 @@ public class BossController : MonoBehaviour
                     shieldBarImage.gameObject.SetActive(true);
                     points_shield_text.gameObject.SetActive(true);
                     points_shield_text.text = "50/50";
+                    UpdateShieldBar();
                 }
 
             }
@@ -354,7 +358,7 @@ public class BossController : MonoBehaviour
                 if (spikeOne != null)
                 {
                     float distance = Vector3.Distance(spikeOne.transform.position, boss.transform.position);
-                    if (distance > 20f)
+                    if (distance > 20f || spikeOne.transform.position.y < -2)
                     {
                         Destroy(spikeOne);
                         Destroy(spikeTwo);
@@ -392,7 +396,7 @@ public class BossController : MonoBehaviour
 
     private void HandlePhase2()
     {
-        if (!auraActive )
+        if (!auraActive && phase2SkillChoice%2 == 0)
         {
             lilithAnimator.SetTrigger("Cast"); 
         }
@@ -418,6 +422,7 @@ public class BossController : MonoBehaviour
            spikeTwo = Instantiate(SpikePrefab, new Vector3(transform.position.x -1.5f, transform.position.y + 0.5f, transform.position.z), Quaternion.Euler(70, 0, 0));
            spikeThree = Instantiate(SpikePrefab, new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z + 1.5f), Quaternion.Euler(70, 0, 0));
         }
+        phase2SkillChoice++;
     }
 
     private IEnumerator HandlePhase1Coroutine()
@@ -425,7 +430,7 @@ public class BossController : MonoBehaviour
         while (phase == 1 && hp > 0)
         {
             HandlePhase1();
-            yield return new WaitForSeconds(20f);
+            yield return new WaitForSeconds(10f);
         }
     }
 

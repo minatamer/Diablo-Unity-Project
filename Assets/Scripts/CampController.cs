@@ -34,6 +34,7 @@ public class CampController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            //Debug.Log("entered trigger");
             GameObject[] allMinions = GameObject.FindGameObjectsWithTag("Minion");
 
             foreach (GameObject minion in allMinions)
@@ -101,7 +102,7 @@ public class CampController : MonoBehaviour
                 originalPositions.RemoveAt(index);
             }
 
-            }
+        }
         
     }
 
@@ -159,7 +160,7 @@ public class CampController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("OriginalPlayer"))
         {
             for (int i = 0; i < aggressiveMinions.Count; i++)
             {

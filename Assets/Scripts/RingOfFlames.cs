@@ -33,8 +33,9 @@ public class RingOfFlames : MonoBehaviour
             GameObject enemyObject = collider.gameObject;
 
             // Check if the collider belongs to a valid enemy
-            if (enemyObject.CompareTag("Minion") || enemyObject.CompareTag("Demon") || enemyObject.CompareTag("Boss"))
+            if (enemyObject.gameObject.CompareTag("Minion") || enemyObject.gameObject.CompareTag("Minion2") || enemyObject.gameObject.CompareTag("Minion3") || enemyObject.gameObject.CompareTag("Demon") || enemyObject.gameObject.CompareTag("Demon11") || enemyObject.gameObject.CompareTag("Demon12") || enemyObject.gameObject.CompareTag("Boss"))
             {
+                Debug.Log("ENEMY RING DETECTED");
                 if (enemiesWithinRing.Contains(enemyObject))
                 {
                     ApplyDamage(enemyObject, 2); // Apply continuous damage
@@ -53,14 +54,14 @@ public class RingOfFlames : MonoBehaviour
 
     private void ApplyDamage(GameObject enemyObject, int damage)
     {
-        if (enemyObject.CompareTag("Minion"))
+        if (enemyObject.tag.Contains("Minion"))
         {
             MinionController enemyScript = enemyObject.GetComponent<MinionController>();
             enemyScript.hp -= damage;
             enemyScript.getHit();
             enemyScript.UpdateHealthBar();
         }
-        else if (enemyObject.CompareTag("Demon"))
+        else if (enemyObject.tag.Contains("Demon"))
         {
             DemonController enemyScript = enemyObject.GetComponent<DemonController>();
             enemyScript.hp -= damage;

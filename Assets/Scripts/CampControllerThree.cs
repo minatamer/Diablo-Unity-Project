@@ -50,9 +50,9 @@ public class CampControllerThree: MonoBehaviour
             demonsWithTag11.CopyTo(allDemons, 0);
             demonsWithTag12.CopyTo(allDemons, demonsWithTag11.Length);
 
-            Debug.Log(allDemons[0]);
+            //Debug.Log(allDemons[0]);
 
-              Debug.Log(allDemons[1]);  Debug.Log(allDemons[2]);  Debug.Log(allDemons[3]);
+            //  Debug.Log(allDemons[1]);  Debug.Log(allDemons[2]);  Debug.Log(allDemons[3]);
 
 
             foreach (GameObject minion in allMinions)
@@ -134,6 +134,7 @@ public class CampControllerThree: MonoBehaviour
                 NavMeshAgent agent = selectedMinion.GetComponent<NavMeshAgent>();
                 if (agent != null)
                 {
+                    //Debug.Log("3 Trigger Enter set destiantion to " + other.transform.position);
                     agent.SetDestination(other.transform.position);
                     agent.speed = 5.0f;
                 }
@@ -150,15 +151,19 @@ public class CampControllerThree: MonoBehaviour
             foreach (int index in selectedIndicesDemons)
             {
                 GameObject selectedDemon = demons[index];
-                aggressiveDemons.Add(selectedDemon);
-                aggressiveDemonsOriginalPositions.Add(originalPositionsDemons[index]);
-
-                NavMeshAgent agent = selectedDemon.GetComponent<NavMeshAgent>();
-                if (agent != null)
+                if(selectedDemon != null)
                 {
-                    agent.SetDestination(other.transform.position);
-                    agent.speed = 5.0f;
+                    aggressiveDemons.Add(selectedDemon);
+                    aggressiveDemonsOriginalPositions.Add(originalPositionsDemons[index]);
+
+                    NavMeshAgent agent = selectedDemon.GetComponent<NavMeshAgent>();
+                    if (agent != null)
+                    {
+                        agent.SetDestination(other.transform.position);
+                        agent.speed = 5.0f;
+                    }
                 }
+
 
             }
 
@@ -189,6 +194,7 @@ public class CampControllerThree: MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         string tag = other.tag == "clonedPlayer" ? "clonedPlayer" : "Player";
+        //Debug.Log(tag);
         if (other.CompareTag(tag))
         {
 
@@ -208,10 +214,8 @@ public class CampControllerThree: MonoBehaviour
                         }
                     }
                     Animator animator = minion.GetComponent<Animator>();
-                    if (animator != null && !animator.GetBool("Run"))
-                    {
-                        animator.SetBool("Run", true);
-                    }
+                    animator.SetBool("Run", true);
+                    
                 }
             }
 
@@ -286,8 +290,9 @@ public class CampControllerThree: MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("OriginalPlayer"))
         {
+
             for (int i = 0; i < aggressiveMinions.Count; i++)
             {
                 NavMeshAgent agent = aggressiveMinions[i].GetComponent<NavMeshAgent>();
@@ -300,6 +305,7 @@ public class CampControllerThree: MonoBehaviour
                 if (animator != null)
                 {
                     animator.SetBool("Run", false);
+                    animator.SetBool("Walk", true);
                 }
             }
             for (int i = 0; i < aggressiveDemons.Count; i++)

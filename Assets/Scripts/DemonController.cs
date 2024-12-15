@@ -264,7 +264,7 @@ public class DemonController : MonoBehaviour
                 {
                     if(currentGrenade == null)
                     {
-                        Debug.Log("grenade instantiated");
+                        //Debug.Log("grenade instantiated");
                         currentGrenade = Instantiate(grenade, shootingPoint.transform.position, Quaternion.identity);
                         currentGrenade.transform.parent = shootingPoint;
                     }

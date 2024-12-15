@@ -103,11 +103,11 @@ public class MainmenuControl : MonoBehaviour
             Debug.Log("Boss Level selected");
             PlayerPrefs.SetString("SelectedLevel", "Boss");
         }
-        else
-        {
-            Debug.LogError("No level selected! Please select a level.");
-            return; // Exit if no level is selected
-        }
+        //else
+        //{
+        //    Debug.LogError("No level selected! Please select a level.");
+        //    return; // Exit if no level is selected
+        //}
         HideLevelSelectPanel();
     }
     }

@@ -586,7 +586,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1329,7 +1329,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -49, y: -103}
+  m_AnchoredPosition: {x: 0, y: -68}
   m_SizeDelta: {x: 150, y: 100}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &457042947
@@ -1720,6 +1720,7 @@ GameObject:
   - component: {fileID: 621235088}
   - component: {fileID: 621235087}
   - component: {fileID: 621235091}
+  - component: {fileID: 621235092}
   m_Layer: 0
   m_Name: CampOne
   m_TagString: CampOne
@@ -1809,7 +1810,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 109.4, y: 0, z: 109.3}
-  m_LocalScale: {x: 4.0665007, y: 1, z: 3.9741743}
+  m_LocalScale: {x: 5.07, y: 1, z: 5.42}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1827,6 +1828,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aggressiveMinions: []
+--- !u!65 &621235092
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621235086}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &691621694
 GameObject:
   m_ObjectHideFlags: 0
@@ -2880,6 +2902,7 @@ GameObject:
   - component: {fileID: 1175779689}
   - component: {fileID: 1175779688}
   - component: {fileID: 1175779692}
+  - component: {fileID: 1175779693}
   m_Layer: 0
   m_Name: CampTwo
   m_TagString: CampTwo
@@ -2969,7 +2992,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 208.7, y: -0, z: 240.7}
-  m_LocalScale: {x: 4.0665007, y: 1, z: 3.9741743}
+  m_LocalScale: {x: 5.07, y: 1, z: 5.42}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2988,6 +3011,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aggressiveMinions: []
   aggressiveDemons: []
+--- !u!65 &1175779693
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1175779686}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1203100238
 GameObject:
   m_ObjectHideFlags: 0
@@ -4108,6 +4152,7 @@ GameObject:
   - component: {fileID: 1797965386}
   - component: {fileID: 1797965385}
   - component: {fileID: 1797965389}
+  - component: {fileID: 1797965390}
   m_Layer: 0
   m_Name: CampThree
   m_TagString: CampThree
@@ -4197,7 +4242,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 326, y: -0, z: 151.4}
-  m_LocalScale: {x: 4.0665007, y: 1, z: 3.9741743}
+  m_LocalScale: {x: 5.07, y: 1, z: 5.42}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -4216,6 +4261,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aggressiveMinions: []
   aggressiveDemons: []
+--- !u!65 &1797965390
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797965383}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1885434005
 GameObject:
   m_ObjectHideFlags: 0
@@ -4724,11 +4790,11 @@ RectTransform:
   - {fileID: 1675025632}
   m_Father: {fileID: 1776913507}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.80500007}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -28, y: 380}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 706}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2136737314
 MonoBehaviour:
   m_ObjectHideFlags: 0

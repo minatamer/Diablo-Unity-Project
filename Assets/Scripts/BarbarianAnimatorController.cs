@@ -191,7 +191,7 @@ public class BarbarianAnimatorController : MonoBehaviour
                  hitPoint = hit.point;
                  //Debug.Log(hitPoint);
                 navMeshAgent.destination = hit.point;
-                navMeshAgent.stoppingDistance = 2f;
+                navMeshAgent.stoppingDistance = 0.8f;
 
                 animator.SetBool("walking", true);
                 
@@ -238,19 +238,21 @@ public class BarbarianAnimatorController : MonoBehaviour
         {
             Debug.Log("Entered bashing");
             Vector3 posClicked = GetMouseWorldPosition();
+            posClicked.y = 0.5f;
             Debug.Log(posClicked);
-            posClicked.y = 0;
-            float radius = 2f;
+            float radius = 10f;
             GameObject foundObject = null;
             Collider[] hitColliders = Physics.OverlapSphere(posClicked, radius);
+            Debug.Log("Length of colliders:" + hitColliders.Length);
 
             foreach (Collider collider in hitColliders)
             {
                 string tag = collider.gameObject.tag;
+                Debug.Log("COLLIDER OBJECT :" + collider.tag);
                 if (tag.Contains("Minion") || tag.Contains("Demon") || tag.Contains("Boss"))
                 {
-                    Debug.Log("found object");
                     foundObject = collider.gameObject;
+                    Debug.Log("FOUND OBJECT :" + foundObject.tag);
                     break;
                 }
             }
@@ -266,141 +268,9 @@ public class BarbarianAnimatorController : MonoBehaviour
                 //Debug.Log("far from barbarian");
             }
         }
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("IronMaelstrom") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.01f)
-        {
-            if (enemyCollision == true)
-            {
-                //Debug.Log("lefi bina denia");
+        
 
-                if (enemy.tag.Contains("Minion"))
-                {
-                    MinionController enemyScript = enemy.GetComponent<MinionController>();
-                    enemyScript.hp -= 10;
-                    enemyScript.getHit();
-                    enemyScript.UpdateHealthBar();
-                }
-                if (enemy.tag.Contains("Demon"))
-                {
-                    DemonController enemyScript = enemy.GetComponent<DemonController>();
-                    enemyScript.hp -= 10;
-                    enemyScript.getHit();
-                    enemyScript.UpdateHealthBar();
-                }
-                if (enemy.tag.Contains("Boss"))
-                {
-                    BossController enemyScript = enemy.gameObject.GetComponent<BossController>();//update with ennemy script name
-                    if (enemyScript.minions.Count > 0)
-                    {
-                        return;
-                    }
-                    else if (enemyScript.auraActive)
-                    {
-                        if (gameController.Instance.invincibility == false)
-                        {
-                            gameController.Instance.healthPoints -= 25;
-                        }
-                            
-                        enemyScript.auraActive = false;
-                    }
-                    else
-                    {
-                        if (enemyScript.currentShieldHealth > 0)
-                        {
-                            enemyScript.currentShieldHealth -= 10;
-                            if (enemyScript.currentShieldHealth < 0)
-                            {
-                                int damage = enemyScript.currentShieldHealth;
-                                enemyScript.currentShieldHealth = 0;
-                                enemyScript.hp += damage;
-
-                            }
-                            enemyScript.UpdateShieldBar();
-                        }
-                        else
-                        {
-                            enemyScript.hp -= 10;
-                            enemyScript.getHit();
-                            enemyScript.UpdateHealthBar();
-                        }
-                    }
-
-                    enemyScript.UpdateHealthBar();
-                }
-
-                enemyCollision = false;
-            }
-
-
-        }
-
-        if (animator.GetCurrentAnimatorStateInfo(1).IsName("Charge"))
-        {
-            transform.position = animator.transform.position;
-            Debug.Log("charge animation");
-            if (enemyCollision == true)
-            {
-                if (enemy.tag.Contains("Minion"))
-                {
-                    MinionController enemyScript = enemy.GetComponent<MinionController>();
-                    enemyScript.hp -= 50;  //DO A BIG DAMAGE THAT WILL KILL THEM 
-                    enemyScript.UpdateHealthBar();
-                }
-                if (enemy.tag.Contains("Demon"))
-                {
-                    DemonController enemyScript = enemy.GetComponent<DemonController>();
-                    enemyScript.hp -= 50; //DO A BIG DAMAGE THAT WILL KILL THEM 
-                    enemyScript.UpdateHealthBar();
-                }
-                if (enemy.tag.Contains("Boss"))
-                {
-                    BossController enemyScript = enemy.GetComponent<BossController>();
-                    if (bossChargeDamage == false)
-                    {
-                        bossChargeDamage = true;
-                        if (enemyScript.minions.Count > 0)
-                        {
-                            return;
-                        }
-                        else if (enemyScript.auraActive)
-                        {
-                            if (gameController.Instance.invincibility == false)
-                            {
-                                gameController.Instance.healthPoints -= 35;
-                            }
-                                
-                            enemyScript.auraActive = false;
-                        }
-                        else
-                        {
-                            if (enemyScript.currentShieldHealth > 0)
-                            {
-                                enemyScript.currentShieldHealth -= 20;
-                                if (enemyScript.currentShieldHealth < 0)
-                                {
-                                    int damage = enemyScript.currentShieldHealth;
-                                    enemyScript.currentShieldHealth = 0;
-                                    enemyScript.hp += damage;
-
-                                }
-                                enemyScript.UpdateShieldBar();
-                            }
-                            else
-                            {
-                                enemyScript.hp -= 20;
-                                enemyScript.getHit();
-                                enemyScript.UpdateHealthBar();
-                            }
-                        }
-
-                        enemyScript.UpdateHealthBar();
-                    }
-                    
-                  
-                }
-                enemyCollision = false;
-            }
-
-        }
+       
 
         if(animator.GetCurrentAnimatorStateInfo(1).IsName("New State"))
         {
@@ -578,7 +448,6 @@ Vector3 GetMouseWorldPosition()
             enemyCollision = true;
         }
 
-
         if (other.gameObject.tag == "Rune")
         {
             gameController.Instance.runeFragments++;
@@ -599,7 +468,7 @@ Vector3 GetMouseWorldPosition()
         {
             if (gameController.Instance.invincibility == false)
             {
-                gameController.Instance.healthPoints -= 30;
+                gameController.Instance.healthPoints -= 10;
                 getHit();
             }
                 
@@ -641,5 +510,136 @@ Vector3 GetMouseWorldPosition()
         }
 
 
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("IronMaelstrom") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f && animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.505f)
+        {
+                //Debug.Log("lefi bina denia");
+
+                if (other.tag.Contains("Minion"))
+                {
+                    MinionController enemyScript = other.GetComponent<MinionController>();
+                    enemyScript.hp -= 10;
+                    enemyScript.getHit();
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Demon"))
+                {
+                    DemonController enemyScript = other.GetComponent<DemonController>();
+                    enemyScript.hp -= 10;
+                    enemyScript.getHit();
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Boss"))
+                {
+                    BossController enemyScript = other.gameObject.GetComponent<BossController>();//update with ennemy script name
+                    if (enemyScript.minions.Count > 0)
+                    {
+                        return;
+                    }
+                    else if (enemyScript.auraActive)
+                    {
+                        if (gameController.Instance.invincibility == false)
+                        {
+                            gameController.Instance.healthPoints -= 25;
+                        }
+
+                        enemyScript.auraActive = false;
+                    }
+                    else
+                    {
+                        if (enemyScript.currentShieldHealth > 0)
+                        {
+                            enemyScript.currentShieldHealth -= 10;
+                            if (enemyScript.currentShieldHealth < 0)
+                            {
+                                int damage = enemyScript.currentShieldHealth;
+                                enemyScript.currentShieldHealth = 0;
+                                enemyScript.hp += damage;
+
+                            }
+                            enemyScript.UpdateShieldBar();
+                        }
+                        else
+                        {
+                            enemyScript.hp -= 10;
+                            enemyScript.getHit();
+                            enemyScript.UpdateHealthBar();
+                        }
+                    }
+
+                    enemyScript.UpdateHealthBar();
+                }
+    
+
+
+        }
+
+        if (animator.GetCurrentAnimatorStateInfo(1).IsName("Charge"))
+        {
+            transform.position = animator.transform.position;
+                if (enemy.tag.Contains("Minion"))
+                {
+                    MinionController enemyScript = enemy.GetComponent<MinionController>();
+                    enemyScript.hp -= 50;  //DO A BIG DAMAGE THAT WILL KILL THEM 
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Demon"))
+                {
+                    DemonController enemyScript = enemy.GetComponent<DemonController>();
+                    enemyScript.hp -= 50; //DO A BIG DAMAGE THAT WILL KILL THEM 
+                    enemyScript.UpdateHealthBar();
+                }
+                if (enemy.tag.Contains("Boss"))
+                {
+                    BossController enemyScript = enemy.GetComponent<BossController>();
+                    if (bossChargeDamage == false)
+                    {
+                        bossChargeDamage = true;
+                        if (enemyScript.minions.Count > 0)
+                        {
+                            return;
+                        }
+                        else if (enemyScript.auraActive)
+                        {
+                            if (gameController.Instance.invincibility == false)
+                            {
+                                gameController.Instance.healthPoints -= 35;
+                            }
+
+                            enemyScript.auraActive = false;
+                        }
+                        else
+                        {
+                            if (enemyScript.currentShieldHealth > 0)
+                            {
+                                enemyScript.currentShieldHealth -= 20;
+                                if (enemyScript.currentShieldHealth < 0)
+                                {
+                                    int damage = enemyScript.currentShieldHealth;
+                                    enemyScript.currentShieldHealth = 0;
+                                    enemyScript.hp += damage;
+
+                                }
+                                enemyScript.UpdateShieldBar();
+                            }
+                            else
+                            {
+                                enemyScript.hp -= 20;
+                                enemyScript.getHit();
+                                enemyScript.UpdateHealthBar();
+                            }
+                        }
+
+                        enemyScript.UpdateHealthBar();
+                    }
+
+
+                }
+
+
+        }
     }
 }

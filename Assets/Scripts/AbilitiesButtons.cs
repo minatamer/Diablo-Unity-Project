@@ -9,7 +9,7 @@ public class AbilitiesButtons : MonoBehaviour, IPointerEnterHandler, IPointerExi
     public void unlockDefensive()
 {
     gameController.Instance.abilityPoints--;
-    Debug.Log("Defensive unlocked");
+    //Debug.Log("Defensive unlocked");
     gameController.Instance.locked[1] = -1;
     Button button = gameController.Instance.buttons[1];
     changecolorOfAButton( button); 
@@ -20,7 +20,7 @@ public class AbilitiesButtons : MonoBehaviour, IPointerEnterHandler, IPointerExi
    public void unlockWild(){
 
         gameController.Instance.abilityPoints --;
-        Debug.Log("wild unlocked");
+        //Debug.Log("wild unlocked");
         gameController.Instance.locked[2] = -1;
         Button button = gameController.Instance.buttons[2];
         changecolorOfAButton( button); 
@@ -32,7 +32,7 @@ public class AbilitiesButtons : MonoBehaviour, IPointerEnterHandler, IPointerExi
     public void unlockUltimate(){
 
             gameController.Instance.abilityPoints --;
-            Debug.Log("ultimate unlocked");
+            //Debug.Log("ultimate unlocked");
             gameController.Instance.locked[3]= -1;
             Button button = gameController.Instance.buttons[3];
             changecolorOfAButton( button); 
@@ -48,14 +48,14 @@ public class AbilitiesButtons : MonoBehaviour, IPointerEnterHandler, IPointerExi
     public void OnPointerEnter(PointerEventData eventData)
     {
         isMouseOver = true;
-        Debug.Log("Mouse is over the button!");
+        //Debug.Log("Mouse is over the button!");
     }
 
     // Called when the mouse exits the button
     public void OnPointerExit(PointerEventData eventData)
     {
         isMouseOver = false;
-        Debug.Log("Mouse is no longer over the button.");
+        //Debug.Log("Mouse is no longer over the button.");
     }
     void Update()
     {

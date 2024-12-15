@@ -206,7 +206,7 @@ public class MinionController : MonoBehaviour
         {
             // Agent has reached the target
             animator.SetBool("Run", false);
-            animator.SetBool("Walk", false);
+            //animator.SetBool("Walk", false);
         }
 
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Die") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.70f)

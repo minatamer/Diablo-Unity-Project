@@ -139,15 +139,19 @@ public class CampControllerTwo : MonoBehaviour
             foreach (int index in selectedIndicesDemons)
             {
                 GameObject selectedDemon = demons[index];
-                aggressiveDemons.Add(selectedDemon);
-                aggressiveDemonsOriginalPositions.Add(originalPositionsDemons[index]);
-
-                NavMeshAgent agent = selectedDemon.GetComponent<NavMeshAgent>();
-                if (agent != null)
+                if (selectedDemon != null)
                 {
-                    agent.SetDestination(other.transform.position);
-                    agent.speed = 5.0f;
+                    aggressiveDemons.Add(selectedDemon);
+                    aggressiveDemonsOriginalPositions.Add(originalPositionsDemons[index]);
+
+                    NavMeshAgent agent = selectedDemon.GetComponent<NavMeshAgent>();
+                    if (agent != null)
+                    {
+                        agent.SetDestination(other.transform.position);
+                        agent.speed = 5.0f;
+                    }
                 }
+                  
 
             }
 
@@ -277,7 +281,7 @@ public class CampControllerTwo : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("OriginalPlayer"))
         {
             for (int i = 0; i < aggressiveMinions.Count; i++)
             {

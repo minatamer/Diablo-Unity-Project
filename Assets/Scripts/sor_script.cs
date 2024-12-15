@@ -82,7 +82,7 @@ public class sor_script : MonoBehaviour
         }
         else
         {
-            Debug.Log("Ability is on cooldown!");
+            //Debug.Log("Ability is on cooldown!");
             return false;
         }
     }
@@ -95,7 +95,7 @@ public class sor_script : MonoBehaviour
             return hit.point; 
         }
 
-        Debug.LogWarning("Mouse click did not hit a valid position.");
+        //Debug.LogWarning("Mouse click did not hit a valid position.");
         return Vector3.zero; // Return a default invalid position
     }
     private IEnumerator HandleInfernoCooldown(GameObject dangInstance)
@@ -271,7 +271,7 @@ public class sor_script : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) )
         {
-            Debug.Log("E key pressed. Waiting for right mouse click...");
+            //Debug.Log("E key pressed. Waiting for right mouse click...");
             if (usedInferno == false)
             {
                 waitingForRightUltimate = true;
@@ -282,10 +282,11 @@ public class sor_script : MonoBehaviour
        
         if (waitingForRightUltimate && Input.GetMouseButtonDown(1) && UseAbility(infernoLastAbilityTime , infernoCooldown) == true && gameController.Instance.locked[3] == -1)
         {
-            Debug.Log("Right mouse button clicked after pressing E!");
+            //Debug.Log("Right mouse button clicked after pressing E!");
             audioSource.PlayOneShot(InfernoSound);
             waitingForRightUltimate = false;
             Vector3 spawnPosition = GetMouseWorldPosition();
+            spawnPosition.y = 0f;
              if (spawnPosition != Vector3.zero) 
             {
                  dangInstance = Instantiate(dangArea, spawnPosition, Quaternion.Euler(0, 0, 90));
@@ -298,14 +299,14 @@ public class sor_script : MonoBehaviour
        
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Debug.Log("W key pressed. Waiting for right mouse click...");
+            //Debug.Log("W key pressed. Waiting for right mouse click...");
             waitingForRightDefensive = true; 
             
         }
       
         if (waitingForRightDefensive && Input.GetMouseButtonDown(1) && UseAbility(teleportLastAbilityTime , teleportCooldown) == true && gameController.Instance.locked[1] == -1)
         {
-             Debug.Log("Right mouse button clicked after pressing W!");
+             //Debug.Log("Right mouse button clicked after pressing W!");
              Vector3 spawnPosition = GetMouseWorldPosition();
 
              // Validate spawn position and update
@@ -315,7 +316,7 @@ public class sor_script : MonoBehaviour
                 navMeshAgent.enabled = false; 
                 navMeshAgent.transform.position = hit.position;
                 navMeshAgent.enabled = true; 
-                Debug.Log($"Teleported to {hit.position}");
+                //Debug.Log($"Teleported to {hit.position}");
              }
         
             waitingForRightDefensive = false;
@@ -324,7 +325,7 @@ public class sor_script : MonoBehaviour
        
        if (Input.GetKeyDown(KeyCode.Q) )
         {
-            Debug.Log("Q key pressed. Waiting for right mouse click...");
+            //Debug.Log("Q key pressed. Waiting for right mouse click...");
             if(usedClone == false)
             {
                 waitingForRightClick = true;
@@ -335,13 +336,15 @@ public class sor_script : MonoBehaviour
         
         if (waitingForRightClick && Input.GetMouseButtonDown(1) && UseAbility(cloneLastAbilityTime , cloneCooldown) == true && gameController.Instance.locked[2] == -1 )
         {
-            Debug.Log("Right mouse button clicked after pressing Q!");
+            //Debug.Log("Right mouse button clicked after pressing Q!");
             audioSource.PlayOneShot(CloneSound);
             waitingForRightClick = false;
             Vector3 spawnPosition = GetMouseWorldPosition();
              if (spawnPosition != Vector3.zero) 
             {
                  clonedinstance = Instantiate(sorcererClone, spawnPosition, Quaternion.identity);
+                Rigidbody rb = clonedinstance.GetComponent<Rigidbody>();
+                rb.isKinematic = false;
                 usedClone = true;
                  Destroy(clonedinstance.GetComponent<sor_script>());
                  Animator cloneAnimator = clonedinstance.GetComponent<Animator>();
@@ -349,7 +352,7 @@ public class sor_script : MonoBehaviour
                  cloneAnimator.runtimeAnimatorController = overrideController;
                  clonedinstance.transform.localScale = transform.localScale;
                  clonedinstance.transform.localRotation = transform.localRotation;
-                 Debug.Log("Sorcerer clone created at: " + spawnPosition);
+                 //Debug.Log("Sorcerer clone created at: " + spawnPosition);
                  clonedinstance.tag = "clonedPlayer";
                  gameObject.tag= "OriginalPlayer";
                  StartCoroutine(HandleCloneCooldown(clonedinstance));
@@ -364,7 +367,7 @@ public class sor_script : MonoBehaviour
             if(Physics.Raycast(ray, out hit)){
                  hitPoint = hit.point;
                 navMeshAgent.destination = hit.point;
-                navMeshAgent.stoppingDistance = 2f;
+                navMeshAgent.stoppingDistance = 0.8f;
                 animator.SetBool("walking", true);
                 
             }
@@ -475,7 +478,7 @@ public class sor_script : MonoBehaviour
             if (gameController.Instance.invincibility == false)
             {
 
-                gameController.Instance.healthPoints -= 30;
+                gameController.Instance.healthPoints -= 10;
                 getHit();
             }
             //Destroy(other.gameObject);

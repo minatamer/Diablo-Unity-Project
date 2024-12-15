@@ -213,7 +213,15 @@ public class gameController : MonoBehaviour
 
 
             //initializePotions(-196f, 386.1f, 320.4f, -94f, 20);
-            initializePotions(136.6f, 271.6f, 264.5f, 83.6f, 20);
+            if(bossLevel == false)
+            {
+                initializePotions(136.6f, 271.6f, 264.5f, 83.6f, 20);
+            }
+            else
+            {
+                initializePotions(-78f, 92f, 110f, -24f, 20);
+            }
+           
 
             newObject.SetActive(true);
 
@@ -481,13 +489,8 @@ public class gameController : MonoBehaviour
         //Makes the gameplay in half speed when enabled
         if (Input.GetKeyDown(KeyCode.M))
         {
-            // Toggle slow motion state
             slowMotion = !slowMotion;
-
-            // Apply time scale
             Time.timeScale = slowMotion ? 0.5f : 1f;
-
-            // Adjust fixed delta time to maintain consistent physics
             Time.fixedDeltaTime = 0.02f * Time.timeScale;
         }
 
